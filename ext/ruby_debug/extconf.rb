@@ -1,3 +1,9 @@
+bindir = RbConfig::CONFIG['bindir']
+if bindir =~ %r{(^.*/\.rbenv/versions)/([^/]+)/bin$}
+  ruby_include = "#{$1}/#{$2}/include/ruby-1.9.1/ruby-#{$2}"
+  ARGV << "--with-ruby-include=#{ruby_include}"
+end
+
 require "mkmf"
 require "ruby_core_source"
 
@@ -12,7 +18,7 @@ hdrs = proc {
     have_struct_member("rb_method_entry_t", "called_id", "method.h") or
     have_struct_member("rb_control_frame_t", "method_id", "method.h")
   end and
-  have_header("vm_core.h") and have_header("iseq.h") and have_header("insns.inc") and 
+  have_header("vm_core.h") and have_header("iseq.h") and have_header("insns.inc") and
   have_header("insns_info.inc") and have_header("eval_intern.h") or break
   have_type("struct iseq_line_info_entry", iseqs) or
   have_type("struct iseq_insn_info_entry", iseqs) or
