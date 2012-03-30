@@ -20,7 +20,7 @@ int
 check_breakpoint_hit_condition(VALUE breakpoint)
 {
     debug_breakpoint_t *debug_breakpoint;
-
+    
     if(breakpoint == Qnil)
         return 0;
     Data_Get_Struct(breakpoint, debug_breakpoint_t, debug_breakpoint);
@@ -54,7 +54,7 @@ check_breakpoint_hit_condition(VALUE breakpoint)
 }
 
 static int
-check_breakpoint_by_pos(VALUE breakpoint, const char *file, int line)
+check_breakpoint_by_pos(VALUE breakpoint, char *file, int line)
 {
     debug_breakpoint_t *debug_breakpoint;
 
@@ -93,14 +93,14 @@ check_breakpoint_by_method(VALUE breakpoint, VALUE klass, ID mid, VALUE self)
 }
 
 VALUE
-check_breakpoints_by_pos(debug_context_t *debug_context, const char *file, int line)
+check_breakpoints_by_pos(debug_context_t *debug_context, char *file, int line)
 {
     VALUE breakpoint;
     int i;
 
     if(!CTX_FL_TEST(debug_context, CTX_FL_ENABLE_BKPT))
         return Qnil;
-
+    
     if(check_breakpoint_by_pos(debug_context->breakpoint, file, line))
         return debug_context->breakpoint;
 
@@ -123,7 +123,7 @@ check_breakpoints_by_method(debug_context_t *debug_context, VALUE klass, ID mid,
 
     if(!CTX_FL_TEST(debug_context, CTX_FL_ENABLE_BKPT))
         return Qnil;
-
+        
     if(check_breakpoint_by_method(debug_context->breakpoint, klass, mid, self))
         return debug_context->breakpoint;
 
@@ -235,6 +235,8 @@ rdebug_remove_breakpoint(VALUE self, VALUE id_value)
 VALUE
 debug_catchpoints(VALUE self)
 {
+    debug_check_started();
+
     return rdebug_catchpoints;
 }
 
@@ -247,6 +249,8 @@ debug_catchpoints(VALUE self)
 VALUE
 rdebug_add_catchpoint(VALUE self, VALUE value)
 {
+    debug_check_started();
+
     if (TYPE(value) != T_STRING) {
         rb_raise(rb_eTypeError, "value of a catchpoint must be String");
     }
@@ -264,6 +268,8 @@ VALUE
 context_breakpoint(VALUE self)
 {
     debug_context_t *debug_context;
+
+    debug_check_started();
 
     Data_Get_Struct(self, debug_context_t, debug_context);
     return debug_context->breakpoint;
@@ -287,6 +293,8 @@ context_set_breakpoint(int argc, VALUE *argv, VALUE self)
 {
     VALUE result;
     debug_context_t *debug_context;
+
+    debug_check_started();
 
     Data_Get_Struct(self, debug_context_t, debug_context);
     result = create_breakpoint_from_args(argc, argv, 0);
@@ -532,7 +540,7 @@ breakpoint_set_hit_condition(VALUE self, VALUE value)
 
     Data_Get_Struct(self, debug_breakpoint_t, breakpoint);
     id_value = rb_to_id(value);
-
+    
     if(rb_intern("greater_or_equal") == id_value || rb_intern("ge") == id_value)
         breakpoint->hit_condition = HIT_COND_GE;
     else if(rb_intern("equal") == id_value || rb_intern("eq") == id_value)
