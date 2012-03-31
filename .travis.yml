@@ -1,4 +1,4 @@
-after_install: rake compile
+before_script: rake compile
 script: testrb -Ilib test/base/base.rb
 rvm:
 - 1.9.3
