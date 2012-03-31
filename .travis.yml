@@ -1,3 +1,4 @@
+before_install: bundle init --gemspec=debugger.gemspec
 before_script: rake compile
 script: testrb -Ilib test/base/base.rb
 rvm:
