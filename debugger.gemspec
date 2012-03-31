@@ -21,6 +21,6 @@ handling, bindings for stack frames among other things.
   s.add_dependency("columnize", ">= 0.3.1")
   s.add_dependency("ruby_core_source", ">= 0.1.5")
   s.add_dependency "debugger-linecache"
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'rake-compiler'
+  s.add_development_dependency 'rake', '0.9.2.2'
+  s.add_development_dependency 'rake-compiler', '0.8.0'
 end
