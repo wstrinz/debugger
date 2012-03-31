@@ -1,0 +1,3 @@
+script: testrb test/base/base.rb
+rvm:
+- 1.9.3
