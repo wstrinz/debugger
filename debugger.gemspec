@@ -18,8 +18,8 @@ handling, bindings for stack frames among other things.
   s.extra_rdoc_files = [ "README.md" ]
   s.files = `git ls-files`.split("\n")
   s.extensions << "ext/ruby_debug/extconf.rb"
-  s.add_dependency("columnize", ">= 0.3.1")
-  s.add_dependency("ruby_core_source", ">= 0.1.5")
+  s.add_dependency "columnize", ">= 0.3.1"
+  s.add_dependency "debugger-ruby_core_source"
   s.add_dependency "debugger-linecache"
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'rake-compiler', '~> 0.8.0'
