@@ -1,7 +1,5 @@
-#!/usr/bin/env rake
 # -*- Ruby -*-
-require 'rubygems'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 require 'rake/rdoctask'
 require 'rake/testtask'
 require 'rake/extensiontask'
@@ -173,10 +171,10 @@ EOF
 end
 
 # Rake task to build the default package
-Rake::GemPackageTask.new(base_spec) do |pkg|
+Gem::PackageTask.new(base_spec) do |pkg|
   pkg.need_tar = true
 end
-Rake::GemPackageTask.new(cli_spec) do |pkg|
+Gem::PackageTask.new(cli_spec) do |pkg|
   pkg.need_tar = true
 end
 
