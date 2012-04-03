@@ -4,7 +4,9 @@ A fork of ruby-debug19 that works on 1.9.3 and installs easily for rvm/rbenv rub
 ## Install
 
     $ gem install debugger -v 1.0.0.rc1
-    # Will bump to 1.0.0 when I've gotten feedback
+
+    # If install fails, try passing headers path
+    $ gem install debugger -- --with-ruby-include=PATH_TO_HEADERS
 
 For Windows install instructions, see OLD\_README.
 
