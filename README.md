@@ -31,12 +31,14 @@ require 'debugger'; debugger
   ruby](http://blog.sj26.com/post/12146951658/updated-using-ruby-debug-on-ruby-1-9-3-p0).
 * We need a decent ruby debugger for future rubies!
 
-## Changes from ruby-debug19
+## What's different from ruby-debug19
 
 * Works on 1.9.3
 * Install painlessly for rvm and rbenv rubies i.e. no compiler flags needed
-* Tests are on travis
+* Tests are up on travis-ci
 * The gem name matches the module namespace, Debugger, and main required file, debugger.
+* Rake tasks have been updated
+* ruby-debug-base19 and ruby-debug19 are released as one gem
 
 ## Credits
 
@@ -50,8 +52,8 @@ this working for the ruby community!
 
 ## TODO
 
-* Fix tests and put them up on CI
 * Add back support for 1.9.2
 * Avoid downloading ruby source during install - behavior of ruby_core_source dependency
+* Fix test/test-*.rb
 * Work with others willing to tackle jruby, rubinius or windows support
 * Clean up (merge) lib + cli as separate runtime paths for ruby-debug-base19 and ruby-debug19
