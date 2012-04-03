@@ -18,6 +18,7 @@ handling, bindings for stack frames among other things.
   s.extra_rdoc_files = [ "README.md" ]
   s.files = `git ls-files`.split("\n")
   s.extensions << "ext/ruby_debug/extconf.rb"
+  s.executables = ["rdebug"]
   s.add_dependency "columnize", ">= 0.3.1"
   s.add_dependency "debugger-ruby_core_source"
   s.add_dependency "debugger-linecache"
