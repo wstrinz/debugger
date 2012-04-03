@@ -1,6 +1,5 @@
 # -*- Ruby -*-
 require 'rubygems/package_task'
-require 'rake/rdoctask'
 require 'rake/testtask'
 require 'rake/extensiontask'
 
@@ -94,91 +93,11 @@ file "emacs/rdebug.elc" => ["emacs/elisp-comp", "emacs/rdebug.el"] do
   end
 end
 
-desc "Create a GNU-style ChangeLog via svn2cl"
-task :ChangeLog do
-  system("svn2cl --authors=svn2cl_usermap svn://rubyforge.org/var/svn/ruby-debug/trunk")
-  system("svn2cl --authors=svn2cl_usermap svn://rubyforge.org/var/svn/ruby-debug/trunk/ext -o ext/ChangeLog")
-  system("svn2cl --authors=svn2cl_usermap svn://rubyforge.org/var/svn/ruby-debug/trunk/lib -o lib/ChangeLog")
-end
-
-# Base GEM Specification
-base_spec = Gem::Specification.new do |spec|
-  spec.name = "ruby-debug-base19"
-
-  spec.homepage = "http://rubyforge.org/projects/ruby-debug19/"
-  spec.summary = "Fast Ruby debugger - core component"
-  spec.description = <<-EOF
-ruby-debug-base19 is a fast implementation of the standard Ruby debugger debug.rb.
-It is implemented by utilizing a new Ruby C API hook. The core component
-provides support that front-ends can build on. It provides breakpoint
-handling, bindings for stack frames among other things.
-EOF
-
-  spec.version = RUBY_DEBUG_VERSION + RUBY_DEBUG_BASE_TEENY
-
-  spec.authors = ["Kent Sibilev", "Mark Moseley"]
-  spec.email = "mark@fast-software.com"
-  spec.platform = Gem::Platform::RUBY
-  spec.require_path = "lib"
-  spec.extensions = ["ext/ruby_debug/extconf.rb"]
-  spec.files = BASE_FILES.to_a
-
-  spec.required_ruby_version = '>= 1.8.2'
-  spec.date = Time.now
-  spec.rubyforge_project = 'ruby-debug19'
-  spec.add_dependency('ruby_core_source', '>= 0.1.4')
-  spec.add_dependency('linecache19', '>= 0.5.11')
-
-  spec.test_files = FileList[BASE_TEST_FILE_LIST]
-
-  # rdoc
-  spec.has_rdoc = true
-  spec.extra_rdoc_files = ['README', 'ext/ruby_debug/ruby_debug.c']
-end
-
-cli_spec = Gem::Specification.new do |spec|
-  spec.name = "ruby-debug19"
-
-  spec.homepage = "http://rubyforge.org/projects/ruby-debug19/"
-  spec.summary = "Command line interface (CLI) for ruby-debug-base19"
-  spec.description = <<-EOF
-A generic command line interface for ruby-debug.
-EOF
-
-  spec.version = RUBY_DEBUG_VERSION + RUBY_DEBUG_TEENY
-
-  spec.authors = ["Kent Sibilev", "Mark Moseley"]
-  spec.email = "mark@fast-software.com"
-  spec.platform = Gem::Platform::RUBY
-  spec.require_path = "cli"
-  spec.bindir = "bin"
-  spec.executables = ["rdebug"]
-  spec.files = CLI_FILES.to_a
-
-  spec.required_ruby_version = '>= 1.8.2'
-  spec.date = Time.now
-  spec.rubyforge_project = 'ruby-debug'
-  spec.add_dependency('columnize', '>= 0.3.1')
-  spec.add_dependency('linecache19', '>= 0.5.11')
-  spec.add_dependency('ruby-debug-base19', '>= 0.12.0')
-
-  # FIXME: work out operational logistics for this
-  # spec.test_files = FileList[CLI_TEST_FILE_LIST]
-
-  # rdoc
-  spec.has_rdoc = true
-  spec.extra_rdoc_files = ['README']
-end
-
+base_spec = eval(File.read('debugger.gemspec'), binding, 'debugger.gemspec')
 # Rake task to build the default package
 Gem::PackageTask.new(base_spec) do |pkg|
   pkg.need_tar = true
 end
-Gem::PackageTask.new(cli_spec) do |pkg|
-  pkg.need_tar = true
-end
-
-task :default => [:package]
 
 # Windows specification
 win_spec = base_spec.clone
@@ -204,17 +123,6 @@ task :win32_gem do
   rm(target)
 end
 
-desc "Publish ruby-debug to RubyForge."
-task :publish do
-  require 'rake/contrib/sshpublisher'
-
-  # Get ruby-debug path.
-  ruby_debug_path = File.expand_path(File.dirname(__FILE__))
-
-  Rake::SshDirPublisher.new("kent@rubyforge.org",
-        "/var/www/gforge-projects/ruby-debug", ruby_debug_path)
-end
-
 desc "Remove built files"
 task :clean do
   cd "ext" do
@@ -227,39 +135,4 @@ task :clean do
   end
 end
 
-# ---------  RDoc Documentation ------
-desc "Generate rdoc documentation"
-Rake::RDocTask.new("rdoc") do |rdoc|
-  rdoc.rdoc_dir = 'doc/rdoc'
-  rdoc.title    = "ruby-debug"
-  # Show source inline with line numbers
-  rdoc.options << "--inline-source" << "--line-numbers"
-  # Make the readme file the start page for the generated html
-  rdoc.options << '--main' << 'README'
-  rdoc.rdoc_files.include('bin/**/*',
-                          'cli/ruby-debug/commands/*.rb',
-                          'lib/**/*.rb',
-                          'ext/**/ruby_debug.c',
-                          'README',
-                          'LICENSE')
-end
-
-desc "Publish the release files to RubyForge."
-task :rubyforge_upload do
-  `rubyforge login`
-  release_command = "rubyforge add_release #{PKG_NAME} #{PKG_NAME} '#{PKG_NAME}-#{PKG_VERSION}' pkg/#{PKG_NAME}-#{PKG_VERSION}.gem"
-  puts release_command
-  system(release_command)
-end
-
-PKG_NAME      = 'ruby-debug'
-desc "Publish the release files to RubyForge."
-task :rubyforge_upload do
-  `rubyforge login`
-  for pkg_name in ['ruby-debug', 'ruby-debug-base'] do
-    pkg_file_name = "#{pkg_name}-#{pkg_version}"
-    release_command = "rubyforge add_release ruby-debug #{pkg_name} '#{pkg_file_name}' pkg/#{pkg_file_name}.gem"
-    puts release_command
-    system(release_command)
-  end
-end
+task :default => :test
