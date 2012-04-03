@@ -42,15 +42,18 @@ require 'debugger'; debugger
 * Rake tasks have been updated
 * ruby-debug-base19 and ruby-debug19 are released as one gem
 
-## Credits
-
-* Thanks to the original authors: Kent Sibilev and Mark Moseley
-* Fork started on awesome @relevance fridays!
+## Issues
+Please report them [on github](http://github.com/cldwalker/debugger/issues).
 
 ## Contributing
 [See here](http://tagaholic.me/contributing.html) for normal contribution policies. I'm willing to
 lower the bar for now since tests aren't fully up and I need all the C help I can get. Let's keep
 this working for the ruby community!
+
+## Credits
+
+* Thanks to the original authors: Kent Sibilev and Mark Moseley
+* Fork started on awesome @relevance fridays!
 
 ## TODO
 
