@@ -1,3 +1,4 @@
+require 'rbconfig'
 bindir = RbConfig::CONFIG['bindir']
 # autodetect ruby headers
 if bindir =~ %r{(^.*/\.rbenv/versions)/([^/]+)/bin$}
@@ -17,29 +18,37 @@ if RUBY_VERSION < "1.9"
   exit(1)
 end
 
-hdrs = lambda {
-  iseqs = %w[vm_core.h iseq.h]
-  begin
-    have_struct_member("rb_method_entry_t", "called_id", "method.h") or
-    have_struct_member("rb_control_frame_t", "method_id", "method.h")
-  end and
-  have_header("vm_core.h") and have_header("iseq.h") and have_header("insns.inc") and
-  have_header("insns_info.inc") and have_header("eval_intern.h") or return(false)
-  have_type("struct iseq_line_info_entry", iseqs) or
-  have_type("struct iseq_insn_info_entry", iseqs) or
-  return(false)
-  if checking_for(checking_message("if rb_iseq_compile_with_option was added an argument filepath")) do
-      try_compile(<<SRC)
+hdrs = if RUBY_VERSION == '1.9.2'
+  lambda {
+    have_struct_member("rb_method_entry_t", "body", "method.h")
+    have_header("vm_core.h") and have_header("iseq.h") and have_header("insns.inc") and
+    have_header("insns_info.inc") and have_header("eval_intern.h")
+  }
+else
+  lambda {
+    iseqs = %w[vm_core.h iseq.h]
+    begin
+      have_struct_member("rb_method_entry_t", "called_id", "method.h") or
+      have_struct_member("rb_control_frame_t", "method_id", "method.h")
+    end and
+    have_header("vm_core.h") and have_header("iseq.h") and have_header("insns.inc") and
+    have_header("insns_info.inc") and have_header("eval_intern.h") or return(false)
+    have_type("struct iseq_line_info_entry", iseqs) or
+    have_type("struct iseq_insn_info_entry", iseqs) or
+    return(false)
+    if checking_for(checking_message("if rb_iseq_compile_with_option was added an argument filepath")) do
+        try_compile(<<SRC)
 #include <ruby.h>
 #include "vm_core.h"
 extern VALUE rb_iseq_new_main(NODE *node, VALUE filename, VALUE filepath);
 SRC
+      end
+      $defs << '-DRB_ISEQ_COMPILE_5ARGS'
     end
-    $defs << '-DRB_ISEQ_COMPILE_5ARGS'
-  end
-}
+  }
+end
 
-header_dir = '193'
+header_dir = RUBY_VERSION == '1.9.2' ? '192' : '193'
 current_dir = File.dirname(__FILE__)
 %w{ruby_debug.h ruby_debug.c breakpoint.c}.each do |file|
   FileUtils.cp("#{current_dir}/#{header_dir}/#{file}", current_dir)
