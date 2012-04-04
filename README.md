@@ -1,7 +1,7 @@
 ## Description
 A fork of ruby-debug19 that works on 1.9.2 and 1.9.3 and installs easily for rvm/rbenv rubies.
 
-[![Build Status](https://secure.travis-ci.org/cldwalker/debugger.png?branch=master)](http://travis-ci.org/cldwalker/log_buddy)
+[![Build Status](https://secure.travis-ci.org/cldwalker/debugger.png?branch=master)](http://travis-ci.org/cldwalker/debugger)
 
 ## Install
 
