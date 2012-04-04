@@ -10,6 +10,7 @@ end
 
 require "mkmf"
 require "ruby_core_source"
+require 'fileutils'
 
 if RUBY_VERSION < "1.9"
   STDERR.print("Ruby version is too old\n")
@@ -37,6 +38,12 @@ SRC
     $defs << '-DRB_ISEQ_COMPILE_5ARGS'
   end
 }
+
+header_dir = '193'
+current_dir = File.dirname(__FILE__)
+%w{ruby_debug.h ruby_debug.c breakpoint.c}.each do |file|
+  FileUtils.cp("#{current_dir}/#{header_dir}/#{file}", current_dir)
+end
 
 dir_config("ruby")
 if !Ruby_core_source::create_makefile_with_core(hdrs, "ruby_debug")
