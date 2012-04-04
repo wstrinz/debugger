@@ -16,7 +16,7 @@ if RUBY_VERSION < "1.9"
   exit(1)
 end
 
-hdrs = proc {
+hdrs = lambda {
   iseqs = %w[vm_core.h iseq.h]
   begin
     have_struct_member("rb_method_entry_t", "called_id", "method.h") or
