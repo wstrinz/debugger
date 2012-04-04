@@ -1,6 +1,5 @@
 ## Description
-A fork of ruby-debug19 that works on 1.9.3 and installs easily for rvm/rbenv rubies. 1.9.2 support
-coming...
+A fork of ruby-debug19 that works on 1.9.2 and 1.9.3 and installs easily for rvm/rbenv rubies.
 
 [![Build Status](https://secure.travis-ci.org/cldwalker/debugger.png?branch=master)](http://travis-ci.org/cldwalker/log_buddy)
 
@@ -38,7 +37,9 @@ require 'debugger'; debugger
 
 ## What's different from ruby-debug19
 
-* Works on 1.9.3 but not 1.9.2 yet
+* Works on 1.9.2 and 1.9.3
+  * 1.9.2 points to ruby-debug-base19-0.11.25 headers
+  * 1.9.3 points to ruby-debug-base19-0.11.26 headers
 * Install painlessly for rvm and rbenv rubies i.e. no compiler flags needed
 * Tests are up on travis-ci
 * The gem name matches the module namespace, Debugger, and main required file, debugger.
@@ -61,8 +62,6 @@ Let's keep this working for the ruby community!
 
 ## TODO
 
-* Add back support for 1.9.2
-  * Doing something stupid simple i.e. copy latest ruby-debug19 that works and require as needed
 * Fix test/test-*.rb
 * Work with others willing to tackle jruby, rubinius or windows support
 * Clean up (merge) lib + cli as separate runtime paths for ruby-debug-base19 and ruby-debug19
