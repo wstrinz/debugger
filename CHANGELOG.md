@@ -1,3 +1,6 @@
+## 1.0.1
+* Fix ruby-debug not being loaded from debugger.rb
+
 ## 1.0.0
 * Add back 1.9.2 support!
 
