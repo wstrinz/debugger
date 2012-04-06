@@ -14,14 +14,14 @@ For Windows install instructions, see OLD\_README.
 
 ## Usage
 
-To use in your Rails app, drop in your Gemfile:
-
-    gem 'debugger'
-
 Wherever you need a debugger, simply:
 ```ruby
 require 'debugger'; debugger
 ```
+
+To use in your Rails app, drop in your Gemfile:
+
+    gem 'debugger'
 
 ## Reason for Fork
 
@@ -49,7 +49,7 @@ require 'debugger'; debugger
   * The gem name matches the module namespace, Debugger, and main required file, debugger.
   * ruby-debug-base19 and ruby-debug19 are released as one gem
   * Rake tasks have been updated
-  * No more $LOAD_PATH manipulation
+  * No more $LOAD_PATH manipulation or runtime code outside of lib
   * man page available via gem-man
 
 ## Issues
