@@ -10,7 +10,7 @@ elsif bindir =~ %r{(^.*/\.rvm/rubies)/([^/]+)/bin$}
 end
 
 require "mkmf"
-require "ruby_core_source"
+require "debugger/ruby_core_source"
 require 'fileutils'
 
 if RUBY_VERSION < "1.9"
@@ -55,7 +55,7 @@ current_dir = File.dirname(__FILE__)
 end
 
 dir_config("ruby")
-if !Ruby_core_source::create_makefile_with_core(hdrs, "ruby_debug")
+if !Debugger::RubyCoreSource.create_makefile_with_core(hdrs, "ruby_debug")
   STDERR.print("Makefile creation failed\n")
   STDERR.print("*************************************************************\n\n")
   STDERR.print("  NOTE: If your headers were not found, try passing\n")
