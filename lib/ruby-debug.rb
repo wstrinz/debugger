@@ -3,11 +3,11 @@ require 'stringio'
 require 'socket'
 require 'thread'
 require 'ruby-debug-base'
-require_relative 'ruby-debug/processor'
+require 'ruby-debug/processor'
 
 module Debugger
   self.handler = CommandProcessor.new
-  
+
   # the port number used for remote debugging
   PORT = 8989 unless defined?(PORT)
 
@@ -16,31 +16,31 @@ module Debugger
     if RUBY_PLATFORM =~ /mswin/
       # Of course MS Windows has to be different
       INITFILE = 'rdebug.ini'
-      HOME_DIR =  (ENV['HOME'] || 
+      HOME_DIR =  (ENV['HOME'] ||
                    ENV['HOMEDRIVE'].to_s + ENV['HOMEPATH'].to_s).to_s
     else
       INITFILE = '.rdebugrc'
       HOME_DIR = ENV['HOME'].to_s
     end
   end
-  
+
   class << self
     # gdb-style annotation mode. Used in GNU Emacs interface
     attr_accessor :annotate
 
-    # in remote mode, wait for the remote connection 
+    # in remote mode, wait for the remote connection
     attr_accessor :wait_connection
 
     # If set, a string to look for in caller() and is used to see
     # if the call stack is truncated.
-    attr_accessor :start_sentinal 
-    
+    attr_accessor :start_sentinal
+
     attr_reader :thread, :control_thread
 
     def interface=(value) # :nodoc:
       handler.interface = value
     end
-    
+
     #
     # Starts a remote debugger.
     #
@@ -57,12 +57,12 @@ module Debugger
       end
 
       start_control(host, ctrl_port)
-      
+
       yield if block_given?
-      
+
       mutex = Mutex.new
       proceed = ConditionVariable.new
-      
+
       @thread = DebugThread.new do
         server = TCPServer.new(host, cmd_port)
         while (session = server.accept)
@@ -77,11 +77,11 @@ module Debugger
       if wait_connection
         mutex.synchronize do
           proceed.wait(mutex)
-        end 
+        end
       end
     end
     alias start_server start_remote
-    
+
     def start_control(host = nil, ctrl_port = PORT + 1) # :nodoc:
       return if defined?(@control_thread) && @control_thread
       @control_thread = DebugThread.new do
@@ -93,7 +93,7 @@ module Debugger
         end
       end
     end
-    
+
     #
     # Connects to the remote debugger
     #
@@ -102,10 +102,10 @@ module Debugger
       interface = Debugger::LocalInterface.new
       socket = TCPSocket.new(host, port)
       puts "Connected."
-      
+
       catch(:exit) do
         while (line = socket.gets)
-          case line 
+          case line
           when /^PROMPT (.*)$/
             input = interface.read_command($1)
             throw :exit unless input
@@ -121,7 +121,7 @@ module Debugger
       end
       socket.close
     end
-    
+
     # Runs normal debugger initialization scripts
     # Reads and executes the commands from init file (if any) in the
     # current working directory.  This is only done if the current
@@ -134,7 +134,7 @@ module Debugger
       run_script(cwd_script_file, out) if File.exists?(cwd_script_file)
 
       home_script_file = File.expand_path(File.join(HOME_DIR, INITFILE))
-      run_script(home_script_file, out) if File.exists?(home_script_file) and 
+      run_script(home_script_file, out) if File.exists?(home_script_file) and
         cwd_script_file != home_script_file
     end
 

@@ -1,5 +1,5 @@
 require 'columnize'
-require_relative 'helper'
+require 'ruby-debug/helper'
 
 module Debugger
   RUBY_DEBUG_DIR = File.expand_path(File.dirname(__FILE__)) unless
