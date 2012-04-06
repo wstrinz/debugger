@@ -37,16 +37,20 @@ require 'debugger'; debugger
 
 ## What's different from ruby-debug19
 
-* Works on 1.9.2 and 1.9.3
-  * 1.9.2 points to ruby-debug-base19-0.11.25 headers
-  * 1.9.3 points to ruby-debug-base19-0.11.26 headers
-* Install painlessly for rvm and rbenv rubies i.e. no compiler flags needed
-* Tests are up on travis-ci
-* The gem name matches the module namespace, Debugger, and main required file, debugger.
-* Rake tasks have been updated
-* ruby-debug-base19 and ruby-debug19 are released as one gem
-* No downloading ruby source during install - was behavior of old ruby_core_source dependency
-* Fix LocalJumpError caused by using proc in extconf.rb
+* Major
+  * Works on 1.9.2 and 1.9.3
+    * 1.9.2 points to ruby-debug-base19-0.11.25 headers
+    * 1.9.3 points to ruby-debug-base19-0.11.26 headers
+  * Install painlessly for rvm and rbenv rubies i.e. no compiler flags needed
+  * No downloading ruby source during install - was behavior of old ruby_core_source dependency
+  * Fix LocalJumpError caused by using proc in extconf.rb
+  * Passing tests are up on travis-ci
+* Minor
+  * The gem name matches the module namespace, Debugger, and main required file, debugger.
+  * ruby-debug-base19 and ruby-debug19 are released as one gem
+  * Rake tasks have been updated
+  * No more $LOAD_PATH manipulation
+  * man page available via gem-man
 
 ## Issues
 Please report them [on github](http://github.com/cldwalker/debugger/issues).
@@ -65,4 +69,3 @@ Let's keep this working for the ruby community!
 
 * Fix test/test-*.rb
 * Work with others willing to tackle jruby, rubinius or windows support
-* Clean up (merge) lib + cli as separate runtime paths for ruby-debug-base19 and ruby-debug19
