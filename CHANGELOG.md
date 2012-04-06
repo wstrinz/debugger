@@ -1,3 +1,8 @@
+## 1.1.0
+* Point to new debugger-ruby_core_source API
+* General cleanup
+* fix rdebug version
+
 ## 1.0.1
 * Fix ruby-debug not being loaded from debugger.rb
 
