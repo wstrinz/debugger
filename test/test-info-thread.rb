@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'test/unit'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 # Test simple thread commands
@@ -15,7 +14,7 @@ class TestInfoThread < Test::Unit::TestCase
 
   def test_basic
     testname='info-thread'
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
        filter = Proc.new{|got_lines, correct_lines|
          [got_lines, correct_lines].each do |a|
           a.each do |s|
@@ -24,7 +23,7 @@ class TestInfoThread < Test::Unit::TestCase
         end
        }
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
                                 "--script #{script} -- ./gcd.rb 3 5", nil, filter))
     end

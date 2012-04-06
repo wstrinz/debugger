@@ -6,7 +6,7 @@
 #Fast Ruby Debugger.
 #
 #Command invocation:
-#  
+#
 #   rdebug [options] [--] [script-options] ruby-script-to-debug
 #   rdebug [options] [script-options] [--client]
 #   rdebug [--version | --help]
@@ -89,7 +89,7 @@
 #      Keep frame bindings.
 #
 #<tt>--script=</tt><i>file</i>::
-#      Name of the script file to run 
+#      Name of the script file to run
 #
 #<tt>-s | --server</tt>::
 #      Listen for remote connections. Another rdebug session
@@ -102,19 +102,18 @@
 #<tt>--help</tt>::
 #      Show invocation help and exit.
 
-require 'rubygems'
 require 'optparse'
 require 'ostruct'
 require_relative '../cli/ruby-debug'
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.
-  # Otherwise we get a load message that looks like rdebug has 
-  # a problem. 
+  # Otherwise we get a load message that looks like rdebug has
+  # a problem.
   output = `ruby -c "#{Debugger::PROG_SCRIPT}" 2>&1`
   if $?.exitstatus != 0 and RUBY_PLATFORM !~ /mswin/
     puts output
-    exit $?.exitstatus 
+    exit $?.exitstatus
   end
   print "\032\032starting\n" if Debugger.annotate and Debugger.annotate > 2
 
@@ -172,20 +171,20 @@ Usage: #{program} [options] <script.rb> -- <script.rb parameters>
 EOB
     opts.separator ""
     opts.separator "Options:"
-    opts.on("-A", "--annotate LEVEL", Integer, "Set annotation level") do 
+    opts.on("-A", "--annotate LEVEL", Integer, "Set annotation level") do
       |annotate|
         Debugger.annotate = annotate
     end
-    opts.on("-c", "--client", "Connect to remote debugger") do 
+    opts.on("-c", "--client", "Connect to remote debugger") do
       options.client = true
     end
-    opts.on("--cport PORT", Integer, "Port used for control commands") do 
+    opts.on("--cport PORT", Integer, "Port used for control commands") do
       |cport|
       options.cport = cport
     end
     opts.on("-d", "--debug", "Set $DEBUG=true") {$DEBUG = true}
     opts.on("--emacs LEVEL", Integer,
-            "Activates full Emacs support at annotation level LEVEL") do 
+            "Activates full Emacs support at annotation level LEVEL") do
       |level|
       Debugger.annotate = level.to_i
       ENV['EMACS'] = '1'
@@ -193,7 +192,7 @@ EOB
       options.control = false
       options.quit = false
     end
-    opts.on('--emacs-basic', 'Activates basic Emacs mode') do 
+    opts.on('--emacs-basic', 'Activates basic Emacs mode') do
       ENV['EMACS'] = '1'
     end
     opts.on('-h', '--host HOST', 'Host name used for remote debugging') do
@@ -203,23 +202,23 @@ EOB
     opts.on('-I', '--include PATH', String, 'Add PATH to $LOAD_PATH') do |path|
       $LOAD_PATH.unshift(path)
     end
-    opts.on('--no-control', 'Do not automatically start control thread') do 
+    opts.on('--no-control', 'Do not automatically start control thread') do
       options.control = false
     end
     opts.on('--no-quit', 'Do not quit when script finishes') do
       options.quit = false
     end
     opts.on('--no-rewrite-program',
-            'Do not set $0 to the program being debugged') do 
+            'Do not set $0 to the program being debugged') do
       options.no_rewrite_program = true
     end
-    opts.on('--no-stop', 'Do not stop when script is loaded') do 
+    opts.on('--no-stop', 'Do not stop when script is loaded') do
       options.stop = false
     end
     opts.on('-nx', 'Not run debugger initialization files (e.g. .rdebugrc') do
       options.nx = true
     end
-    opts.on('-p', '--port PORT', Integer, 'Port used for remote debugging') do 
+    opts.on('-p', '--port PORT', Integer, 'Port used for remote debugging') do
       |port|
       options.port = port
     end
@@ -231,8 +230,8 @@ EOB
         require name
       end
     end
-    opts.on('--restart-script FILE', String, 
-            'Name of the script file to run. Erased after read') do 
+    opts.on('--restart-script FILE', String,
+            'Name of the script file to run. Erased after read') do
       |restart_script|
       options.restart_script = restart_script
       unless File.exists?(options.restart_script)
@@ -240,7 +239,7 @@ EOB
         exit
       end
     end
-    opts.on('--script FILE', String, 'Name of the script file to run') do 
+    opts.on('--script FILE', String, 'Name of the script file to run') do
       |script|
       options.script = script
       unless File.exists?(options.script)
@@ -248,7 +247,7 @@ EOB
         exit
       end
     end
-    opts.on('-s', '--server', 'Listen for remote connections') do 
+    opts.on('-s', '--server', 'Listen for remote connections') do
       options.server = true
     end
     opts.on('-w', '--wait', 'Wait for a client connection, implies -s option') do
@@ -261,7 +260,7 @@ EOB
       puts opts
       exit
     end
-    opts.on_tail('--version', 
+    opts.on_tail('--version',
                  'Print the version') do
       puts "ruby-debug #{Debugger::VERSION}"
       exit
@@ -270,7 +269,7 @@ EOB
       $VERBOSE = true
       options.verbose_long = true
     end
-    opts.on_tail('-v', 
+    opts.on_tail('-v',
                  'Print version number, then turn on verbose mode') do
       puts "ruby-debug #{Debugger::VERSION}"
       $VERBOSE = true
@@ -284,7 +283,7 @@ unless defined?(OPTS_INITFILE)
   if RUBY_PLATFORM =~ /mswin/
     # Of course MS Windows has to be different
     OPTS_INITFILE = 'rdbopt.ini'
-    HOME_DIR =  (ENV['HOME'] || 
+    HOME_DIR =  (ENV['HOME'] ||
                  ENV['HOMEDRIVE'].to_s + ENV['HOMEPATH'].to_s).to_s
   else
     OPTS_INITFILE = '.rdboptrc'
@@ -293,7 +292,7 @@ unless defined?(OPTS_INITFILE)
 end
 begin
   initfile = File.join(HOME_DIR, OPTS_INITFILE)
-  eval(File.read(initfile)) if 
+  eval(File.read(initfile)) if
     File.exist?(initfile)
 rescue
 end
@@ -328,18 +327,18 @@ else
     puts 'Must specify a script to run'
     exit(-1)
   end
-  
+
   # save script name
   prog_script = ARGV.shift
   prog_script = whence_file(prog_script) unless File.exist?(prog_script)
   Debugger::PROG_SCRIPT = File.expand_path prog_script
-  
+
   # install interruption handler
   trap('INT') { Debugger.interrupt_last }
-  
+
   # set options
   Debugger.wait_connection = options.wait
-  
+
   if options.server
     # start remote mode
     Debugger.start_remote(options.host, [options.port, options.cport]) do
@@ -355,7 +354,7 @@ else
 
     # load initrc script (e.g. .rdebugrc)
     Debugger.run_init_script(StringIO.new) unless options.nx
-    
+
     # run restore-settings startup script if specified
     if options.restart_script
       require 'fileutils'
@@ -384,7 +383,7 @@ else
         print $!.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
         print "Uncaught exception: #{$!}\n"
       end
-      print "The program finished.\n" unless 
+      print "The program finished.\n" unless
         Debugger.annotate.to_i > 1 # annotate has its own way
       interface = Debugger::LocalInterface.new
       # Not sure if ControlCommandProcessor is really the right

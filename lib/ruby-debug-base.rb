@@ -1,12 +1,11 @@
 require 'ruby_debug.so'
-require 'rubygems'
 require 'linecache19'
 
 module Debugger
-  
+
   # Default options to Debugger.start
-  DEFAULT_START_SETTINGS = { 
-    :init        => true,  # Set $0 and save ARGV? 
+  DEFAULT_START_SETTINGS = {
+    :init        => true,  # Set $0 and save ARGV?
     :post_mortem => false, # post-mortem debugging on uncaught exception?
     :tracing     => nil    # Debugger.tracing value. true/false resets,
                            # nil keeps the prior value
@@ -16,7 +15,7 @@ module Debugger
     def interrupt
       self.stop_next = 1
     end
-    
+
     alias __c_frame_binding frame_binding
     def frame_binding(frame)
       __c_frame_binding(frame) || hbinding(frame)
@@ -59,27 +58,27 @@ module Debugger
       handler.at_return(self, file, line)
     end
   end
-  
+
   @reload_source_on_change = false
   @tracing_started = false
-  
+
   class << self
     # interface modules provide +handler+ object
     attr_accessor :handler
-    
+
     # if <tt>true</tt>, checks the modification time of source files and reloads if it was modified
     attr_accessor :reload_source_on_change
 
     attr_accessor :last_exception
     Debugger.last_exception = nil
-    
+
     #
     # Interrupts the current thread
     #
     def interrupt
       current_context.interrupt
     end
-    
+
     #
     # Interrupts the last debugged thread
     #
@@ -90,11 +89,11 @@ module Debugger
       end
       context
     end
-    
+
     def source_reload
       LineCache::clear_file_cache
     end
-    
+
     # Get line +line_number+ from file named +filename+. Return "\n"
     # there was a problem. Leaking blanks are stripped off.
     def line_at(filename, line_number) # :nodoc:
@@ -106,7 +105,7 @@ module Debugger
 
     #
     # Activates the post-mortem mode. There are two ways of using it:
-    # 
+    #
     # == Global post-mortem mode
     # By calling Debugger.post_mortem method without a block, you install
     # at_exit hook that intercepts any unhandled by your script exceptions
@@ -145,9 +144,9 @@ module Debugger
         end
       end
     end
-    
+
     def handle_post_mortem(exp)
-      return if !exp || !exp.__debug_context || 
+      return if !exp || !exp.__debug_context ||
         exp.__debug_context.stack_size == 0
       Debugger.suspend
       orig_tracing = Debugger.tracing, Debugger.current_context.tracing
@@ -160,10 +159,10 @@ module Debugger
     end
     # private :handle_post_mortem
   end
-  
+
   class DebugThread # :nodoc:
   end
-  
+
   class ThreadsTable # :nodoc:
   end
 
@@ -189,27 +188,27 @@ module Debugger
   # <i>Note that if you want to stop debugger, you must call
   # Debugger.stop as many time as you called Debugger.start
   # method.</i>
-  # 
+  #
   # +options+ is a hash used to set various debugging options.
   # Set :init true if you want to save ARGV and some variables which
   # make a debugger restart possible. Only the first time :init is set true
-  # will values get set. Since ARGV is saved, you should make sure 
-  # it hasn't been changed before the (first) call. 
+  # will values get set. Since ARGV is saved, you should make sure
+  # it hasn't been changed before the (first) call.
   # Set :post_mortem true if you want to enter post-mortem debugging
   # on an uncaught exception. Once post-mortem debugging is set, it can't
   # be unset.
   def start(options={}, &block)
     options = Debugger::DEFAULT_START_SETTINGS.merge(options)
     if options[:init]
-      Debugger.const_set('ARGV', ARGV.clone) unless 
+      Debugger.const_set('ARGV', ARGV.clone) unless
         defined? Debugger::ARGV
-      Debugger.const_set('PROG_SCRIPT', $0) unless 
+      Debugger.const_set('PROG_SCRIPT', $0) unless
         defined? Debugger::PROG_SCRIPT
-      Debugger.const_set('INITIAL_DIR', Dir.pwd) unless 
+      Debugger.const_set('INITIAL_DIR', Dir.pwd) unless
         defined? Debugger::INITIAL_DIR
     end
     Debugger.tracing = options[:tracing] unless options[:tracing].nil?
-    retval = Debugger.started? ? block && block.call(self) : Debugger.start_(&block) 
+    retval = Debugger.started? ? block && block.call(self) : Debugger.start_(&block)
     if options[:post_mortem]
       post_mortem
     end
@@ -230,7 +229,7 @@ module Kernel
   # right after the last statement in some scope, because the next
   # step will take you out of some scope.
 
-  # If a block is given (and the debugger hasn't been started, we run the 
+  # If a block is given (and the debugger hasn't been started, we run the
   # block under the debugger. Alas, when a block is given, we can't support
   # running the startup script or support the steps option. FIXME.
   def debugger(steps = 1, &block)
@@ -247,7 +246,7 @@ module Kernel
     end
   end
   alias breakpoint debugger unless respond_to?(:breakpoint)
-  
+
   #
   # Returns a binding of n-th call frame
   #
@@ -283,7 +282,7 @@ class Module
     end
     EOD
   end
-  
+
   #
   # Wraps the +meth+ method with Debugger.post_mortem {...} block.
   #

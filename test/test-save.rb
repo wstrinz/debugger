@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'test/unit'
 
-# require 'rubygems' 
 # require 'ruby-debug'; Debugger.start(:post_mortem =>true)
 
 class TestSave < Test::Unit::TestCase
@@ -20,9 +19,9 @@ class TestSave < Test::Unit::TestCase
          s.sub!(/2 file .*gcd.rb/, '2 file gcd.rb')
        end
      }
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
                                 "--script #{script} -- ./gcd.rb 3 5",
                                 nil, filter))

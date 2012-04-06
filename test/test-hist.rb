@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'test/unit'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 # Test history commands
@@ -24,8 +23,8 @@ class TestHistory < Test::Unit::TestCase
     ENV['HOME']=@@SRC_DIR
     ENV['RDEBUG'] = nil
 
-    debugger_commands = ['show commands', 
-                         'set history save on', 
+    debugger_commands = ['show commands',
+                         'set history save on',
                          'show history',
                          'quit unconditionally']
     debugger_output = 'test-history.out'
@@ -42,13 +41,13 @@ class TestHistory < Test::Unit::TestCase
       # and check that it's reading that correctly.
       debug_pgm=File.join('..', 'rdbg.rb')
       debugged=File.join('gcd.rb')
-      IO.popen("#{debug_pgm} #{debugged} 3 5 >#{debugger_output}", 'w') do 
+      IO.popen("#{debug_pgm} #{debugged} 3 5 >#{debugger_output}", 'w') do
         |pipe|
         debugger_commands.each do |cmd|
           pipe.puts cmd
         end
       end
-      
+
       # Compare output
       got_lines = File.read(@@FILE_HISTORY).split(/\n/)
       # FIXME: Disable for now.
@@ -64,5 +63,3 @@ class TestHistory < Test::Unit::TestCase
     end
   end
 end
-    
-    

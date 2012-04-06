@@ -2,7 +2,6 @@
 require 'test/unit'
 require 'rbconfig'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 # Test Debugger.init and setting up ruby-debug variables
@@ -13,7 +12,7 @@ class TestDebuggerInit < Test::Unit::TestCase
 
   def test_basic
     debugger_output = 'test-init.out'
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
       old_emacs = ENV['EMACS']
       old_columns = ENV['COLUMNS']
       ENV['EMACS'] = nil

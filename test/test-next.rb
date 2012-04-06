@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'test/unit'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 # Test next command
@@ -15,9 +14,9 @@ class TestNextCommand < Test::Unit::TestCase
 
   def test_basic
     testname='next'
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
                                 "--script #{script} -- ./#{testname}.rb"))
     end

@@ -5,7 +5,6 @@ require 'yaml'
 # require 'diff/lcs'
 # require 'diff/lcs/hunk'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 module TestHelper
@@ -14,13 +13,13 @@ module TestHelper
   def run_debugger(testname, args='', outfile=nil, filter=nil, old_code=false,
                    debug_pgm='tdebug.rb')
     rightfile = File.join('data', "#{testname}.right")
-    
+
     outfile = "#{testname}.out" unless outfile
 
     if File.exists?(outfile)
       FileUtils.rm(outfile)
     end
-    
+
     ENV['RDEBUG'] = debug_pgm
 
     if old_code
@@ -30,7 +29,7 @@ module TestHelper
     end
     puts "'#{cmd}'" if $DEBUG
     output = `#{cmd}`
-    
+
     curr_path = Dir.pwd
     got_lines     = File.read(outfile).split(/\n/).map{|s| s.sub(curr_path, '.') }
     correct_lines = File.read(rightfile).split(/\n/)
@@ -58,14 +57,14 @@ module TestHelper
       end
     end
     if correct_lines.size != got_lines.size
-      puts("difference in number of lines: " + 
+      puts("difference in number of lines: " +
            "#{correct_lines.size} vs. #{got_lines.size}")
       return false
     end
     return true
   end
 
-  # FIXME: using this causes the same test to get run several times 
+  # FIXME: using this causes the same test to get run several times
   # and some tests fail probably because of a lack of environment isolation.
   # Many tests follow a basic pattern: run the debugger with a given
   # debugger script and compare output produced. The following creates
@@ -77,16 +76,16 @@ module TestHelper
     cmd         = 'gcd.rb 3 5' unless cmd
     eval <<-EOF
     def test_#{test_name}
-      Dir.chdir(\"#{src_dir}\") do 
-        assert_equal(true, 
-                     run_debugger(\"#{base_name}\", 
+      Dir.chdir(\"#{src_dir}\") do
+        assert_equal(true,
+                     run_debugger(\"#{base_name}\",
                                   \"--script #{script_name} -- #{cmd}\"))
       end
     end
     EOF
   end
   module_function :add_test
-               
+
   # Adapted from the Ruby Cookbook, Section 6.10: Comparing two files.
   # def diff_as_string(rightfile, checkfile, format=:unified, context_lines=3)
   #   right_data = File.read(rightfile)
@@ -98,7 +97,7 @@ module TestHelper
   #   file_length_difference = 0
   #   diffs.each do |piece|
   #     begin
-  #       hunk = Diff::LCS::Hunk.new(right_data, check_data, piece, 
+  #       hunk = Diff::LCS::Hunk.new(right_data, check_data, piece,
   #                                  context_lines, file_length_difference)
   #       next unless oldhunk
   #
@@ -115,11 +114,11 @@ module TestHelper
   #       output << '\n'
   #     end
   #   end
-  
-  #   # Handle the last remaining hunk 
+
+  #   # Handle the last remaining hunk
   #   output << oldhunk.diff(format) << '\n'
   # end
-  
+
   # Loads key from the _config_._yaml_ file.
   def config_load(key, may_be_nil=false, default_value='')
     conf = File.join('config.private.yaml') # try private first
@@ -139,6 +138,5 @@ module TestHelper
     config_load('ruby_params', true)
   end
   module_function :load_params
-  
-end
 
+end

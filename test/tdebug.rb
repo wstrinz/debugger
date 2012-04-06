@@ -4,11 +4,10 @@
 # FIXME: use the real rdebug script - DRY.
 
 require 'stringio'
-require 'rubygems'
 require 'optparse'
 require "ostruct"
 
-TOP_SRC_DIR = File.join(File.dirname(__FILE__), "..") unless 
+TOP_SRC_DIR = File.join(File.dirname(__FILE__), "..") unless
   defined?(TOP_SRC_DIR)
 
 $:.unshift File.join(TOP_SRC_DIR, "ext")
@@ -17,12 +16,12 @@ $:.unshift File.join(TOP_SRC_DIR, "cli")
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.
-  # Otherwise we get a load message that looks like rdebug has 
-  # a problem. 
+  # Otherwise we get a load message that looks like rdebug has
+  # a problem.
   output = `ruby -c "#{Debugger::PROG_SCRIPT}" 2>&1`
   if $?.exitstatus != 0 and RUBY_PLATFORM !~ /mswin/
     puts output
-    exit $?.exitstatus 
+    exit $?.exitstatus
   end
   print "\032\032starting\n" if Debugger.annotate and Debugger.annotate > 2
   unless options.no_rewrite_program
@@ -32,7 +31,7 @@ def debug_program(options)
     # for the first time and then switching to the debug hook that's
     # normally used would be helpful. Doing this would also help other
     # first-time initializations such as reloading debugger state
-    # after a restart. 
+    # after a restart.
 
     # However This is just a little more than I want to take on right
     # now, so I think I'll stick with the slightly hacky approach.
@@ -96,20 +95,20 @@ EOB
     Debugger.annotate = s
   end
   opts.on("-d", "--debug", "Set $DEBUG=true") {$DEBUG = true}
-  opts.on("--emacs-basic", "Activates basic Emacs mode") do 
+  opts.on("--emacs-basic", "Activates basic Emacs mode") do
     ENV['EMACS'] = '1'
     options.emacs = true
   end
-  opts.on("-m", "--post-mortem", "Activate post-mortem mode") do 
+  opts.on("-m", "--post-mortem", "Activate post-mortem mode") do
     options.post_mortem = true
   end
-  opts.on("--no-control", "Do not automatically start control thread") do 
+  opts.on("--no-control", "Do not automatically start control thread") do
     options.control = false
   end
   opts.on("--no-quit", "Do not quit when script finishes") do
     options.noquit = true
   end
-  opts.on("--no-stop", "Do not stop when script is loaded") do 
+  opts.on("--no-stop", "Do not stop when script is loaded") do
     options.nostop = true
   end
   opts.on("-nx", "Not run debugger initialization files (e.g. .rdebugrc") do
@@ -141,7 +140,7 @@ EOB
     puts opts
     exit
   end
-  opts.on_tail("--version", 
+  opts.on_tail("--version",
                "Print the version") do
     puts "ruby-debug #{Debugger::VERSION}"
     exit
@@ -150,7 +149,7 @@ EOB
     $VERBOSE = true
     options.verbose_long = true
   end
-  opts.on_tail("-v", 
+  opts.on_tail("-v",
                "Print version number, then turn on verbose mode") do
     puts "ruby-debug #{Debugger::VERSION}"
     $VERBOSE = true
@@ -183,7 +182,7 @@ if ARGV.empty?
   puts 'Must specify a script to run'
   exit(-1)
 end
-  
+
 # save script name
 Debugger::PROG_SCRIPT = ARGV.shift
 
@@ -204,19 +203,19 @@ Debugger.post_mortem if options.post_mortem
 
 # Set up an interface to read commands from a debugger script file.
 if options.script
-  Debugger.interface = Debugger::ScriptInterface.new(options.script, 
+  Debugger.interface = Debugger::ScriptInterface.new(options.script,
                                                      STDOUT, true)
 end
 options.nostop = true if options.tracing
 Debugger.tracing = options.tracing
 
 # Make sure Ruby script syntax checks okay.
-# Otherwise we get a load message that looks like rdebug has 
-# a problem. 
+# Otherwise we get a load message that looks like rdebug has
+# a problem.
 output = `ruby -c #{Debugger::PROG_SCRIPT} 2>&1`
 if $?.exitstatus != 0 and RUBY_PLATFORM !~ /mswin/
   puts output
-  exit $?.exitstatus 
+  exit $?.exitstatus
 end
 
 # load initrc script (e.g. .rdebugrc)
@@ -236,7 +235,7 @@ if options.noquit
     until Debugger.stop do end
   end
   debug_program(options)
-  print "The program finished.\n" unless 
+  print "The program finished.\n" unless
     Debugger.annotate.to_i > 1 # annotate has its own way
   interface = Debugger::LocalInterface.new
   # Not sure if ControlCommandProcessor is really the right

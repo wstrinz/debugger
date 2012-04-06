@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 # Adapted from Programming Ruby 2nd Ed. p. 138
-require 'rubygems'
 
 unless defined?(Debugger)
   puts "This program has to be called from the debugger"
@@ -10,7 +9,7 @@ end
 def fn(count, i)
   sleep(rand(0.1))
   if 4 == i
-    debugger 
+    debugger
   end
   Thread.current['mycount'] = count
 end

@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug' ; Debugger.start
 
 require 'test/unit'
-SRC_DIR = File.dirname(__FILE__) unless 
+SRC_DIR = File.dirname(__FILE__) unless
   defined?(SRC_DIR)
 %w(ext lib cli).each do |dir|
   $:.unshift  File.join(SRC_DIR, '..', dir)
@@ -25,7 +24,7 @@ def cheap_diff(got_lines, correct_lines)
       return false
     end
     if correct_lines.size != got_lines.size
-      puts("difference in number of lines: " + 
+      puts("difference in number of lines: " +
            "#{correct_lines.size} vs. #{got_lines.size}")
       return false
     end
@@ -41,7 +40,7 @@ class TestHelp < Test::Unit::TestCase
   def test_basic
     testbase = 'help'
     op = StringIO.new('', 'w')
-    Dir.chdir(SRC_DIR) do 
+    Dir.chdir(SRC_DIR) do
       script = File.join('data', "#{testbase}.cmd")
       Debugger.const_set('Version', 'unit testing')
       Debugger.run_script(script, op)
@@ -51,10 +50,10 @@ class TestHelp < Test::Unit::TestCase
       result = cheap_diff(got_lines, correct_lines)
       unless result
         puts '-' * 80
-        puts got_lines 
+        puts got_lines
         puts '-' * 80
       end
-      assert result 
+      assert result
     end
   end
 end

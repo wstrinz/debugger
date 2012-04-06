@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug' ; Debugger.start
 
 require 'test/unit'

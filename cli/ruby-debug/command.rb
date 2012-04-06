@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'columnize'
 require_relative 'helper'
 
@@ -29,22 +28,22 @@ module Debugger
       def commands
         @commands ||= []
       end
-      
+
       DEF_OPTIONS = {
-        :allow_in_control     => false, 
+        :allow_in_control     => false,
         :allow_in_post_mortem => true,
-        :event => true, 
+        :event => true,
         :always_run => 0,
         :unknown => false,
         :need_context => false,
       } unless defined?(DEF_OPTIONS)
-      
+
       def inherited(klass)
         DEF_OPTIONS.each do |o, v|
           klass.options[o] = v if klass.options[o].nil?
         end
         commands << klass
-      end 
+      end
 
       def load_commands
         Dir[File.join(Debugger.const_get(:RUBY_DEBUG_DIR), 'commands', '*')].each do |file|
@@ -54,7 +53,7 @@ module Debugger
           include mod
         end
       end
-      
+
       def method_missing(meth, *args, &block)
         if meth.to_s =~ /^(.+?)=$/
           @options[$1.intern] = args.first
@@ -66,7 +65,7 @@ module Debugger
           end
         end
       end
-      
+
       def options
         @options ||= {}
       end
@@ -75,7 +74,7 @@ module Debugger
         @@settings_map ||= {}
       end
       private :settings_map
-      
+
       def settings
         unless true and defined? @settings and @settings
           @settings = Object.new
@@ -126,7 +125,7 @@ module Debugger
       end
     end
 
-    register_setting_var(:basename, false)  # use basename in showing files? 
+    register_setting_var(:basename, false)  # use basename in showing files?
     register_setting_var(:callstyle, :last)
     register_setting_var(:debuggertesting, false)
     register_setting_var(:force_stepping, false)
@@ -134,18 +133,18 @@ module Debugger
     register_setting_var(:listsize, 10)    # number of lines in list command
     register_setting_var(:stack_trace_on_error, false)
     register_setting_var(:tracing_plus, false) # different linetrace lines?
-    
-    # width of line output. Use COLUMNS value if it exists and is 
+
+    # width of line output. Use COLUMNS value if it exists and is
     # not too rediculously large.
-    width = ENV['COLUMNS'].to_i 
+    width = ENV['COLUMNS'].to_i
     width = 80 unless width > 10
-    register_setting_var(:width, width)  
+    register_setting_var(:width, width)
 
     if not defined? Debugger::ARGV
       Debugger::ARGV = ARGV.clone
     end
     register_setting_var(:argv, Debugger::ARGV)
-    
+
     def initialize(state)
       @state = state
     end
@@ -156,7 +155,7 @@ module Debugger
 
     protected
 
-    # FIXME: use delegate? 
+    # FIXME: use delegate?
     def errmsg(*args)
       @state.errmsg(*args)
     end
@@ -204,15 +203,15 @@ module Debugger
 
     def get_context(thnum)
       Debugger.contexts.find{|c| c.thnum == thnum}
-    end  
+    end
   end
-  
+
   Command.load_commands
 
   # Returns setting object.
   # Use Debugger.settings[] and Debugger.settings[]= methods to query and set
   # debugger settings. These settings are available:
-  # 
+  #
   # - :autolist - automatically calls 'list' command on breakpoint
   # - :autoeval - evaluates input in the current binding if it's not recognized as a debugger command
   # - :autoirb - automatically calls 'irb' command on breakpoint
@@ -221,7 +220,7 @@ module Debugger
   # - :frame_class_names - displays method's class name when showing frame stack
   # - :reload_source_on_change - makes 'list' command to always display up-to-date source code
   # - :force_stepping - stepping command asways move to the new line
-  # 
+  #
   def self.settings
     Command.settings
   end

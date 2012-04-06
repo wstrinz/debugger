@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'test/unit'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 # Test 'starting' annotation.
@@ -15,9 +14,9 @@ class TestStartingAnnotate < Test::Unit::TestCase
 
   def test_basic
     testname='output'
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
                                 "-A 3 --script #{script} -- ./output.rb",
                                 nil, nil, true))

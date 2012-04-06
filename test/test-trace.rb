@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'test/unit'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 # Test tracing
@@ -20,7 +19,7 @@ class TestTrace < Test::Unit::TestCase
       }
 
     testname='trace'
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
       assert_equal(true,
                    run_debugger(testname,
                                 "-nx --trace ./gcd.rb 3 5", nil, filter))
@@ -34,11 +33,11 @@ class TestTrace < Test::Unit::TestCase
       }
 
     testname='linetrace'
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
-                                "--script #{script} -- ./gcd.rb 3 5", nil, 
+                                "--script #{script} -- ./gcd.rb 3 5", nil,
                                 filter))
 
     end

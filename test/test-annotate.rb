@@ -2,7 +2,6 @@
 require 'test/unit'
 require 'fileutils'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 # Test annotate handling.
@@ -15,9 +14,9 @@ class TestAnnotate < Test::Unit::TestCase
 
   def test_basic
     testname='annotate'
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
                                 "--script #{script} -- ./gcd.rb 3 5"))
     end

@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'test/unit'
 
-# require 'rubygems'
 # require 'ruby-debug'; Debugger.start
 
 # Test finish command
@@ -23,11 +22,11 @@ class TestFinish < Test::Unit::TestCase
 #       end
 #       got_lines[32] = 'return a'
 #     }
-    Dir.chdir(@@src_dir) do 
+    Dir.chdir(@@src_dir) do
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
-                                "--script #{script} -- ./gcd.rb 3 5", 
+                                "--script #{script} -- ./gcd.rb 3 5",
                                 nil, nil))
     end
   end

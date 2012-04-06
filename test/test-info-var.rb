@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'test/unit'
 
-# begin require 'rubygems' rescue LoadError end
 # require 'ruby-debug'; Debugger.start
 
 # Test info variables command
@@ -15,7 +14,7 @@ class TestInfoVar < Test::Unit::TestCase
 
   def test_info_variables
 
-    Dir.chdir(@@SRC_DIR) do 
+    Dir.chdir(@@SRC_DIR) do
 
       filter = Proc.new{|got_lines, correct_lines|
         [got_lines[13-1], correct_lines[13-1]].each do |s|
@@ -31,13 +30,13 @@ class TestInfoVar < Test::Unit::TestCase
 
       testname='info-var'
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
                                 "--script #{script} -- ./info-var-bug.rb",
                                 nil, filter))
       testname='info-var-bug2'
       script = File.join('data', testname + '.cmd')
-      assert_equal(true, 
+      assert_equal(true,
                    run_debugger(testname,
                                 "--script #{script} -- ./info-var-bug2.rb",
                                 nil))
