@@ -15,6 +15,7 @@ For Windows install instructions, see OLD\_README.
 ## Usage
 
 Wherever you need a debugger, simply:
+
 ```ruby
 require 'debugger'; debugger
 ```
