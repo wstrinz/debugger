@@ -9,8 +9,8 @@ SRC_DIR = File.dirname(__FILE__) unless
   $:.unshift  File.join(SRC_DIR, '..', dir)
 end
 require 'ruby_debug'
+require 'ruby-debug'
 
-require File.join(SRC_DIR, '..', 'cli', 'ruby-debug')
 $:.shift; $:.shift; $:.shift
 
 def cheap_diff(got_lines, correct_lines)

@@ -15,13 +15,13 @@ COMMON_FILES = FileList[
   'Rakefile',
 ]
 
-CLI_TEST_FILE_LIST = FileList['test/cli/commands/unit/*.rb',
-                              'test/cli/commands/*_test.rb',
-                              'test/cli/**/*_test.rb']
+CLI_TEST_FILE_LIST = FileList['test/lib/commands/unit/*.rb',
+                              'test/lib/commands/*_test.rb',
+                              'test/lib/**/*_test.rb']
                               # disabled until requires fixed and tests pass
                               # 'test/test-*.rb']
 CLI_FILES = COMMON_FILES + FileList[
-  "cli/**/*",
+  "lib/**/*",
   'ChangeLog',
   'bin/*',
   'doc/rdebug.1',
@@ -51,7 +51,6 @@ task :test => :test_base do
   Rake::TestTask.new(:test) do |t|
     t.libs << './ext'
     t.libs << './lib'
-    t.libs << './cli'
     t.test_files = CLI_TEST_FILE_LIST
     t.verbose = true
   end

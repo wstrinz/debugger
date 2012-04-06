@@ -9,7 +9,7 @@ SRC_DIR = File.join(Dir.pwd, File.dirname(__FILE__)) unless
   $: <<  File.join(SRC_DIR, '..', dir)
 end
 require 'ruby_debug'
-require File.join(SRC_DIR, '..', 'cli', 'ruby-debug')
+require 'ruby-debug'
 
 # Test Local Control Interface
 class TestCtrl < Test::Unit::TestCase

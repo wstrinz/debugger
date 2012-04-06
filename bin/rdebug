@@ -104,7 +104,7 @@
 
 require 'optparse'
 require 'ostruct'
-require_relative '../cli/ruby-debug'
+require 'ruby-debug'
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.

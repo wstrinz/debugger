@@ -2,13 +2,10 @@ require 'test/unit'
 
 
 class TestCommandREs < Test::Unit::TestCase
-  base_dir=File.expand_path(File.join(File.dirname(__FILE__), 
-                                      '..', '..', '..', '..',
-                                      'cli', 'ruby-debug'))
-  require File.join(base_dir, 'command')
-  require File.join(base_dir, 'commands', 'frame')
+  require 'ruby-debug/command'
+  require 'ruby-debug/commands/frame'
   include Debugger
- 
+
   def test_quit
     c = QuitCommand.new(nil)
     assert c.regexp.match('quit')
@@ -39,4 +36,3 @@ class TestCommandREs < Test::Unit::TestCase
     assert_equal(nil, c.regexp.match('dow'))
   end
 end
-
