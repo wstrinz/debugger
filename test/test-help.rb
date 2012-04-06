@@ -5,13 +5,8 @@
 require 'test/unit'
 SRC_DIR = File.dirname(__FILE__) unless
   defined?(SRC_DIR)
-%w(ext lib cli).each do |dir|
-  $:.unshift  File.join(SRC_DIR, '..', dir)
-end
 require 'ruby_debug'
 require 'ruby-debug'
-
-$:.shift; $:.shift; $:.shift
 
 def cheap_diff(got_lines, correct_lines)
   puts got_lines if $DEBUG

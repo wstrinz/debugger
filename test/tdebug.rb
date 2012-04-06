@@ -12,7 +12,6 @@ TOP_SRC_DIR = File.join(File.dirname(__FILE__), "..") unless
 
 $:.unshift File.join(TOP_SRC_DIR, "ext")
 $:.unshift File.join(TOP_SRC_DIR, "lib")
-$:.unshift File.join(TOP_SRC_DIR, "cli")
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.

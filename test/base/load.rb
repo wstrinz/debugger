@@ -1,14 +1,10 @@
 #!/usr/bin/env ruby
 require 'test/unit'
+require 'ruby_debug'
 
 # Test of Debugger.debug_load in C extension ruby_debug.so
 class TestDebugLoad < Test::Unit::TestCase
 
-  @@src_dir = File.dirname(__FILE__)
-  $:.unshift File.join(@@src_dir, '..', '..', 'ext')
-  require 'ruby_debug'
-  $:.shift
-  
   class  << self
     def at_line(file, line)
       @@at_line = [File.basename(file), line]
