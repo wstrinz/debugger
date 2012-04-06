@@ -2,7 +2,7 @@
 
 #=== Summary
 #
-#A command-line front-end to the Ruby debugger, <tt>ruby-debug</tt>, the
+#A command-line front-end to the Ruby debugger, <tt>debugger</tt>, the
 #Fast Ruby Debugger.
 #
 #Command invocation:
@@ -104,7 +104,7 @@
 
 require 'optparse'
 require 'ostruct'
-require 'ruby-debug'
+require 'debugger'
 
 def debug_program(options)
   # Make sure Ruby script syntax checks okay.
@@ -225,7 +225,7 @@ EOB
     opts.on('-r', '--require SCRIPT', String,
             'Require the library, before executing your script') do |name|
       if name == 'debug'
-        puts "ruby-debug is not compatible with Ruby's 'debug' library. This option is ignored."
+        puts "debugger is not compatible with Ruby's 'debug' library. This option is ignored."
       else
         require name
       end
@@ -262,7 +262,7 @@ EOB
     end
     opts.on_tail('--version',
                  'Print the version') do
-      puts "ruby-debug #{Debugger::VERSION}"
+      puts "debugger #{Debugger::VERSION}"
       exit
     end
     opts.on('--verbose', 'Turn on verbose mode') do
@@ -271,7 +271,7 @@ EOB
     end
     opts.on_tail('-v',
                  'Print version number, then turn on verbose mode') do
-      puts "ruby-debug #{Debugger::VERSION}"
+      puts "debugger #{Debugger::VERSION}"
       $VERBOSE = true
     end
   end
