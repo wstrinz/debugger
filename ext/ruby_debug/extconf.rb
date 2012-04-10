@@ -1,12 +1,14 @@
-require 'rbconfig'
-bindir = RbConfig::CONFIG['bindir']
 # autodetect ruby headers
-if bindir =~ %r{(^.*/\.rbenv/versions)/([^/]+)/bin$}
-  ruby_include = "#{$1}/#{$2}/include/ruby-1.9.1/ruby-#{$2}"
-  ARGV << "--with-ruby-include=#{ruby_include}"
-elsif bindir =~ %r{(^.*/\.rvm/rubies)/([^/]+)/bin$}
-  ruby_include = "#{$1}/#{$2}/include/ruby-1.9.1/#{$2}"
-  ARGV << "--with-ruby-include=#{ruby_include}"
+unless ARGV.any? {|arg| arg.include?('--with-ruby-include') }
+  require 'rbconfig'
+  bindir = RbConfig::CONFIG['bindir']
+  if bindir =~ %r{(^.*/\.rbenv/versions)/([^/]+)/bin$}
+    ruby_include = "#{$1}/#{$2}/include/ruby-1.9.1/ruby-#{$2}"
+    ARGV << "--with-ruby-include=#{ruby_include}"
+  elsif bindir =~ %r{(^.*/\.rvm/rubies)/([^/]+)/bin$}
+    ruby_include = "#{$1}/#{$2}/include/ruby-1.9.1/#{$2}"
+    ARGV << "--with-ruby-include=#{ruby_include}"
+  end
 end
 
 require "mkmf"
