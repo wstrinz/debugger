@@ -63,7 +63,7 @@ Let's keep this working for the ruby community!
 ## Credits
 
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
-* Contributors: jnimety
+* Contributors: jnimety, adammck
 * Fork started on awesome @relevance fridays!
 
 ## TODO
