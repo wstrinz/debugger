@@ -1,3 +1,7 @@
+## 1.1.1
+* Fix allowing user's to pass --with-ruby-include
+* Improve rvm src autodetection - works for 1.9.3-head
+
 ## 1.1.0
 * Point to new debugger-ruby_core_source API
 * General cleanup
