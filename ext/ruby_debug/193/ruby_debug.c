@@ -1755,6 +1755,7 @@ context_frame_id(int argc, VALUE *argv, VALUE self)
 {
     ID id;
     VALUE frame;
+    VALUE frame_id;
     debug_context_t *debug_context;
     rb_control_frame_t *cfp;
 
@@ -1764,10 +1765,11 @@ context_frame_id(int argc, VALUE *argv, VALUE self)
 
     cfp = GET_FRAME->info.runtime.cfp;
 #if defined HAVE_RB_CONTROL_FRAME_T_METHOD_ID
-    return(RUBYVM_CFUNC_FRAME_P(cfp) ? ID2SYM(cfp->method_id) : ID2SYM(cfp->iseq->defined_method_id));
+    frame_id = RUBYVM_CFUNC_FRAME_P(cfp) ? cfp->method_id : cfp->iseq->defined_method_id;
 #elif defined HAVE_RB_METHOD_ENTRY_T_CALLED_ID
-    return(RUBYVM_CFUNC_FRAME_P(cfp) ? ID2SYM(cfp->me->called_id) : ID2SYM(cfp->iseq->defined_method_id));
+    frame_id = RUBYVM_CFUNC_FRAME_P(cfp) ? cfp->me->called_id : cfp->iseq->defined_method_id;
 #endif
+    return frame_id ? ID2SYM(frame_id) : Qnil;
 }
 
 /*
