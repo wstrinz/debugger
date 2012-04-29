@@ -15,10 +15,9 @@ For Windows install instructions, see OLD\_README.
 
 ## Supported Rubies
 On install, debugger tries to find your ruby's headers. If it's unable to find them and your ruby is a patch release,
-it will use headers included with[debugger-ruby_core_source](https://github.com/cldwalker/debugger-ruby_core_source).
-[See here](https://github.com/cldwalker/debugger-ruby_core_source/tree/master/lib/debugger/ruby_core_source) for
-the list of rubies supported by debugger. *If your ruby is not a patch release i.e. head, dev or an rc,
-you are responsible for having headers and setting them with --with-ruby-include.*
+it will use headers included with [debugger-ruby_core_source](https://github.com/cldwalker/debugger-ruby_core_source).
+For the list of rubies supported by debugger [see here](https://github.com/cldwalker/debugger-ruby_core_source/tree/master/lib/debugger/ruby_core_source).
+*If your ruby is not a patch release i.e. head, dev or an rc, you are responsible for having headers and setting them with --with-ruby-include.*
 
 ## Usage
 
