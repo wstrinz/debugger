@@ -12,6 +12,14 @@ A fork of ruby-debug(19) that works on 1.9.2 and 1.9.3 and installs easily for r
 
 For Windows install instructions, see OLD\_README.
 
+
+## Supported Rubies
+On install, debugger tries to find your ruby's headers. If it's unable to find them and your ruby is a patch release,
+it will use headers included with[debugger-ruby_core_source](https://github.com/cldwalker/debugger-ruby_core_source).
+[See here](https://github.com/cldwalker/debugger-ruby_core_source/tree/master/lib/debugger/ruby_core_source) for
+the list of rubies supported by debugger. *If your ruby is not a patch release i.e. head, dev or an rc,
+you are responsible for having headers and setting them with --with-ruby-include.*
+
 ## Usage
 
 Wherever you need a debugger, simply:
@@ -20,7 +28,7 @@ Wherever you need a debugger, simply:
 require 'debugger'; debugger
 ```
 
-To use in your Rails app, drop in your Gemfile:
+To use with bundler, drop in your Gemfile:
 
     gem 'debugger'
 
