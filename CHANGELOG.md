@@ -1,3 +1,6 @@
+## 1.1.2
+* Fix where command failing at the top level
+
 ## 1.1.1
 * Fix allowing user's to pass --with-ruby-include
 * Improve rvm src autodetection - works for 1.9.3-head
