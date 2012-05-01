@@ -1,3 +1,6 @@
+## 1.1.3
+* Bump dependencies
+
 ## 1.1.2
 * Fix where command failing at the top level
 
