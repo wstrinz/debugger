@@ -64,6 +64,11 @@ To use with bundler, drop in your Gemfile:
 ## Issues
 Please report them [on github](http://github.com/cldwalker/debugger/issues).
 
+## Known Issues
+* If you place a debugger call at the end of a block, debugging will start at the next step and
+  outside of your block. A simple work-around is to place a meaningless step (i.e. puts "STAY")
+  at the end of your block and before debugger.
+
 ## Contributing
 [See here](http://tagaholic.me/contributing.html) for contribution policies.
 Let's keep this working for the ruby community!
