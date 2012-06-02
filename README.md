@@ -31,6 +31,35 @@ To use with bundler, drop in your Gemfile:
 
     gem 'debugger'
 
+### Using Settings
+
+From an interactive debugging session you can see the list of
+available debugger settings with "set", and set your settings accordingly:
+
+    (rdb:1) set
+    [..]
+    set autoeval -- Evaluate every unrecognized command
+    set autolist -- Execute 'list' command on every breakpoint
+    [..]
+
+
+#### Saving your settings to an initialization script (dotfile)
+
+If you find yourself wanting certain settings for every debugging session,
+you can put them in an initialization script which will be run every time
+the debugger is invoked.  This file must be called `.rdebugrc` and must
+be either in the current working directory when the debugger is invoked
+and/or in your home directory:
+
+    # (this file: ~/.rdebugrc)
+    set autolist on
+    set autoeval on
+
+You may want to put settings specific to the program you are debugging
+in the current working directory, but note that settings in any
+`.rdebugrc` in your home directory will trump the settings in the
+local one.
+
 ## Reason for Fork
 
 * ruby-debug19 maintainer isn't maintaining:
