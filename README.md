@@ -14,10 +14,13 @@ For Windows install instructions, see OLD\_README.
 
 
 ## Supported Rubies
-On install, debugger tries to find your ruby's headers. If it's unable to find them and your ruby is a patch release,
-it will use headers included with [debugger-ruby_core_source](https://github.com/cldwalker/debugger-ruby_core_source).
-For the list of rubies supported by debugger [see here](https://github.com/cldwalker/debugger-ruby_core_source/tree/master/lib/debugger/ruby_core_source).
-*If your ruby is not a patch release i.e. head, dev or an rc, you are responsible for having headers and setting them with --with-ruby-include.*
+On install, debugger tries to find your ruby's headers. If it's unable to find them and your ruby is
+a patch release, it will use headers included with
+[debugger-ruby_core_source](https://github.com/cldwalker/debugger-ruby_core_source).  For the list
+of rubies supported by debugger [see
+here](https://github.com/cldwalker/debugger-ruby_core_source/tree/master/lib/debugger/ruby_core_source).
+*If your ruby is not an official patch release i.e. head, dev or an rc, you are responsible for
+having headers and setting them with --with-ruby-include.*
 
 ## Usage
 
@@ -31,34 +34,40 @@ To use with bundler, drop in your Gemfile:
 
     gem 'debugger'
 
-### Using Settings
+### Configuration
 
-From an interactive debugging session you can see the list of
-available debugger settings with "set", and set your settings accordingly:
+At initialization time, debugger loads config files, executing their lines
+as if they were actual commands a user has typed. config files are loaded
+from two locations:
 
-    (rdb:1) set
-    [..]
-    set autoeval -- Evaluate every unrecognized command
-    set autolist -- Execute 'list' command on every breakpoint
-    [..]
+* ~/.rdebugrc (~/rdebug.ini for windows)
+* $PWD/.rdebugrc ($PWD/rdebug.ini for windows)
 
+Here's a common configuration (yeah, I should make this the default):
 
-#### Saving your settings to an initialization script (dotfile)
+    set autolist
+    set autoeval
+    set autoreload
 
-If you find yourself wanting certain settings for every debugging session,
-you can put them in an initialization script which will be run every time
-the debugger is invoked.  This file must be called `.rdebugrc` and must
-be either in the current working directory when the debugger is invoked
-and/or in your home directory:
+To see debugger's current settings, use the `set` command.
 
-    # (this file: ~/.rdebugrc)
-    set autolist on
-    set autoeval on
+### Using Commands
 
-You may want to put settings specific to the program you are debugging
-in the current working directory, but note that settings in any
-`.rdebugrc` in your home directory will trump the settings in the
-local one.
+For a list of commands:
+
+    (rdb: 1) help
+
+Most commands are described in rdebug's man page
+
+    $ gem install gem-man
+    $ man rdebug
+
+### More documentation
+
+Some thorough documentation of debugger is found with [this bashdb
+tutorial](http://bashdb.sourceforge.net/ruby-debug.html). For emacs and debugger
+usage, see [another bashdb
+tutorial](http://bashdb.sourceforge.net/ruby-debug/rdebug-emacs.html)
 
 ## Reason for Fork
 
@@ -102,13 +111,19 @@ Please report them [on github](http://github.com/cldwalker/debugger/issues).
 [See here](http://tagaholic.me/contributing.html) for contribution policies.
 Let's keep this working for the ruby community!
 
+## Related projects
+
+* [debugger-pry](https://github.com/pry/debugger-pry) - using pry within debugger
+* [pry-debugger](https://github.com/nixme/pry-debugger) - using debugger within pry
+
 ## Credits
 
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
-* Contributors: ericpromislow, jnimety, adammck
+* Contributors: ericpromislow, jnimety, adammck, hipe
 * Fork started on awesome @relevance fridays!
 
 ## TODO
 
 * Fix test/test-*.rb
+* Port some of bashdb's docs
 * Work with others willing to tackle jruby, rubinius or windows support
