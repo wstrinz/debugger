@@ -113,6 +113,8 @@ Let's keep this working for the ruby community!
 
 ## Related projects
 
+* [debugger-completion](https://github.com/cldwalker/debugger-completion) - autocompletion for
+  debugger commands and more
 * [debugger-pry](https://github.com/pry/debugger-pry) - using pry within debugger
 * [pry-debugger](https://github.com/nixme/pry-debugger) - using debugger within pry
 
