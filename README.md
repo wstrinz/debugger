@@ -126,4 +126,5 @@ Let's keep this working for the ruby community!
 
 * Fix test/test-*.rb
 * Port some of bashdb's docs
+* Use ~/.debuggerrc and bin/debugger and gracefully deprecate rdebug*
 * Work with others willing to tackle jruby, rubinius or windows support
