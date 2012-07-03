@@ -117,6 +117,8 @@ Let's keep this working for the ruby community!
   debugger commands and more
 * [debugger-pry](https://github.com/pry/debugger-pry) - using pry within debugger
 * [pry-debugger](https://github.com/nixme/pry-debugger) - using debugger within pry
+* [ruby-debug-passenger](https://github.com/davejamesmiller/ruby-debug-passenger) - rake task to
+  restart Passenger with debugger connected
 
 ## Credits
 
