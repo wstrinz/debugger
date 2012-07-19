@@ -17,7 +17,8 @@ COMMON_FILES = FileList[
 
 CLI_TEST_FILE_LIST = FileList['test/lib/commands/unit/*.rb',
                               'test/lib/commands/*_test.rb',
-                              'test/lib/**/*_test.rb']
+                              'test/lib/**/*_test.rb',
+                              'test/test-remote.rb']
                               # disabled until requires fixed and tests pass
                               # 'test/test-*.rb']
 CLI_FILES = COMMON_FILES + FileList[

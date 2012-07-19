@@ -1,6 +1,6 @@
-#!/usr/bin/env ruby
 require 'test/unit'
 require 'socket'
+require 'ruby-debug'
 
 # Test Debugger.start_remote, Debugger.cmd_port and Debugger.ctrl_port
 class TestRemote < Test::Unit::TestCase
