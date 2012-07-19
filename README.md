@@ -123,7 +123,7 @@ Let's keep this working for the ruby community!
 ## Credits
 
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
-* Contributors: ericpromislow, jnimety, adammck, hipe
+* Contributors: ericpromislow, jnimety, adammck, hipe, FooBarWidget
 * Fork started on awesome @relevance fridays!
 
 ## TODO
