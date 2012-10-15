@@ -1,3 +1,6 @@
+## 1.2.1
+* Bump ruby_core_source dependency
+
 ## 1.2.0
 * Add the ability to query the command and control port when starting remote debugging
 
