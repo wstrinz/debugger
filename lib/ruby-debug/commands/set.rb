@@ -141,8 +141,10 @@ set history size -- Set the size of the command history"],
                   when /^size$/
                     interface.history_length = get_int(args[1],
                                                        "Set history size")
+                  when /^filename$/
+                    interface.histfile = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
                   else
-                    print "Invalid history parameter #{args[0]}. Should be 'save' or 'size'.\n" 
+                    print "Invalid history parameter #{args[0]}. Should be 'filename', 'save' or 'size'.\n" 
                   end
                 else
                   print "Need two parameters for 'set history'; got #{args.size}.\n" 
