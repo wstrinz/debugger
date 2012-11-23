@@ -12,4 +12,4 @@ a = 3
 debugger
 b = 5
 c = a + b
-load Pathname.new(__FILE__ + "/../ex2.rb").cleanpath
+load Pathname.new(__FILE__ + "/../breakpoint2.rb").cleanpath

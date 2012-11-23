@@ -8,7 +8,7 @@ describe "Settings" do
     before do
       Debugger::Command.settings[:debuggertesting] = nil
       enter 'set debuggertesting on'
-      debug_file("ex1")
+      debug_file("settings")
     end
 
     it "must be set" do
@@ -25,7 +25,7 @@ describe "Settings" do
     before do
       Debugger::Command.settings[:callstyle] = nil
       enter 'set callstyle last'
-      debug_file("ex1")
+      debug_file("settings")
     end
 
     it "must be set" do
@@ -42,7 +42,7 @@ describe "Settings" do
     before do
       Debugger::Command.settings[:autoeval] = nil
       enter 'set autoeval off'
-      debug_file("ex1")
+      debug_file("settings")
     end
 
     it "must be set" do
