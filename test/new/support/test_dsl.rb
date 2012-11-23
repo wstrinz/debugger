@@ -88,4 +88,10 @@ module TestDsl
   def context
     state.context
   end
+
+  def force_set_const(klass, const, value)
+    klass.send(:remove_const, const) if klass.const_defined?(const)
+    klass.const_set(const, value)
+  end
+
 end

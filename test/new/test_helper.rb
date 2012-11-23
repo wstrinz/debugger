@@ -1,6 +1,7 @@
 require 'pathname'
 require 'rubygems'
 require 'minitest/autorun'
+require 'mocha/setup'
 
 lib_path = (Pathname.new(__FILE__) + "../../../lib").cleanpath
 $LOAD_PATH.unshift(lib_path)
