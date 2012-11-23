@@ -2,7 +2,6 @@ require_relative 'test_helper'
 
 describe "Settings" do
   include TestDsl
-  before { Debugger.interface = TestInterface.new }
 
   describe "setting debuggertesting" do
     before do

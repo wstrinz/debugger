@@ -2,7 +2,6 @@ require_relative 'test_helper'
 
 describe "Breakpoints" do
   include TestDsl
-  before { Debugger.interface = TestInterface.new }
 
   describe "setting breakpoint in the current file" do
     before { enter 'break 10' }

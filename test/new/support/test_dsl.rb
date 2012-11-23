@@ -1,4 +1,11 @@
 module TestDsl
+  def self.included(base)
+    base.class_eval do
+      before do
+        Debugger.interface = TestInterface.new
+      end
+    end
+  end
 
   # Adds commands to the input queue, so they will be retrieved by Processor later.
   # I.e. it emulates user's input.
