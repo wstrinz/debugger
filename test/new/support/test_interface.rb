@@ -29,6 +29,7 @@ class TestInterface < Debugger::Interface
 
   def confirm(message)
     @confirm_queue << message
+    read_command message
   end
 
   def readline_support?
