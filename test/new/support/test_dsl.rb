@@ -105,4 +105,22 @@ module TestDsl
     klass.const_set(const, value)
   end
 
+  def temporary_change_method_value(item, method, value)
+    old = item.send(method)
+    item.send("#{method}=", value)
+    yield
+  ensure
+    item.send("#{method}=", old)
+  end
+
+  def temporary_change_hash_value(item, key, value)
+    old_value = item[key]
+    begin
+      item[key] = value
+      yield
+    ensure
+      item[key] = old_value
+    end
+  end
+
 end
