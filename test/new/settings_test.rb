@@ -15,7 +15,7 @@ describe "Settings" do
     end
 
     it "must return right response" do
-      check_output 'Currently testing the debugger is on.'
+      check_output_includes 'Currently testing the debugger is on.'
     end
   end
 
@@ -32,7 +32,7 @@ describe "Settings" do
     end
 
     it "must return right response" do
-      check_output 'Frame call-display style is last.'
+      check_output_includes 'Frame call-display style is last.'
     end
   end
 
@@ -49,7 +49,7 @@ describe "Settings" do
     end
 
     it "must return right response" do
-      check_output 'autoeval is off.'
+      check_output_includes 'autoeval is off.'
     end
   end
 end

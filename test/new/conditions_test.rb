@@ -56,7 +56,7 @@ describe "Conditions" do
     it "must show error if there are no breakpoints" do
       enter 'cond 1 true'
       debug_file('conditions')
-      check_output "No breakpoints have been set."
+      check_output_includes "No breakpoints have been set."
     end
 
     it "must not set breakpoint condition if breakpoint id is incorrect" do

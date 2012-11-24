@@ -21,7 +21,7 @@ describe "Continue Command" do
   it "must show error if there is no specified line" do
     enter 'cont 123'
     debug_file('continue')
-    check_output "Line 123 is not a stopping point in file \"#{fullpath('continue')}\".", interface.error_queue
+    check_output_includes "Line 123 is not a stopping point in file \"#{fullpath('continue')}\".", interface.error_queue
   end
 
   it "must ignore the line if the context is dead"

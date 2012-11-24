@@ -45,7 +45,7 @@ describe "Restart Command" do
 
       it "must show a message about reexecing" do
         debug_file('restart')
-        check_output "Re exec'ing:\n\t#{rdebug_script} argv"
+        check_output_includes "Re exec'ing:\n\t#{rdebug_script} argv"
       end
     end
 
@@ -62,7 +62,7 @@ describe "Restart Command" do
 
       it "must show an error message" do
         debug_file('restart')
-        check_output "Don't know name of debugged program", interface.error_queue
+        check_output_includes "Don't know name of debugged program", interface.error_queue
       end
     end
 
@@ -71,7 +71,7 @@ describe "Restart Command" do
       Debugger.send(:remove_const, "PROG_SCRIPT")
       force_set_const(Debugger, "DEFAULT_START_SETTINGS", init: true, post_mortem: false, tracing: nil)
       debug_file('restart')
-      check_output "Ruby program prog-0 doesn't exist", interface.error_queue
+      check_output_includes "Ruby program prog-0 doesn't exist", interface.error_queue
     end
 
     describe "no script at the specified path" do
@@ -84,7 +84,7 @@ describe "Restart Command" do
 
       it "must show an error message" do
         debug_file('restart')
-        check_output "Ruby program blabla doesn't exist", interface.error_queue
+        check_output_includes "Ruby program blabla doesn't exist", interface.error_queue
       end
     end
 
@@ -98,13 +98,13 @@ describe "Restart Command" do
 
       it "must show a warning message" do
         debug_file('restart')
-        check_output "Debugger was not called from the outset..."
+        check_output_includes "Debugger was not called from the outset..."
       end
 
       it "must show a warning message when prog script is not executable" do
         debug_file('restart')
-        check_output "Ruby program #{prog_script} doesn't seem to be executable..."
-        check_output "We'll add a call to Ruby."
+        check_output_includes "Ruby program #{prog_script} doesn't seem to be executable..."
+        check_output_includes "We'll add a call to Ruby."
       end
     end
 
@@ -118,7 +118,7 @@ describe "Restart Command" do
 
       it "must show an error message " do
         debug_file('restart')
-        check_output "Failed to change initial directory unexisted/path"
+        check_output_includes "Failed to change initial directory unexisted/path"
       end
     end
 

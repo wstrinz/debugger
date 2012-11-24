@@ -20,7 +20,7 @@ describe "Breakpoints" do
     it("must return right response") do
       id = nil
       debug_file('breakpoint1') { id = subject.id }
-      check_output "Breakpoint #{id} file #{fullpath('breakpoint1')}, line 10"
+      check_output_includes "Breakpoint #{id} file #{fullpath('breakpoint1')}, line 10"
     end
   end
 
@@ -42,7 +42,7 @@ describe "Breakpoints" do
 
     it "must show an error" do
       debug_file("breakpoint1")
-      check_output "There are only #{LineCache.size(fullpath('breakpoint1'))} lines in file \"breakpoint1.rb\".", interface.error_queue
+      check_output_includes "There are only #{LineCache.size(fullpath('breakpoint1'))} lines in file \"breakpoint1.rb\".", interface.error_queue
     end
   end
 
@@ -56,7 +56,7 @@ describe "Breakpoints" do
 
     it "must show an error" do
       debug_file("breakpoint1")
-      check_output 'Line 8 is not a stopping point in file "breakpoint1.rb".', interface.error_queue
+      check_output_includes 'Line 8 is not a stopping point in file "breakpoint1.rb".', interface.error_queue
     end
   end
 
@@ -76,7 +76,7 @@ describe "Breakpoints" do
 
     it "must show a message" do
       debug_file("breakpoint1")
-      check_output "Breakpoint 1 at #{fullpath('breakpoint1')}:14"
+      check_output_includes "Breakpoint 1 at #{fullpath('breakpoint1')}:14"
     end
   end
 
@@ -102,11 +102,11 @@ describe "Breakpoints" do
         debug_file("breakpoint1")
       end
       it "must show an error" do
-        check_output "No source file named asf", interface.error_queue
+        check_output_includes "No source file named asf", interface.error_queue
       end
 
       it "must ask about setting breakpoint anyway" do
-        check_output "Set breakpoint anyway? (y/n)", interface.confirm_queue
+        check_output_includes "Set breakpoint anyway? (y/n)", interface.confirm_queue
       end
     end
   end
@@ -145,7 +145,7 @@ describe "Breakpoints" do
       it "must show an error" do
         enter "break B.a"
         debug_file("breakpoint1")
-        check_output "Unknown class B.", interface.error_queue
+        check_output_includes "Unknown class B.", interface.error_queue
       end
     end
   end
@@ -160,7 +160,7 @@ describe "Breakpoints" do
 
     it "must show an error" do
       debug_file("breakpoint1")
-      check_output 'Invalid breakpoint location: foo.', interface.error_queue
+      check_output_includes 'Invalid breakpoint location: foo.', interface.error_queue
     end
   end
 
@@ -207,19 +207,19 @@ describe "Breakpoints" do
     it "must show an error when conditional syntax is wrong" do
       enter "break 14 ifa b == 3", "break 15", "cont"
       debug_file("breakpoint1") { state.line.must_equal 15 }
-      check_output "Expecting 'if' in breakpoint condition; got: ifa b == 3.", interface.error_queue
+      check_output_includes "Expecting 'if' in breakpoint condition; got: ifa b == 3.", interface.error_queue
     end
 
     it "must show an error if no file or line is specified" do
       enter "break ifa b == 3", "break 15", "cont"
       debug_file("breakpoint1") { state.line.must_equal 15 }
-      check_output "Invalid breakpoint location: ifa b == 3.", interface.error_queue
+      check_output_includes "Invalid breakpoint location: ifa b == 3.", interface.error_queue
     end
 
     it "must show an error if expression syntax is invalid" do
       enter "break if b -=) 3", "break 15", "cont"
       debug_file("breakpoint1") { state.line.must_equal 15 }
-      check_output 'Expression "b -=) 3" syntactically incorrect; breakpoint disabled.', interface.error_queue
+      check_output_includes 'Expression "b -=) 3" syntactically incorrect; breakpoint disabled.', interface.error_queue
     end
   end
 
