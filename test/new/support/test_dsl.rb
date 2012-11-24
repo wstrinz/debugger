@@ -41,6 +41,7 @@ module TestDsl
   #
   def debug_file(filename, &block)
     is_test_block_called = false
+    debug_completed = false
     exception = nil
     if block
       interface.test_block = lambda do
@@ -55,7 +56,11 @@ module TestDsl
         end
       end
     end
-    Debugger.start { load fullpath(filename) }
+    Debugger.start do
+      load fullpath(filename)
+      debug_completed = true
+    end
+    flunk "Debug block was not completed" unless debug_completed
     flunk "test block is provided, but not called" if block && !is_test_block_called
     raise exception if exception
   end
