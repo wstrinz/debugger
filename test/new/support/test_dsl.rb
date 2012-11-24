@@ -105,6 +105,10 @@ module TestDsl
     state.context
   end
 
+  def breakpoint
+    Debugger.breakpoints.first
+  end
+
   def force_set_const(klass, const, value)
     klass.send(:remove_const, const) if klass.const_defined?(const)
     klass.const_set(const, value)

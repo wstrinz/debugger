@@ -5,7 +5,7 @@ describe "Breakpoints" do
 
   describe "setting breakpoint in the current file" do
     before { enter 'break 10' }
-    subject { Debugger.breakpoints.first }
+    subject { breakpoint }
 
     def check_subject(field, value)
       debug_file("breakpoint1") { subject.send(field).must_equal value }
@@ -166,21 +166,94 @@ describe "Breakpoints" do
 
 
   describe "disabling a breakpoint" do
-    before { enter "break 14", ->{"disable #{Debugger.breakpoints.first.id}"}, "break 15" }
+    describe "successfully" do
+      before { enter "break 14" }
 
-    it "must have a breakpoint with #enabled? returning false" do
-      debug_file("breakpoint1") { Debugger.breakpoints.first.enabled?.must_equal false }
+      describe "short syntax" do
+        before { enter ->{"disable #{breakpoint.id}"}, "break 15" }
+        it "must have a breakpoint with #enabled? returning false" do
+          debug_file("breakpoint1") { breakpoint.enabled?.must_equal false }
+        end
+
+        it "must not stop on the disabled breakpoint" do
+          enter "cont"
+          debug_file("breakpoint1") { state.line.must_equal 15 }
+        end
+      end
+
+      describe "full syntax" do
+        before { enter ->{"disable breakpoints #{breakpoint.id}"}, "break 15" }
+        it "must have a breakpoint with #enabled? returning false" do
+          debug_file("breakpoint1") { breakpoint.enabled?.must_equal false }
+        end
+      end
     end
 
-    it "must not stop on the disabled breakpoint" do
-      enter "cont"
-      debug_file("breakpoint1") { state.line.must_equal 15 }
+    describe "errors" do
+      it "must show an error if syntax is incorrect" do
+        enter "disable"
+        debug_file("breakpoint1")
+        check_output_includes(
+          '"disable" must be followed "display", "breakpoints" or breakpoint numbers.',
+          interface.error_queue
+        )
+      end
+
+      it "must show an error if no breakpoints is set" do
+        enter "disable 1"
+        debug_file("breakpoint1")
+        check_output_includes 'No breakpoints have been set.', interface.error_queue
+      end
+
+      it "must show an error if not a number is provided as an argument to 'disable' command" do
+        enter "break 14", "disable foo"
+        debug_file("breakpoint1")
+        check_output_includes "Disable breakpoints argument 'foo' needs to be a number."
+      end
+    end
+  end
+
+
+  describe "enabling a breakpoint" do
+    describe "successfully" do
+      before { enter "break 14" }
+      describe "short syntax" do
+        before { enter ->{"enable #{breakpoint.id}"}, "break 15" }
+
+        it "must have a breakpoint with #enabled? returning true" do
+          debug_file("breakpoint1") { breakpoint.enabled?.must_equal true }
+        end
+
+        it "must stop on the enabled breakpoint" do
+          enter "cont"
+          debug_file("breakpoint1") { state.line.must_equal 14 }
+        end
+      end
+
+      describe "full syntax" do
+        before { enter ->{"enable breakpoints #{breakpoint.id}"}, "break 15" }
+
+        it "must have a breakpoint with #enabled? returning true" do
+          debug_file("breakpoint1") { breakpoint.enabled?.must_equal true }
+        end
+      end
+    end
+
+    describe "errors" do
+      it "must show an error if syntax is incorrect" do
+        enter "enable"
+        debug_file("breakpoint1")
+        check_output_includes(
+          '"enable" must be followed "display", "breakpoints" or breakpoint numbers.',
+          interface.error_queue
+        )
+      end
     end
   end
 
 
   describe "deleting a breakpoint" do
-    before { enter "break 14", ->{"delete #{Debugger.breakpoints.first.id}"}, "break 15" }
+    before { enter "break 14", ->{"delete #{breakpoint.id}"}, "break 15" }
 
     it "must have only one breakpoint" do
       debug_file("breakpoint1") { Debugger.breakpoints.size.must_equal 1 }
@@ -208,6 +281,29 @@ describe "Breakpoints" do
       enter "break 14 ifa b == 3", "break 15", "cont"
       debug_file("breakpoint1") { state.line.must_equal 15 }
       check_output_includes "Expecting 'if' in breakpoint condition; got: ifa b == 3.", interface.error_queue
+    end
+
+    describe "enabling with wrong conditional syntax" do
+      before do
+        enter(
+          "break 14",
+          ->{"disable #{breakpoint.id}"},
+          ->{"cond #{breakpoint.id} b -=( 3"},
+          ->{"enable #{breakpoint.id}"}
+        )
+      end
+
+      it "must not enable a breakpoint" do
+        debug_file("breakpoint1") { breakpoint.enabled?.must_equal false }
+      end
+
+      it "must show an error" do
+        debug_file("breakpoint1")
+        check_output_includes(
+          'Expression "b -=( 3" syntactically incorrect; breakpoint remains disabled.',
+          interface.error_queue
+        )
+      end
     end
 
     it "must show an error if no file or line is specified" do

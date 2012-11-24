@@ -95,4 +95,30 @@ describe "Display Command" do
       end
     end
   end
+
+  describe "disable" do
+    it "must disable a position" do
+      enter 'display d', 'disable display 1'
+      debug_file('display') { state.display.must_equal [[false, "d"]] }
+    end
+
+    it "must show an error if no displays are set" do
+      enter 'disable display 1'
+      debug_file('display')
+      check_output_includes "No display expressions have been set.", interface.error_queue
+    end
+
+    it "must show an error if there is no such display position" do
+      enter 'display d', 'disable display 4'
+      debug_file('display')
+      check_output_includes "Disable display argument '4' needs to at most 1."
+    end
+  end
+
+  describe "enable" do
+    it "must enable a position" do
+      enter 'display d', 'disable display 1', 'enable display 1'
+      debug_file('display') { state.display.must_equal [[true, "d"]] }
+    end
+  end
 end
