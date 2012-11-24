@@ -18,7 +18,7 @@ module TestDsl
   #   enter 'b 12'
   #   enter 'b 12', 'cont'
   #   enter ['b 12', 'cont']
-  #   enter 'b 12', ->{"disable #{Debugger.breakpoints.first.id}"}, 'cont'
+  #   enter 'b 12', ->{"disable #{breakpoint.id}"}, 'cont'
   #
   def enter(*messages)
     messages = messages.first.is_a?(Array) ? messages.first : messages

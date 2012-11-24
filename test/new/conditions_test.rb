@@ -7,43 +7,43 @@ describe "Conditions" do
     before { enter 'break 3' }
 
     describe "successfully" do
-      before { enter ->{"cond #{Debugger.breakpoints.first.id} b == 5"}, "cont" }
+      before { enter ->{"cond #{breakpoint.id} b == 5"}, "cont" }
       it "must stop at the breakpoint if condition is true" do
         debug_file('conditions') { state.line.must_equal 3 }
       end
 
       it "must assign that expression to breakpoint" do
-        debug_file('conditions') { Debugger.breakpoints.first.expr.must_equal "b == 5" }
+        debug_file('conditions') { breakpoint.expr.must_equal "b == 5" }
       end
     end
 
     it "must not stop at the breakpoint if condition is false" do
-      enter "break 4", ->{"cond #{Debugger.breakpoints.first.id} b == 3"}, "cont"
+      enter "break 4", ->{"cond #{breakpoint.id} b == 3"}, "cont"
       debug_file('conditions') { state.line.must_equal 4 }
     end
 
     it "must ignore the condition if its syntax is incorrect" do
-      enter "break 3", ->{"cond #{Debugger.breakpoints.first.id} b =="}, "break 4", "cont"
+      enter "break 3", ->{"cond #{breakpoint.id} b =="}, "break 4", "cont"
       debug_file('conditions') { state.line.must_equal 4 }
     end
 
     it "must assign the expression to the breakpoint anyway, even if its syntax is incorrect" do
-      enter "break 3", ->{"cond #{Debugger.breakpoints.first.id} b =="}, "break 4", "cont"
-      debug_file('conditions') { Debugger.breakpoints.first.expr.must_equal "b ==" }
+      enter "break 3", ->{"cond #{breakpoint.id} b =="}, "break 4", "cont"
+      debug_file('conditions') { breakpoint.expr.must_equal "b ==" }
     end
 
     it "must work with full command name too" do
-      enter ->{"condition #{Debugger.breakpoints.first.id} b == 5"}, "cont"
+      enter ->{"condition #{breakpoint.id} b == 5"}, "cont"
       debug_file('conditions') { state.line.must_equal 3 }
     end
   end
 
 
   describe "removing conditions" do
-    before { enter "break 3 if b == 3", "break 4", ->{"cond #{Debugger.breakpoints.first.id}"}, "cont" }
+    before { enter "break 3 if b == 3", "break 4", ->{"cond #{breakpoint.id}"}, "cont" }
 
     it "must remove the condition from the breakpoint" do
-      debug_file('conditions') { Debugger.breakpoints.first.expr.must_be_nil }
+      debug_file('conditions') { breakpoint.expr.must_be_nil }
     end
 
     it "must not stop on the breakpoint" do
