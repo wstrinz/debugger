@@ -3,6 +3,10 @@ module TestDsl
     base.class_eval do
       before do
         Debugger.interface = TestInterface.new
+        Debugger.handler.display.clear
+      end
+      after do
+        Debugger.handler.display.clear
       end
     end
   end

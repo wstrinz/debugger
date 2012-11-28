@@ -2,7 +2,6 @@ require_relative 'test_helper'
 
 describe "Display Command" do
   include TestDsl
-  before { Debugger.handler.display.clear }
 
   it "must show expressions" do
     enter 'display d + 1', 'break 3', 'cont'
