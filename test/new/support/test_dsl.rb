@@ -79,18 +79,18 @@ module TestDsl
   #   check_output "Breakpoint 1 at #{fullpath('ex1')}:4"
   #
   def check_output(check_method, *args)
-    queue = args.last.is_a?(String) ? interface.output_queue : args.pop
-    Array(args).each do |message|
-      queue.map(&:strip).send(check_method, message.strip)
-    end
+    queue = args.last.is_a?(String) || args.last.is_a?(Regexp) ? interface.output_queue : args.pop
+    queue_messages = queue.map(&:strip)
+    messages = Array(args).map { |msg| msg.is_a?(String) ? msg.strip : msg }
+    queue_messages.send(check_method, messages)
   end
 
   def check_output_includes(*args)
-    check_output :must_include, *args
+    check_output :must_include_in_order, *args
   end
 
   def check_output_doesnt_include(*args)
-    check_output :wont_include, *args
+    check_output :wont_include_in_order, *args
   end
 
   def fullpath(filename)
