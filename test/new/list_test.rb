@@ -89,12 +89,6 @@ describe "List Command" do
   end
 
   describe "reload source" do
-    def change_line_in_file(file, line, new_line_content)
-      old_content = File.read(file)
-      new_content = old_content.split("\n").tap { |c| c[line - 1] = new_line_content }.join("\n")
-      File.open(file, 'w') { |f| f.write(new_content) }
-    end
-
     it "must not reload if setting is false" do
       temporary_change_hash_value(Debugger::Command.settings, :reload_source_on_change, false) do
         begin

@@ -118,6 +118,12 @@ module TestDsl
     klass.const_set(const, value)
   end
 
+  def change_line_in_file(file, line, new_line_content)
+    old_content = File.read(file)
+    new_content = old_content.split("\n").tap { |c| c[line - 1] = new_line_content }.join("\n")
+    File.open(file, 'w') { |f| f.write(new_content) }
+  end
+
   def temporary_change_method_value(item, method, value)
     old = item.send(method)
     item.send("#{method}=", value)
