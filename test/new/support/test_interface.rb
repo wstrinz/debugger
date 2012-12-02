@@ -1,6 +1,6 @@
 class TestInterface < Debugger::Interface
   attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue
-  attr_accessor :command_queue, :test_block, :print_queue
+  attr_accessor :command_queue, :test_block, :print_queue, :restart_file
   def initialize
     @input_queue = []
     @output_queue = []
