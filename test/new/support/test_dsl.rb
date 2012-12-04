@@ -143,7 +143,32 @@ module TestDsl
     end
   end
 
+  def temporary_set_const(klass, const, value)
+    old_value = klass.const_defined?(const) ? klass.const_get(const) : :__undefined__
+    begin
+      force_set_const(klass, const, value)
+      yield
+    ensure
+      if old_value == :__undefined__
+        klass.send(:remove_const, const)
+      else
+        force_set_const(klass, const, old_value)
+      end
+    end
+  end
+
   module ClassMethods
+    def temporary_change_method_value(item, method, value)
+      old_value = nil
+      before do
+        old_value = item.send(method)
+        item.send("#{method}=", value)
+      end
+      after do
+        item.send("#{method}=", old_value)
+      end
+    end
+
     def temporary_change_hash_value(item, key, value)
       old_value = nil
       before do
@@ -152,6 +177,21 @@ module TestDsl
       end
       after do
         item[key] = old_value
+      end
+    end
+
+    def temporary_set_const(klass, const, value)
+      old_value = nil
+      before do
+        old_value = klass.const_defined?(const) ? klass.const_get(const) : :__undefined__
+        force_set_const(klass, const, value)
+      end
+      after do
+        if old_value == :__undefined__
+          klass.send(:remove_const, const)
+        else
+          force_set_const(klass, const, old_value)
+        end
       end
     end
   end

@@ -1,7 +1,7 @@
 class TestInterface < Debugger::Interface
   attr_reader :input_queue, :output_queue, :error_queue, :confirm_queue
   attr_accessor :command_queue, :test_block, :print_queue
-  attr_accessor :restart_file, :history_save, :history_length
+  attr_accessor :restart_file, :history_save, :history_length, :readline_support, :histfile
   def initialize
     @input_queue = []
     @output_queue = []
@@ -9,6 +9,7 @@ class TestInterface < Debugger::Interface
     @confirm_queue = []
     @command_queue = []
     @print_queue = []
+    @readline_support = false
   end
 
   def errmsg(*args)
@@ -34,6 +35,7 @@ class TestInterface < Debugger::Interface
   end
 
   def readline_support?
+    @readline_support
   end
 
   def finalize

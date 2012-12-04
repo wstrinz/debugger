@@ -68,7 +68,7 @@ module Debugger
             i += 1
           end
         else
-          s='No readline suport'
+          s='No readline support'
         end
         return s
       when /^debuggertesting$/
