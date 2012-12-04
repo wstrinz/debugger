@@ -18,10 +18,10 @@ class A
     2
   end
   def c
-    d
+    d('a')
     3
   end
-  def d
+  def d(e)
     5
   end
 end

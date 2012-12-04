@@ -36,7 +36,7 @@ describe "Frame Command" do
   it "must print current stack frame when without arguments" do
     enter 'break 25', 'cont', 'up', 'frame'
     debug_file('frame')
-    check_output_includes "#0 ", "A.d"
+    check_output_includes "#0 ", "A.d(e#String)"
   end
 
   it "must set frame to the first one" do
@@ -46,7 +46,7 @@ describe "Frame Command" do
 
   it "must set frame to the last one" do
     enter 'break 25', 'cont', 'frame -1'
-    debug_file('frame') { state.line.must_equal 64 }
+    debug_file('frame') { state.line.must_equal 65 }
   end
 
   it "must not set frame if the frame number is too low" do
@@ -61,15 +61,66 @@ describe "Frame Command" do
     check_output_includes "Adjusting would put us beyond the oldest (initial) frame.", interface.error_queue
   end
 
-  it "must display current backtrace" do
-    enter 'break 25', 'cont', 'where'
-    debug_file('frame')
-    check_output_includes(
-      "-->", "#0", "A.d", "at line #{fullpath('frame')}:25",
-             "#1", "A.c", "at line #{fullpath('frame')}:21",
-             "#2", "A.b", "at line #{fullpath('frame')}:17",
-             "#3", "A.a", "at line #{fullpath('frame')}:14"
-    )
+  describe "full path settings" do
+    temporary_change_hash_value(Debugger::Command.settings, :full_path, false)
+
+    def short_path(fullpath)
+      separator = File::ALT_SEPARATOR || File::SEPARATOR
+      "...#{separator}" + fullpath.split(separator)[-3..-1].join(separator)
+    end
+
+    it "must display current backtrace with full path = true" do
+      enter 'set fullpath', 'break 25', 'cont', 'where'
+      debug_file('frame')
+      check_output_includes(
+        "-->", "#0", "A.d(e#String)", "at line #{fullpath('frame')}:25",
+               "#1", "A.c", "at line #{fullpath('frame')}:21"
+      )
+    end
+
+    it "must display current backtrace with full path = false" do
+      enter 'set nofullpath', 'break 25', 'cont', 'where'
+      debug_file('frame')
+      check_output_includes(
+        "-->", "#0", "A.d(e#String)", "at line #{short_path(fullpath('frame'))}:25",
+               "#1", "A.c", "at line #{short_path(fullpath('frame'))}:21"
+      )
+    end
+  end
+
+  describe "display backtrace with callstyle" do
+    temporary_change_hash_value(Debugger::Command.settings, :callstyle, :last)
+
+    it "must display current backtrace" do
+      enter 'set callstyle last', 'break 25', 'cont', 'where'
+      debug_file('frame')
+      check_output_includes(
+        "-->", "#0", "A.d(e#String)", "at line #{fullpath('frame')}:25",
+               "#1", "A.c", "at line #{fullpath('frame')}:21",
+               "#2", "A.b", "at line #{fullpath('frame')}:17",
+               "#3", "A.a", "at line #{fullpath('frame')}:14"
+      )
+    end
+
+    it "must display current backtrace" do
+      enter 'set callstyle short', 'break 25', 'cont', 'where'
+      debug_file('frame')
+      check_output_includes(
+        "-->", "#0", "d(e)", "at line #{fullpath('frame')}:25",
+               "#1", "c", "at line #{fullpath('frame')}:21",
+               "#2", "b", "at line #{fullpath('frame')}:17",
+               "#3", "a", "at line #{fullpath('frame')}:14"
+      )
+    end
+
+    # NOTE: We also have support of 'tracked' callstyle in the code, but by some reason
+    # it is not allowed to be set by the 'set' command
+    it "must not set 'tracked' callstyle" do
+      enter 'set callstyle tracked'
+      debug_file('frame')
+      check_output_includes "Invalid call style tracked. Should be one of: 'short' or 'last'."
+      Debugger::Command.settings[:callstyle].must_equal :last
+    end
   end
 
   it "must change frame in another thread"

@@ -34,6 +34,14 @@ describe "Restart Command" do
     debug_file('restart')
   end
 
+  it "must specify arguments by 'set' command" do
+    temporary_change_hash_value(Debugger::Command.settings, :argv, []) do
+      Debugger::RestartCommand.any_instance.expects(:exec).with("#{rdebug_script}  1 2 3")
+      enter 'set args 1 2 3', 'restart'
+      debug_file('restart')
+    end
+  end
+
   describe "messaging" do
     before { enter 'restart' }
 

@@ -62,21 +62,56 @@ describe "Breakpoints" do
 
 
   describe "stopping at breakpoint" do
-    before do
-      enter 'break 14', 'cont'
-    end
-
     it "must stop at the correct line" do
+      enter 'break 14', 'cont'
       debug_file("breakpoint1") { state.line.must_equal 14 }
     end
 
     it "must stop at the correct file" do
+      enter 'break 14', 'cont'
       debug_file("breakpoint1") { state.file.must_equal fullpath("breakpoint1") }
     end
 
-    it "must show a message" do
-      debug_file("breakpoint1")
+    describe "show a message" do
+      temporary_change_hash_value(Debugger::Command.settings, :basename, false)
+
+      it "must show a message with full filename" do
+        enter 'break 14', 'cont'
+        debug_file("breakpoint1")
+        check_output_includes "Breakpoint 1 at #{fullpath('breakpoint1')}:14"
+      end
+
+      it "must show a message with basename" do
+        enter 'set basename', 'break 14', 'cont'
+        debug_file("breakpoint1")
+        check_output_includes "Breakpoint 1 at breakpoint1.rb:14"
+      end
+    end
+  end
+
+
+  describe "reloading source on change" do
+    temporary_change_hash_value(Debugger::Command.settings, :reload_source_on_change, false)
+
+    it "must not reload source if autoreload is not set" do
+      enter(
+        'set noautoreload',
+        ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
+        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b'); 'cont'}
+      )
+      debug_file "breakpoint1"
       check_output_includes "Breakpoint 1 at #{fullpath('breakpoint1')}:14"
+    end
+
+    it "must reload source if autoreload is set" do
+      enter(
+        'set autoreload',
+        ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
+        # Setting second breakpoint just to reload the source code after rolling the file changes back
+        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b'); 'break 15'}, 'cont'
+      )
+      debug_file "breakpoint1"
+      check_output_includes "Line 14 is not a stopping point in file \"breakpoint1.rb\".", interface.error_queue
     end
   end
 

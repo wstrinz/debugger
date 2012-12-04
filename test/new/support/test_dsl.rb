@@ -1,6 +1,7 @@
 module TestDsl
   def self.included(base)
     base.class_eval do
+      extend ClassMethods
       before do
         Debugger.interface = TestInterface.new
         Debugger.handler.display.clear
@@ -139,6 +140,19 @@ module TestDsl
       yield
     ensure
       item[key] = old_value
+    end
+  end
+
+  module ClassMethods
+    def temporary_change_hash_value(item, key, value)
+      old_value = nil
+      before do
+        old_value = item[key]
+        item[key] = value
+      end
+      after do
+        item[key] = old_value
+      end
     end
   end
 

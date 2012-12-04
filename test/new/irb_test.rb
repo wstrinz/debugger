@@ -30,6 +30,16 @@ describe "Irb Command" do
     debug_file('irb') { state.line.must_equal 4 }
   end
 
+  describe "autoirb" do
+    temporary_change_hash_value(Debugger::Command.settings, :autoirb, 0)
+
+    it "must call irb automatically after breakpoint" do
+      irb.expects(:eval_input)
+      enter 'set autoirb', 'break 4', 'cont'
+      debug_file 'irb'
+    end
+  end
+
   # TODO: Can't reliably test the signal, from time to time Signal.trap, which is defined in IRBCommand, misses
   # the SIGINT signal, which makes the test suite exit. Not sure how to fix that...
   it "must translate SIGINT into 'cont' command" # do
@@ -40,24 +50,22 @@ describe "Irb Command" do
 
   describe "setting context to $rdebug_state" do
     before { $rdebug_state = nil }
+    temporary_change_hash_value(Debugger::Command.settings, :debuggertesting, false)
+
     it "must set $rdebug_state if irb is in the debug mode" do
-      temporary_change_hash_value(Debugger::Command.settings, :debuggertesting, false) do
-        rdebug_state = nil
-        irb.stubs(:eval_input).calls { rdebug_state = $rdebug_state }
-        enter 'irb -d'
-        debug_file('irb')
-        rdebug_state.must_be_kind_of Debugger::CommandProcessor::State
-      end
+      rdebug_state = nil
+      irb.stubs(:eval_input).calls { rdebug_state = $rdebug_state }
+      enter 'irb -d'
+      debug_file('irb')
+      rdebug_state.must_be_kind_of Debugger::CommandProcessor::State
     end
 
     it "must not set $rdebug_state if irb is not in the debug mode" do
-      temporary_change_hash_value(Debugger::Command.settings, :debuggertesting, false) do
-        rdebug_state = nil
-        irb.stubs(:eval_input).calls { rdebug_state = $rdebug_state }
-        enter 'irb'
-        debug_file('irb')
-        rdebug_state.must_be_nil
-      end
+      rdebug_state = nil
+      irb.stubs(:eval_input).calls { rdebug_state = $rdebug_state }
+      enter 'irb'
+      debug_file('irb')
+      rdebug_state.must_be_nil
     end
   end
 

@@ -5,12 +5,12 @@ describe "Info Command" do
   include Columnize
 
   describe "Args info" do
+    temporary_change_hash_value(Debugger::InfoCommand.settings, :width, 15)
+
     it "must show info about all args" do
-      temporary_change_hash_value(Debugger::InfoCommand.settings, :width, 15) do
-        enter 'break 3', 'cont', 'info args'
-        debug_file 'info'
-        check_output_includes 'a = "aaaaaaa...', 'b = "b"'
-      end
+      enter 'break 3', 'cont', 'info args'
+      debug_file 'info'
+      check_output_includes 'a = "aaaaaaa...', 'b = "b"'
     end
   end
 
