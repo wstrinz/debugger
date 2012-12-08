@@ -80,6 +80,7 @@ describe "Set Command" do
 
   describe "debuggertesting" do
     temporary_change_hash_value(Debugger::Command.settings, :debuggertesting, false)
+    before { $rdebug_state = nil }
     after { $rdebug_state = nil }
 
     it "must set $rdebug_context if debuggersetting is on" do
