@@ -37,7 +37,7 @@ end
 t1 = Thread.new do
   while true
     break if @break
-    sleep 0.1
+    sleep 0.02
   end
 end
 
