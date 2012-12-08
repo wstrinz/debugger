@@ -31,7 +31,7 @@ describe "Thread Command" do
   describe "stop" do
     it "must stop one of the threads" do
       thnum = nil
-      enter 'break 21', 'cont', ->{"thread stop #{Debugger.contexts.last.thnum}"}, ->{puts; release}
+      enter 'break 21', 'cont', ->{"thread stop #{Debugger.contexts.last.thnum}"}, release
       debug_file('thread') { thnum = Debugger.contexts.last.thnum }
       check_output_includes "$", thnum.to_s, /#<Thread:/
     end
@@ -93,7 +93,7 @@ describe "Thread Command" do
 
   describe "switch" do
     it "must switch to another thread" do
-      enter 'break 21', 'cont', ->{"thread #{Debugger.contexts.last.thnum}"}, ->{puts; release}
+      enter 'break 21', 'cont', ->{"thread #{Debugger.contexts.last.thnum}"}, release
       debug_file('thread') { state.line.must_equal 16 }
     end
 
