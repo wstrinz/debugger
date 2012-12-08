@@ -233,9 +233,8 @@ describe "Info Command" do
 
   describe "Threads info" do
     it "must show threads info" do
-      enter 'break 48', 'cont', ->{sleep 0.05; 'info threads'}
+      enter 'break 36', 'cont', 'info threads'
       debug_file 'info'
-      check_output_includes /#<Thread:\S+ sleep>/
       check_output_includes /#<Thread:\S+ run>/
     end
 
