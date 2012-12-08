@@ -1,4 +1,11 @@
 module TestDsl
+  module Shared
+    def fullpath(filename)
+      (Pathname.new(__FILE__) + "../../examples/#{filename}.rb").cleanpath.to_s
+    end
+  end
+  include Shared
+
   def self.included(base)
     base.class_eval do
       extend ClassMethods
@@ -94,10 +101,6 @@ module TestDsl
     check_output :wont_include_in_order, *args
   end
 
-  def fullpath(filename)
-    (Pathname.new(__FILE__) + "../../examples/#{filename}.rb").cleanpath.to_s
-  end
-
   def interface
     Debugger.handler.interface
   end
@@ -158,6 +161,8 @@ module TestDsl
   end
 
   module ClassMethods
+    include Shared
+
     def temporary_change_method_value(item, method, value)
       old_value = nil
       before do
