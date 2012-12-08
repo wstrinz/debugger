@@ -4,10 +4,10 @@ module Debugger
       ary.sort!
       for v in ary
         begin
-          s = debug_eval(v, b).inspect
+          s = debug_eval(v.to_s, b).inspect
         rescue
           begin
-            s = debug_eval(v, b).to_s
+            s = debug_eval(v.to_s, b).to_s
           rescue
             s = "*Error in evaluation*"
           end
@@ -78,7 +78,7 @@ module Debugger
 
       def help(cmd)
         %{
-          v[ar] c[onst] <object>\t\tshow constants of object
+          v[ar] co[nst] <object>\t\tshow constants of object
         }
       end
     end
