@@ -125,4 +125,16 @@ describe "Frame Command" do
 
   it "must change frame in another thread"
   it "must not change frame in another thread if specified thread doesn't exist"
+
+  describe "Post Mortem" do
+    # TODO: This test fails with "Segmentation fault". Probably need to fix it somehow, or forbid this
+    # command in the post mortem mode. Seems like state.context.frame_file and state.context.frame_line
+    # cause that.
+    it "must work in post-mortem mode"
+    #  enter 'cont', "frame"
+    #  debug_file "post_mortem"
+    #  pi
+    #end
+  end
+
 end

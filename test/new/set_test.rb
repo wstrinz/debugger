@@ -162,4 +162,13 @@ describe "Set Command" do
   end
 
 
+  describe "Post Mortem" do
+    temporary_change_hash_value(Debugger::Command.settings, :autolist, 0)
+    it "must work in post-mortem mode" do
+      enter 'cont', "set autolist on"
+      debug_file 'post_mortem'
+      check_output_includes "autolist is on."
+    end
+  end
+
 end

@@ -25,6 +25,4 @@ describe "Continue Command" do
   end
 
   it "must ignore the line if the context is dead"
-  # TODO: What's about postmortem?
-
 end

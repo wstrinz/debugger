@@ -80,4 +80,13 @@ describe "Eval Command" do
     end
   end
 
+
+  describe "Post Mortem" do
+    it "must work in post-mortem mode" do
+      enter 'cont', 'eval 2 + 2'
+      debug_file "post_mortem"
+      check_output_includes "4"
+    end
+  end
+
 end

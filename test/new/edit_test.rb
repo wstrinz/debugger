@@ -39,4 +39,17 @@ describe "Edit Command" do
     check_output_includes "Invalid file/line number specification: blabla", interface.error_queue
   end
 
+
+  describe "Post Mortem" do
+    # TODO: This test fails with "Segmentation fault". Probably need to fix it somehow, or forbid this
+    # command in the post mortem mode
+    it "must work in post-mortem mode"
+    #  temporary_change_hash_value(ENV, "EDITOR", 'editr') do
+    #    Debugger::Edit.any_instance.expects(:system).with("editr +2 #{fullpath('edit')}")
+    #    enter 'cont', "edit #{fullpath('edit')}:2", 'cont'
+    #    debug_file "post_mortem"
+    #  end
+    #end
+  end
+
 end

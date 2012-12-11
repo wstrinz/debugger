@@ -37,4 +37,14 @@ describe "Help Command" do
     debug_file('help')
     check_output_includes Debugger::AddBreakpoint.help(nil).split("\n").map { |l| l.gsub(/^ +/, '') }.join("\n")
   end
+
+
+  describe "Post Mortem" do
+    it "must work in post-mortem mode" do
+      enter 'cont', 'help'
+      debug_file "post_mortem"
+      check_output_includes "Available commands:"
+    end
+  end
+
 end

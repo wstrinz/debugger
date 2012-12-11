@@ -33,4 +33,12 @@ describe "Source Command" do
     debug_file 'source'
     check_output_includes /Command file '.*blabla' is not found/, interface.error_queue
   end
+
+  describe "Post Mortem" do
+    it "must work in post-mortem mode" do
+      enter 'cont', "so #{filename}"
+      debug_file('post_mortem') { Debugger.breakpoints[0].pos.must_equal 3 }
+    end
+  end
+
 end

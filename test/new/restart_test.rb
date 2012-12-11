@@ -129,6 +129,15 @@ describe "Restart Command" do
         check_output_includes "Failed to change initial directory unexisted/path"
       end
     end
-
   end
+
+
+  describe "Post Mortem" do
+    it "must work in post-mortem mode" do
+      must_restart
+      enter 'cont', 'restart'
+      debug_file 'post_mortem'
+    end
+  end
+
 end

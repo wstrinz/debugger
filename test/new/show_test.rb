@@ -24,7 +24,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :argv, %w{foo bar})
 
     it "must show args" do
-      Debugger.send(:remove_const, "RDEBUG_SCRIPT")
+      Debugger.send(:remove_const, "RDEBUG_SCRIPT") if Debugger.const_defined?("RDEBUG_SCRIPT")
       enter 'show args'
       debug_file 'show'
       check_output_includes 'Argument list to give program being debugged when it is started is "foo bar".'
@@ -276,6 +276,16 @@ describe "Show Command" do
           check_output_doesnt_include /9  jjj/
         end
       end
+    end
+  end
+
+  describe "Post Mortem" do
+    temporary_change_hash_value(Debugger::Command.settings, :autolist, 0)
+
+    it "must work in post-mortem mode" do
+      enter 'cont', "show autolist"
+      debug_file 'post_mortem'
+      check_output_includes "autolist is off."
     end
   end
 

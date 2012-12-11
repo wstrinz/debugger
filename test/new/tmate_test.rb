@@ -28,4 +28,14 @@ describe "Tmate Command" do
       check_output_includes "Wrong frame number"
     end
   end
+
+  describe "Post Mortem" do
+    it "must work in post-mortem mode" do
+      Debugger::TextMateCommand.any_instance.expects(:`).with(
+        "open 'txmt://open?url=file://#{fullpath('post_mortem')}&line=8'"
+      )
+      enter 'cont', 'tmate'
+      debug_file 'post_mortem'
+    end
+  end
 end

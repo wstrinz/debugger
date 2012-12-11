@@ -133,4 +133,13 @@ describe "List Command" do
     debug_file 'list'
     check_output_includes "No sourcefile available for blabla", interface.error_queue
   end
+
+
+  describe "Post Mortem" do
+    it "must work in post-mortem mode" do
+      enter 'cont', 'list'
+      debug_file 'post_mortem'
+      check_output_includes "[7, 9] in #{fullpath('post_mortem')}"
+    end
+  end
 end

@@ -120,4 +120,14 @@ describe "Display Command" do
       debug_file('display') { state.display.must_equal [[true, "d"]] }
     end
   end
+
+
+  describe "Post Mortem" do
+    it "must be able to set display expressions in post-mortem mode" do
+      enter 'cont', 'display 2 + 2', 'cont'
+      debug_file("post_mortem")
+      check_output_includes "1:", "2 + 2 = 4"
+    end
+  end
+
 end

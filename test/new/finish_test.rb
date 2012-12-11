@@ -35,4 +35,14 @@ describe "Finish Command" do
       debug_file('finish') { state.line.must_equal 16 }
     end
   end
+
+
+  describe "Post Mortem" do
+    it "must not work in post-mortem mode" do
+      enter 'cont', 'finish'
+      debug_file "post_mortem"
+      check_output_includes 'Unknown command: "finish".  Try "help".', interface.error_queue
+    end
+  end
+
 end

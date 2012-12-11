@@ -53,4 +53,18 @@ describe "Jump Command" do
       end
     end
   end
+
+
+  describe "Post Mortem" do
+    # TODO: This test fails with "Segmentation fault". Probably need to fix it somehow, or forbid this
+    # command in the post mortem mode. Seems like state.context.frame_file and state.context.frame_line
+    # cause that.
+    it "must work in post-mortem mode"# do
+    #  enter 'cont', 'jump 12'
+    #  debug_file 'post_mortem'
+    #  pi
+    #end
+  end
+
+
 end

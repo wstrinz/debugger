@@ -58,4 +58,13 @@ describe "Method Command" do
     end
   end
 
+
+  describe "Post Mortem" do
+    it "must work in post-mortem mode" do
+      enter 'cont', 'm i self'
+      debug_file 'post_mortem'
+      check_output_includes /to_s/
+    end
+  end
+
 end
