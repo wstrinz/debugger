@@ -9,8 +9,6 @@ describe "Display Command" do
     check_output_includes "1: ", "d + 1 = 5"
   end
 
-  it "must not add display to always_run if Debugger.annotate is > 1"
-
   it "must work with shortcut" do
     enter 'disp d + 1', 'break 3', 'cont'
     debug_file('display')
@@ -118,6 +116,16 @@ describe "Display Command" do
     it "must enable a position" do
       enter 'display d', 'disable display 1', 'enable display 1'
       debug_file('display') { state.display.must_equal [[true, "d"]] }
+    end
+  end
+
+  describe "annotate" do
+    temporary_change_method_value(Debugger, :annotate, 0)
+
+    it "must show display expression in annotation" do
+      enter 'display 2 + 2', 'set annotate 3', 'next', 'next'
+      debug_file 'display'
+      check_output_includes "\x1A\x1Adisplay", "1:", "2 + 2 = 4"
     end
   end
 

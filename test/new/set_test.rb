@@ -63,19 +63,39 @@ describe "Set Command" do
     end
   end
 
-  # TODO: Test 'annotate'
   describe "annotate" do
-    it "must set annotate"
-  end
+    temporary_change_method_value(Debugger, :annotate, 0)
+    let(:file) { 'set_annotate' }
 
-  # TODO: Test 'force_stepping'
-  describe "force stepping" do
-    it "must set force stepping"
-  end
+    before do
+      enter 'break 7', 'cont', 'set annotate 3', 'next'
+      debug_file file
+    end
 
-  # TODO: Test 'linetrace and linetrace+'
-  describe "linetrace" do
-    it "must set linetrace"
+    it "must notify when started" do
+      check_output_includes "\x1A\x1Astarting"
+    end
+
+    it "must notify when stopped" do
+      check_output_includes "\x1A\x1Astopped"
+    end
+
+    it "must show breakpoints" do
+      check_output_includes "\x1A\x1Abreakpoints", 'Num Enb What', /\d+ y   at #{fullpath(file)}:7/
+    end
+
+    it "must show stack" do
+      check_output_includes "\x1A\x1Astack", "-->", "#0", "AnnotateExample.a",  "at line #{fullpath(file)}:8"
+    end
+
+    it "must show variables" do
+      check_output_includes "\x1A\x1Avariables"
+      check_output_includes "d = 5"
+      check_output_includes "e = nil"
+      check_output_includes /self = #<AnnotateExample:\S+ @b=3/
+      check_output_includes "@b = 3"
+      check_output_includes "@@c = 4"
+    end
   end
 
   describe "debuggertesting" do
