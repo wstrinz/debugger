@@ -17,4 +17,9 @@ describe "Post Mortem" do
     enter 'cont', 'break 12', 'cont'
     debug_file("post_mortem") { Debugger.post_mortem?.must_equal false }
   end
+
+  it "must save the raised exception" do
+    enter 'cont'
+    debug_file("post_mortem") { Debugger.last_exception.must_be_kind_of RuntimeError }
+  end
 end
