@@ -42,7 +42,7 @@ module Debugger
   # Implements the debugger 'method' command.
   class MethodCommand < Command
     def regexp
-      /^\s*m(?:ethod)?\s+((iv)|(i(:?nstance\s+)?)\s+)?/
+      /^\s*m(?:ethod)?\s+((iv)|(i(:?nstance)?)\s+)?/
     end
 
     def execute
