@@ -63,41 +63,6 @@ describe "Set Command" do
     end
   end
 
-  describe "annotate" do
-    temporary_change_method_value(Debugger, :annotate, 0)
-    let(:file) { 'set_annotate' }
-
-    before do
-      enter 'break 7', 'cont', 'set annotate 3', 'next'
-      debug_file file
-    end
-
-    it "must notify when started" do
-      check_output_includes "\x1A\x1Astarting"
-    end
-
-    it "must notify when stopped" do
-      check_output_includes "\x1A\x1Astopped"
-    end
-
-    it "must show breakpoints" do
-      check_output_includes "\x1A\x1Abreakpoints", 'Num Enb What', /\d+ y   at #{fullpath(file)}:7/
-    end
-
-    it "must show stack" do
-      check_output_includes "\x1A\x1Astack", "-->", "#0", "AnnotateExample.a",  "at line #{fullpath(file)}:8"
-    end
-
-    it "must show variables" do
-      check_output_includes "\x1A\x1Avariables"
-      check_output_includes "d = 5"
-      check_output_includes "e = nil"
-      check_output_includes /self = #<AnnotateExample:\S+ @b=3/
-      check_output_includes "@b = 3"
-      check_output_includes "@@c = 4"
-    end
-  end
-
   describe "debuggertesting" do
     temporary_change_hash_value(Debugger::Command.settings, :debuggertesting, false)
     before { $rdebug_state = nil }
@@ -170,14 +135,18 @@ describe "Set Command" do
     end
   end
 
-  it "must set ENV['COLUMNS'] by the 'set width' command" do
-    old_columns = ENV["COLUMNS"]
-    begin
-      enter 'set width 10'
-      debug_file 'set'
-      ENV["COLUMNS"].must_equal '10'
-    ensure
-      ENV["COLUMNS"] = old_columns
+  describe "width" do
+    temporary_change_hash_value(Debugger::Command.settings, :width, 20)
+
+    it "must set ENV['COLUMNS'] by the 'set width' command" do
+      old_columns = ENV["COLUMNS"]
+      begin
+        enter 'set width 10'
+        debug_file 'set'
+        ENV["COLUMNS"].must_equal '10'
+      ensure
+        ENV["COLUMNS"] = old_columns
+      end
     end
   end
 
