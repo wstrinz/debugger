@@ -91,6 +91,8 @@ module Debugger
     end
 
     def source_reload
+      Object.send(:remove_const, "SCRIPT_LINES__") if Object.const_defined?("SCRIPT_LINES__")
+      Object.const_set("SCRIPT_LINES__", {})
       LineCache::clear_file_cache
     end
 
