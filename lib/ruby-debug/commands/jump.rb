@@ -23,7 +23,7 @@ module Debugger
         return
       end
       if !numeric?(@match[1])
-        puts "Bad line number: " + @match[1]
+        errmsg "Bad line number: " + @match[1]
         return
       end
       line = @match[1].to_i
