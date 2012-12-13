@@ -47,6 +47,14 @@ BASE_FILES = COMMON_FILES + FileList[
   BASE_TEST_FILE_LIST,
 ]
 
+namespace :test do
+  desc "Run new MiniTest tests."
+  Rake::TestTask.new(:new) do |t|
+    t.test_files = FileList["test/new/*_test.rb"]
+    t.verbose = true
+  end
+end
+
 desc "Test everything."
 task :test => :test_base do
   Rake::TestTask.new(:test) do |t|
