@@ -46,7 +46,7 @@ module Debugger
     end
 
     def at_tracing(file, line)
-      @tracing_started = true if File.identical?(file, File.join(Debugger::INITIAL_DIR, Debugger::PROG_SCRIPT))
+      @tracing_started = File.identical?(file, Debugger::PROG_SCRIPT)
       handler.at_tracing(self, file, line) if @tracing_started
     end
 
