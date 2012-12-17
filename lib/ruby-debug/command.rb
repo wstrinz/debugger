@@ -11,6 +11,9 @@ module Debugger
 
     include Columnize
 
+    extend Forwardable
+    def_delegator :"Debugger.printer", :print, :pr
+
     # Find param in subcmds. param id downcased and can be abbreviated
     # to the minimum length listed in the subcommands
     def find(subcmds, param)

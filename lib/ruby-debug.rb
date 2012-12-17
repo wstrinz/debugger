@@ -4,6 +4,7 @@ require 'socket'
 require 'thread'
 require 'ruby-debug-base'
 require 'ruby-debug/processor'
+Dir.glob(File.expand_path("../ruby-debug/printers/**/*.rb", __FILE__)).each { |f| require f }
 
 module Debugger
   self.handler = CommandProcessor.new
@@ -35,13 +36,15 @@ module Debugger
     # if the call stack is truncated.
     attr_accessor :start_sentinal
 
+    attr_accessor :printer
+
     attr_reader :thread, :control_thread, :cmd_port, :ctrl_port
 
     def interface=(value) # :nodoc:
       handler.interface = value
     end
 
-    #
+
     # Starts a remote debugger.
     #
     def start_remote(host = nil, port = PORT)
@@ -150,6 +153,7 @@ module Debugger
       processor.process_commands(verbose)
     end
   end
+  self.printer = Printers::Plain.new
 end
 
 module Kernel

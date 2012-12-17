@@ -6,6 +6,8 @@ module Debugger
   # Should this be a mixin?
   class Processor # :nodoc
     attr_accessor :interface
+    extend Forwardable
+    def_delegator :"Debugger.printer", :print, :pr
 
     # Format msg with gdb-style annotation header
     def afmt(msg, newline="\n")

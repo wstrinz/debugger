@@ -40,7 +40,7 @@ module Mocha
           message = UnexpectedInvocation.new(self, symbol, *arguments).to_s
           require 'mocha/mockery'
           message << Mockery.instance.mocha_inspect
-          raise ExpectationError.new(message, caller)
+          raise ExpectationError.new(message)
         end
       end
     end
