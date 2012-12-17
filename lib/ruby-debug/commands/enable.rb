@@ -7,7 +7,7 @@ module Debugger
         tally = b.id if b.id > tally
       end
       if 0 == largest
-        errmsg "No breakpoints have been set.\n"
+        errmsg pr("toggle.errors.no_breakpoints")
         return
       end
       args.each do |pos|
@@ -18,7 +18,7 @@ module Debugger
             enabled = ("Enable" == is_enable)
             if enabled
               unless syntax_valid?(b.expr)
-                errmsg("Expression \"#{b.expr}\" syntactically incorrect; breakpoint remains disabled.\n")
+                errmsg pr("toggle.errors.expression", expr: b.expr)
                 break
               end
             end
@@ -31,7 +31,7 @@ module Debugger
 
     def enable_disable_display(is_enable, args)
       if 0 == @state.display.size 
-        errmsg "No display expressions have been set.\n"
+        errmsg pr("toggle.errors.no_display")
         return
       end
       args.each do |pos|
@@ -64,8 +64,7 @@ Do \"info display\" to see current list of code numbers."],
     
     def execute
       if not @match[1]
-        errmsg "\"enable\" must be followed \"display\", \"breakpoints\"" +
-          " or breakpoint numbers.\n"
+        errmsg pr("toggle.errors.syntax", toggle: "enable")
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift
@@ -140,8 +139,7 @@ Do \"info display\" to see current list of code numbers."],
     
     def execute
       if not @match[1]
-        errmsg "\"disable\" must be followed \"display\", \"breakpoints\"" +
-          " or breakpoint numbers.\n"
+        errmsg pr("toggle.errors.syntax", toggle: "disable")
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift

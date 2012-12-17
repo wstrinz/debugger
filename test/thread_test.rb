@@ -100,7 +100,7 @@ describe "Thread Command" do
     it "must show error message if thread number is not specified" do
       enter 'break 8', 'cont', "thread switch", release
       debug_file 'thread'
-      check_output_includes "thread thread switch argument 'switch' needs to be a number."
+      check_output_includes "thread thread switch argument 'switch' needs to be a number"
     end
 
     it "must show error message when trying to switch current thread" do

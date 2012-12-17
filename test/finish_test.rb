@@ -28,7 +28,7 @@ describe "Finish Command" do
 
     it "must show an error" do
       debug_file('finish')
-      check_output_includes "Finish argument 'foo' needs to be a number."
+      check_output_includes "Finish argument 'foo' needs to be a number"
     end
 
     it "must be on the same line" do

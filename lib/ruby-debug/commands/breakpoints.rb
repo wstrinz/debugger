@@ -3,7 +3,7 @@ module Debugger
   # Implements debugger "break" command.
   class AddBreakpoint < Command
     self.allow_in_control = true
-    
+
     def regexp
       / ^\s*
         b(?:reak)?
@@ -13,18 +13,22 @@ module Debugger
       /x
     end
 
+    def pr(path, *args)
+      super("breakpoints.#{path}", *args)
+    end
+
     def execute
       if @match[1]
         line, _, _, expr = @match.captures
       else
         _, file, line, expr = @match.captures
       end
-      if expr 
+      if expr
         if expr !~ /^\s*if\s+(.+)/
           if file or line
-            errmsg "Expecting 'if' in breakpoint condition; got: #{expr}.\n"
+            errmsg pr("errors.if", expr: expr)
           else
-            errmsg "Invalid breakpoint location: #{expr}.\n"
+            errmsg pr("errors.location", expr: expr)
           end
           return
         else
@@ -35,12 +39,12 @@ module Debugger
       brkpt_filename = nil
       if file.nil?
         unless @state.context
-          errmsg "We are not in a state that has an associated file.\n"
-          return 
+          errmsg pr("errors.state", expr: expr)
+          return
         end
         brkpt_filename = @state.file
         file = File.basename(@state.file)
-        if line.nil? 
+        if line.nil?
           # Set breakpoint at current line
           line = @state.line.to_s
         end
@@ -50,7 +54,7 @@ module Debugger
         if klass && klass.kind_of?(Module)
           class_name = klass.name if klass
         else
-          errmsg "Unknown class #{file}.\n"
+          errmsg pr("errors.class", file: file)
           throw :debug_error
         end
       else
@@ -59,38 +63,38 @@ module Debugger
         File::ALT_SEPARATOR && file.index(File::ALT_SEPARATOR)
         brkpt_filename = file
       end
-      
+
       if line =~ /^\d+$/
         line = line.to_i
         if LineCache.cache(brkpt_filename, Command.settings[:reload_source_on_change])
           last_line = LineCache.size(brkpt_filename)
           if line > last_line
-            errmsg("There are only %d lines in file \"%s\".\n", last_line, file) 
+            errmsg pr("errors.far_line", lines: last_line, file: file)
             return
           end
           unless LineCache.trace_line_numbers(brkpt_filename).member?(line)
-            errmsg("Line %d is not a stopping point in file \"%s\".\n", line, file) 
+            errmsg pr("errors.not_stopping_line", line: line, file: file)
             return
           end
         else
-          errmsg("No source file named %s\n" % file)
-          return unless confirm("Set breakpoint anyway? (y/n) ")
+          errmsg pr("errors.source", file: file)
+          return unless confirm(pr("confirmations.set_breakpoint"))
         end
 
         unless @state.context
-          errmsg "We are not in a state we can add breakpoints.\n"
-          return 
+          errmsg pr("errors.state")
+          return
         end
         b = Debugger.add_breakpoint brkpt_filename, line, expr
-        print "Breakpoint %d file %s, line %s\n", b.id, brkpt_filename, line.to_s
+        print pr("set_breakpoint_to_line", id: b.id, file: brkpt_filename, line: line)
         unless syntax_valid?(expr)
-          errmsg("Expression \"#{expr}\" syntactically incorrect; breakpoint disabled.\n")
+          errmsg pr("errors.expression", expr: expr)
           b.enabled = false
         end
       else
         method = line.intern.id2name
         b = Debugger.add_breakpoint class_name, method, expr
-        print "Breakpoint %d at %s::%s\n", b.id, class_name, method.to_s
+        print pr("set_breakpoint_to_method", id: b.id, class: class_name, method: method)
       end
     end
 
@@ -120,7 +124,7 @@ module Debugger
     def execute
       unless @state.context
         errmsg "We are not in a state we can delete breakpoints.\n"
-        return 
+        return
       end
       brkpts = @match[1]
       unless brkpts

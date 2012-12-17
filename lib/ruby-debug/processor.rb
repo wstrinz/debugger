@@ -135,7 +135,9 @@ module Debugger
       if Debugger.annotate.to_i > 2
         print afmt("source #{file}:#{line}")
       end
-      print "Breakpoint %d at %s:%s\n", n, file, line
+      print pr(
+        "breakpoints.stop_at_breakpoint", id: n, file: file, line: line, thread_id: Debugger.current_context.thnum
+      )
     end
     protect :at_breakpoint
 

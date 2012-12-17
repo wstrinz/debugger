@@ -1,0 +1,30 @@
+breakpoints:
+  errors:
+    if: "Expecting 'if' in breakpoint condition; got: {expr}"
+    location: "Invalid breakpoint location: {expr}"
+    state: "We are not in a state that has an associated file"
+    class: "Unknown class {file}"
+    far_line: "There are only {lines} lines in file '{file}'"
+    not_stopping_line: "Line {line} is not a stopping point in file '{file}'"
+    source: "No source file named {file}"
+    state: "We are not in a state we can add breakpoints"
+    expression: "Expression '{expr}' syntactically incorrect; breakpoint disabled"
+  confirmations:
+    set_breakpoint: "Set breakpoint anyway?"
+
+toggle:
+  errors:
+    no_breakpoints: "No breakpoints have been set"
+    no_display: "No display expressions have been set"
+    syntax: "'{toggle}' must be followed 'display', 'breakpoints' or breakpoint numbers"
+    expression: "Expression '{expr}' syntactically incorrect; breakpoint remains disabled"
+
+parse:
+  errors:
+    int:
+      too_low: "{cmd} argument '{str}' needs to at least {min}"
+      too_high: "{cmd} argument '{str}' needs to at most {max}"
+      not_number: "{cmd} argument '{str}' needs to be a number"
+    onoff:
+      syntax: "Expecting 'on', 1, 'off', or 0. Got {arg}"
+

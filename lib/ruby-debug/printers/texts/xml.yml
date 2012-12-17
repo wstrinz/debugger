@@ -1,0 +1,17 @@
+breakpoints:
+  set_breakpoint_to_line:
+    tag: breakpointAdded
+    attributes:
+      "no": "{id}"
+      location: "{file}:{line}"
+  set_breakpoint_to_method:
+    tag: breakpointAdded
+    attributes:
+      "no": "{id}"
+      method: "{class}::{method}"
+  stop_at_breakpoint:
+    tag: breakpoint
+    attributes:
+      file: "{file}"
+      line: "{line}"
+      threadId: "{thread_id}"

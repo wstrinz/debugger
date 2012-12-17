@@ -11,15 +11,15 @@ module Debugger
       begin
         int = Integer(str)
         if min and int < min
-          print "%s argument '%s' needs to at least %s.\n" % [cmd, str, min]
+          print Debugger.printer.print("parse.errors.int.too_low", cmd: cmd, str: str, min: min)
           return nil
         elsif max and int > max
-          print "%s argument '%s' needs to at most %s.\n" % [cmd, str, max]
+          print Debugger.printer.print("parse.errors.int.too_high", cmd: cmd, str: str, max: max)
           return nil
         end
         return int
       rescue
-        print "%s argument '%s' needs to be a number.\n" % [cmd, str]
+        print Debugger.printer.print("parse.errors.int.not_number", cmd: cmd, str: str)
         return nil
       end
     end
@@ -30,7 +30,7 @@ module Debugger
       if arg.nil? or arg == ''
         if default.nil?
           if print_error
-            print "Expecting 'on', 1, 'off', or 0. Got nothing.\n"
+            print Debugger.printer.print("parse.errors.onoff.syntax", arg: "nothing")
             raise RuntimeError
           end
           return default
@@ -43,7 +43,7 @@ module Debugger
         return false
       else
         if print_error
-          print "Expecting 'on', 1, 'off', or 0. Got: %s.\n" % arg.to_s
+          print Debugger.printer.print("parse.errors.onoff.syntax", arg: arg)
           raise RuntimeError
         end
       end
