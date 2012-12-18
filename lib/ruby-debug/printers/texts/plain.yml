@@ -2,3 +2,7 @@ breakpoints:
   set_breakpoint_to_line: "Breakpoint {id} file {file}, line {line}"
   set_breakpoint_to_method: "Breakpoint {id} at {class}::{method}"
   stop_at_breakpoint: "Breakpoint {id} at {file}:{line}"
+
+conditions:
+  set_condition: "Condition '{expr}' is set for the breakpoint {id}"
+  unset_condition: "Condition is cleared for the breakpoint {id}"

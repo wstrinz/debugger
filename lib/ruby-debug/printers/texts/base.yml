@@ -12,6 +12,11 @@ breakpoints:
   confirmations:
     set_breakpoint: "Set breakpoint anyway?"
 
+condition:
+  errors:
+    syntax: "'condition' must be followed a breakpoint number and expression"
+    no_breakpoints: "No breakpoints have been set"
+
 toggle:
   errors:
     no_breakpoints: "No breakpoints have been set"
@@ -27,4 +32,3 @@ parse:
       not_number: "{cmd} argument '{str}' needs to be a number"
     onoff:
       syntax: "Expecting 'on', 1, 'off', or 0. Got {arg}"
-

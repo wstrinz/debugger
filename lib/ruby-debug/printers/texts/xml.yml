@@ -15,3 +15,13 @@ breakpoints:
       file: "{file}"
       line: "{line}"
       threadId: "{thread_id}"
+
+conditions:
+  set_condition:
+    tag: conditionSet
+    attributes:
+      bp_id: "{id}"
+  unset_condition:
+    tag: conditionSet # Would ideally be conditionUnset, but we keep compatibility with old ruby-debug-ide
+    attributes:
+      bp_id: "{id}"

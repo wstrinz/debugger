@@ -8,14 +8,14 @@ module Debugger
     
     def execute
       if not @match[1]
-        errmsg "\"condition\" must be followed a breakpoint number and expression\n"
+        errmsg pr("condition.errors.syntax")
       else
         breakpoints = Debugger.breakpoints.sort_by{|b| b.id }
         largest = breakpoints.inject(0) do |tally, b|
           tally = b.id if b.id > tally
         end
         if 0 == largest
-          print "No breakpoints have been set.\n"
+          print pr("condition.errors.no_breakpoints")
           return
         end
         pos = get_int(@match[1], "Condition", 1, largest)
@@ -23,6 +23,11 @@ module Debugger
         breakpoints.each do |b|
           if b.id == pos 
             b.expr = @match[2].empty? ? nil : @match[2]
+            if b.expr
+              print pr("conditions.set_condition", id: b.id, expr: b.expr)
+            else
+              print pr("conditions.unset_condition", id: b.id)
+            end
             break
           end
         end
