@@ -14,8 +14,7 @@ module Debugger
         line_number = get_int(@match[1], "Continue", 0, nil, 0)
         return unless line_number
         unless LineCache.trace_line_numbers(filename).member?(line_number)
-          errmsg("Line %d is not a stopping point in file \"%s\".\n", 
-                 line_number, filename) 
+          errmsg pr("continue.errors.unstopped_line", line: line_number, file: filename)
           return
         end
         @state.context.set_breakpoint(filename, line_number)

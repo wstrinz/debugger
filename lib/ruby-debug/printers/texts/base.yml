@@ -17,6 +17,10 @@ condition:
     syntax: "'condition' must be followed a breakpoint number and expression"
     no_breakpoints: "No breakpoints have been set"
 
+continue:
+  errors:
+    unstopped_line: "Line {line} is not a stopping point in file '{file}'"
+
 toggle:
   errors:
     no_breakpoints: "No breakpoints have been set"
