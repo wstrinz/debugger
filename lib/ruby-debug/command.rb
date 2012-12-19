@@ -167,6 +167,10 @@ module Debugger
       @state.print(*args)
     end
 
+    def print_debug(*args)
+      @state.print_debug(*args)
+    end
+
     def confirm(msg)
       @state.confirm(msg) == 'y'
     end

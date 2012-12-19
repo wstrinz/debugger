@@ -14,6 +14,9 @@ describe "Printers::Plain" do
         "confirmations" => {
           "okay" => "Okay?"
         },
+        "debug" => {
+          "dbg" => "Debug message"
+        },
         "bar" => {
           "tag" => "xmltag",
           "attributes" => {
@@ -43,6 +46,11 @@ describe "Printers::Plain" do
     it "must return confirmation string" do
       printer.print("foo.confirmations.okay").must_equal "<confirmation>Okay?</confirmation>"
     end
+
+    it "must return debug string" do
+      printer.print("foo.debug.dbg").must_equal "Debug message"
+    end
   end
+
 end
 

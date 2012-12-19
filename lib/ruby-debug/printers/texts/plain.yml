@@ -6,3 +6,6 @@ breakpoints:
 conditions:
   set_condition: "Condition '{expr}' is set for the breakpoint {id}"
   unset_condition: "Condition is cleared for the breakpoint {id}"
+
+restart:
+  success: "Re exec'ing:\n\t{cmd}"

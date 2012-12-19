@@ -51,9 +51,18 @@ describe "Restart Command" do
         debug_file('restart')
       end
 
-      it "must show a message about reexecing" do
-        debug_file('restart')
-        check_output_includes "Re exec'ing:\n\t#{rdebug_script} argv"
+      describe "show a message about reexecing" do
+        it "must show a message in plain text" do
+          debug_file('restart')
+          check_output_includes "Re exec'ing:\n\t#{rdebug_script} argv"
+        end
+
+        it "must show a message in xml" do
+          temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+            debug_file('restart')
+            check_output_includes "<restart command=\"#{rdebug_script} argv\"/>"
+          end
+        end
       end
     end
 
@@ -68,9 +77,18 @@ describe "Restart Command" do
         debug_file('restart')
       end
 
-      it "must show an error message" do
-        debug_file('restart')
-        check_output_includes "Don't know name of debugged program", interface.error_queue
+      describe "show an error message" do
+        it "must show in plain text" do
+          debug_file('restart')
+          check_output_includes "Don't know name of debugged program", interface.error_queue
+        end
+
+        it "must show in xml" do
+          temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+            debug_file('restart')
+            check_output_includes "<error>Don't know name of debugged program</error>", interface.error_queue
+          end
+        end
       end
     end
 
@@ -90,9 +108,18 @@ describe "Restart Command" do
         debug_file('restart')
       end
 
-      it "must show an error message" do
-        debug_file('restart')
-        check_output_includes "Ruby program blabla doesn't exist", interface.error_queue
+      describe "show an error message" do
+        it "must show an error message" do
+          debug_file('restart')
+          check_output_includes "Ruby program blabla doesn't exist", interface.error_queue
+        end
+
+        it "must show in plain text" do
+          temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+            debug_file('restart')
+            check_output_includes "<error>Ruby program blabla doesn't exist</error>", interface.error_queue
+          end
+        end
       end
     end
 
@@ -111,8 +138,7 @@ describe "Restart Command" do
 
       it "must show a warning message when prog script is not executable" do
         debug_file('restart')
-        check_output_includes "Ruby program #{prog_script} doesn't seem to be executable..."
-        check_output_includes "We'll add a call to Ruby."
+        check_output_includes "Ruby program #{prog_script} doesn't seem to be executable...\nWe'll add a call to Ruby"
       end
     end
 

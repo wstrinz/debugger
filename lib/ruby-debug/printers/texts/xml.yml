@@ -25,3 +25,9 @@ conditions:
     tag: conditionSet # Would ideally be conditionUnset, but we keep compatibility with old ruby-debug-ide
     attributes:
       bp_id: "{id}"
+
+restart:
+  success:
+    tag: restart
+    attributes:
+      command: "{cmd}"

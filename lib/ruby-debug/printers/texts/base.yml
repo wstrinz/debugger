@@ -21,6 +21,17 @@ continue:
   errors:
     unstopped_line: "Line {line} is not a stopping point in file '{file}'"
 
+restart:
+  errors:
+    undefined: "Don't know name of debugged program"
+    not_exist: "Ruby program {prog} doesn't exist"
+    no_args: "Arguments have not been set. Use 'set args' to set them"
+    not_available: "Restart command is not available at this time"
+  debug:
+    outset: "Debugger was not called from the outset..."
+    change_initial_dir: "Failed to change initial directory {dir}"
+    not_executable: "Ruby program {prog} doesn't seem to be executable...\nWe'll add a call to Ruby"
+
 toggle:
   errors:
     no_breakpoints: "No breakpoints have been set"

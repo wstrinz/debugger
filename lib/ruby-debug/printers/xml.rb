@@ -10,6 +10,8 @@ module Printers
         print_error(path, args)
       when "confirmations"
         print_confirmation(path, args)
+      when "debug"
+        print_debug(path, args)
       else
         print_message(path, args)
       end
@@ -23,6 +25,10 @@ module Printers
         tag = translate(settings["tag"], args)
         attributes = translated_attributes(settings["attributes"], args)
         xml.tag!(tag, attributes)
+      end
+
+      def print_debug(path, args)
+        translate(locate(path), args)
       end
 
       def print_error(path, args)

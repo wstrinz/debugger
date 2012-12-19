@@ -379,6 +379,10 @@ module Debugger
         @interface.print(*args)
       end
 
+      def print_debug(*args)
+        @interface.print_debug(*args)
+      end
+
       def confirm(*args)
         @interface.confirm(*args)
       end

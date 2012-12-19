@@ -28,6 +28,10 @@ module Debugger
       print afmt(msg)
     end
 
+    def print_debug(msg)
+      print(msg)
+    end
+
   end
 
   class LocalInterface < Interface # :nodoc:
