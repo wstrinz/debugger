@@ -7,10 +7,13 @@ breakpoints:
     far_line: "There are only {lines} lines in file '{file}'"
     not_stopping_line: "Line {line} is not a stopping point in file '{file}'"
     source: "No source file named {file}"
-    state: "We are not in a state we can add breakpoints"
+    state_add: "We are not in a state we can add breakpoints"
+    state_delete: "We are not in a state we can delete breakpoints"
     expression: "Expression '{expr}' syntactically incorrect; breakpoint disabled"
+    no_breakpoint: "No breakpoint number {id}"
   confirmations:
     set_breakpoint: "Set breakpoint anyway?"
+    delete_all: "Delete all breakpoints?"
 
 condition:
   errors:

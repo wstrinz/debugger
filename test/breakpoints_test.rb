@@ -320,6 +320,22 @@ describe "Breakpoints" do
           enter "cont"
           debug_file("breakpoint1") { state.line.must_equal 15 }
         end
+
+        describe "messaging" do
+          it "must show success message in plain text" do
+            id = nil
+            debug_file("breakpoint1") { id = breakpoint.id }
+            check_output_includes "Breakpoint #{id} is disabled"
+          end
+
+          it "must show success message in xml" do
+            temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+              id = nil
+              debug_file("breakpoint1") { id = breakpoint.id }
+              check_output_includes "<breakpointDisabled bp_id=\"#{id}\"/>"
+            end
+          end
+        end
       end
 
       describe "full syntax" do
@@ -396,6 +412,22 @@ describe "Breakpoints" do
           enter "cont"
           debug_file("breakpoint1") { state.line.must_equal 14 }
         end
+
+        describe "messaging" do
+          it "must show success message in plain text" do
+            id = nil
+            debug_file("breakpoint1") { id = breakpoint.id }
+            check_output_includes "Breakpoint #{id} is enabled"
+          end
+
+          it "must show success message in xml" do
+            temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+              id = nil
+              debug_file("breakpoint1") { id = breakpoint.id }
+              check_output_includes "<breakpointEnabled bp_id=\"#{id}\"/>"
+            end
+          end
+        end
       end
 
       describe "full syntax" do
@@ -435,7 +467,10 @@ describe "Breakpoints" do
 
 
   describe "deleting a breakpoint" do
-    before { enter "break 14", ->{"delete #{breakpoint.id}"}, "break 15" }
+    before do
+      @breakpoint_id = nil
+      enter "break 14", ->{@breakpoint_id = breakpoint.id; "delete #{@breakpoint_id}"}, "break 15"
+    end
 
     it "must have only one breakpoint" do
       debug_file("breakpoint1") { Debugger.breakpoints.size.must_equal 1 }
@@ -444,6 +479,20 @@ describe "Breakpoints" do
     it "must not stop on the disabled breakpoint" do
       enter "cont"
       debug_file("breakpoint1") { state.line.must_equal 15 }
+    end
+
+    describe "messaging" do
+      it "must show a success message in plain text" do
+        debug_file("breakpoint1")
+        check_output_includes "Breakpoint #{@breakpoint_id} has been deleted"
+      end
+
+      it "must show a success message in xml" do
+        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+          debug_file("breakpoint1")
+          check_output_includes "<breakpointDeleted no=\"#{@breakpoint_id}\"/>"
+        end
+      end
     end
   end
 

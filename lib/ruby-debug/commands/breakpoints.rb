@@ -39,7 +39,7 @@ module Debugger
       brkpt_filename = nil
       if file.nil?
         unless @state.context
-          errmsg pr("errors.state", expr: expr)
+          errmsg pr("errors.state_add")
           return
         end
         brkpt_filename = @state.file
@@ -123,20 +123,22 @@ module Debugger
 
     def execute
       unless @state.context
-        errmsg "We are not in a state we can delete breakpoints.\n"
+        errmsg pr("breakpoints.errors.state_delete")
         return
       end
       brkpts = @match[1]
       unless brkpts
-        if confirm("Delete all breakpoints? (y or n) ")
+        if confirm(pr("breakpoints.confirmations.delete_all"))
           Debugger.breakpoints.clear
         end
       else
         brkpts.split(/[ \t]+/).each do |pos|
           pos = get_int(pos, "Delete", 1)
           return unless pos
-          unless Debugger.remove_breakpoint(pos)
-            errmsg "No breakpoint number %d\n", pos
+          if Debugger.remove_breakpoint(pos)
+            print pr("breakpoints.delete", id: pos)
+          else
+            errmsg pr("breakpoints.errors.no_breakpoint", id: pos)
           end
         end
       end

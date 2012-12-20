@@ -15,6 +15,10 @@ breakpoints:
       file: "{file}"
       line: "{line}"
       threadId: "{thread_id}"
+  delete:
+    tag: breakpointDeleted
+    attributes:
+      "no": "{id}"
 
 conditions:
   set_condition:
@@ -32,6 +36,16 @@ display:
     attributes:
       key: "{exp}"
       value: "{result}"
+
+toggle:
+  breakpoint_enabled:
+    tag: breakpointEnabled
+    attributes:
+      bp_id: "{id}"
+  breakpoint_disabled:
+    tag: breakpointDisabled
+    attributes:
+      bp_id: "{id}"
 
 restart:
   success:

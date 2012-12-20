@@ -23,6 +23,7 @@ module Debugger
               end
             end
             b.enabled = ("Enable" == is_enable)
+            print(pr("toggle.breakpoint_#{enabled ? "enabled" : "disabled"}", id: b.id))
             break
           end
         end
