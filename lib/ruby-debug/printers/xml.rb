@@ -17,6 +17,17 @@ module Printers
       end
     end
 
+    def print_collection(path, collection, &block)
+      settings = locate(path)
+      xml = ::Builder::XmlMarkup.new
+      tag = translate(settings["tag"])
+      xml.tag!("#{tag}s") do |xml|
+        array_of_args(collection, &block).each do |args|
+          xml.tag!(tag, translated_attributes(settings["attributes"], args))
+        end
+      end
+    end
+
     private
 
       def print_message(path, args)

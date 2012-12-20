@@ -19,11 +19,11 @@ module Printers
         result
       end
 
-      def translate(string, args)
+      def translate(string, args = {})
         string.gsub(/{([^}]*)}/) do
-          args[$1.to_s.to_sym].tap do |substitution|
-            raise MissedArgument, "Missed argument #{$1} for '#{string}'" unless substitution
-          end
+          key = $1.to_s.to_sym
+          raise MissedArgument, "Missed argument #{$1} for '#{string}'" unless args.has_key?(key)
+          args[key]
         end
       end
 
@@ -35,6 +35,14 @@ module Printers
         @contents ||= contents_files.inject({}) do |hash, filename|
           hash[filename] = YAML.load_file(File.expand_path(File.join("..", "texts", "#{filename}.yml"), __FILE__)) || {}
           hash
+        end
+      end
+
+      def array_of_args(collection, &block)
+        collection.each.with_index.inject([]) do |array, (item, index)|
+          args = block.call(item, index)
+          array << args if args
+          array
         end
       end
 

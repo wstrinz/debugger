@@ -6,13 +6,13 @@ describe "Display Command" do
   it "must show expressions" do
     enter 'display d + 1', 'break 3', 'cont'
     debug_file('display')
-    check_output_includes "1: ", "d + 1 = 5"
+    check_output_includes "1: d + 1 = 5"
   end
 
   it "must work with shortcut" do
     enter 'disp d + 1', 'break 3', 'cont'
     debug_file('display')
-    check_output_includes "1: ", "d + 1 = 5"
+    check_output_includes "1: d + 1 = 5"
   end
 
   it "must save displayed expressions" do
@@ -20,12 +20,26 @@ describe "Display Command" do
     debug_file('display') { state.display.must_equal [[true, "d + 1"]] }
   end
 
-  it "displays all expressions available" do
-    enter 'break 3', 'cont', -> do
-      Debugger.handler.display.concat([[true, "abc"], [true, "d"]]); 'display'
+  describe "in plain text" do
+    it "displays all expressions available" do
+      enter 'break 3', 'cont', -> do
+        Debugger.handler.display.concat([[true, "abc"], [true, "d"]]); 'display'
+      end
+      debug_file('display')
+      check_output_includes "1: abc = \n2: d = 4"
     end
-    debug_file('display')
-    check_output_includes "1: ", "abc = ", "2: ", "d = 4"
+  end
+
+  describe "in xml" do
+    temporary_change_method_value(Debugger, :printer, Printers::Xml.new)
+
+    it "displays all expressions available" do
+      enter 'break 3', 'cont', -> do
+        Debugger.handler.display.concat([[true, "abc"], [true, "d"]]); 'display'
+      end
+      debug_file('display')
+      check_output_includes '<displays><display key="abc" value=""/><display key="d" value="4"/></displays>'
+    end
   end
 
   describe "undisplay" do
@@ -40,9 +54,18 @@ describe "Display Command" do
       describe "confirmation is successful" do
         let(:confirm_response) { 'y' }
 
-        it "must ask about confirmation" do
-          debug_file('display')
-          check_output_includes "Clear all expressions? (y/n)", interface.confirm_queue
+        describe "asking about confirmation" do
+          it "must ask in plain text" do
+            debug_file('display')
+            check_output_includes "Clear all expressions? (y/n)", interface.confirm_queue
+          end
+
+          it "must ask in xml" do
+            temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+              debug_file('display')
+              check_output_includes "<confirmation>Clear all expressions?</confirmation>", interface.confirm_queue
+            end
+          end
         end
 
         it "must set all expressions saved to 'false'" do
@@ -51,7 +74,7 @@ describe "Display Command" do
 
         it "must not show any output" do
           debug_file('display')
-          check_output_doesnt_include "1: ", "abc = ", "2: ", "d = 4"
+          check_output_doesnt_include "1: abc = \n2: d = 4"
         end
       end
 
@@ -64,7 +87,7 @@ describe "Display Command" do
 
         it "must not show any output" do
           debug_file('display')
-          check_output_includes "1: ", "abc = ", "2: ", "d = 4"
+          check_output_includes "1: abc = \n2: d = 4"
         end
       end
     end
@@ -83,12 +106,12 @@ describe "Display Command" do
 
       it "must display only the active position" do
         debug_file('display')
-        check_output_includes "2: ", "d = 4"
+        check_output_includes "2: d = 4"
       end
 
       it "must not display the disabled position" do
         debug_file('display')
-        check_output_doesnt_include "1: ", "abc"
+        check_output_doesnt_include "1: abc"
       end
     end
   end
@@ -125,7 +148,7 @@ describe "Display Command" do
     it "must show display expression in annotation" do
       enter 'display 2 + 2', 'set annotate 3', 'next', 'next'
       debug_file 'display'
-      check_output_includes "\x1A\x1Adisplay", "1:", "2 + 2 = 4"
+      check_output_includes "\x1A\x1Adisplay", "1: 2 + 2 = 4"
     end
   end
 
@@ -134,7 +157,7 @@ describe "Display Command" do
     it "must be able to set display expressions in post-mortem mode" do
       enter 'cont', 'display 2 + 2', 'cont'
       debug_file("post_mortem")
-      check_output_includes "1:", "2 + 2 = 4"
+      check_output_includes "1: 2 + 2 = 4"
     end
   end
 

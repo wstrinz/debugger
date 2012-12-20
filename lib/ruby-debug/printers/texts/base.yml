@@ -21,6 +21,12 @@ continue:
   errors:
     unstopped_line: "Line {line} is not a stopping point in file '{file}'"
 
+display:
+  confirmations:
+    clear_all: "Clear all expressions?"
+  errors:
+    undefined: "Display expression {expr} is not defined"
+
 restart:
   errors:
     undefined: "Don't know name of debugged program"

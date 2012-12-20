@@ -26,6 +26,13 @@ conditions:
     attributes:
       bp_id: "{id}"
 
+display:
+  result:
+    tag: display
+    attributes:
+      key: "{exp}"
+      value: "{result}"
+
 restart:
   success:
     tag: restart

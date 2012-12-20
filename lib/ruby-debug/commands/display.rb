@@ -1,22 +1,15 @@
 module Debugger
   module DisplayFunctions # :nodoc:
     def display_expression(exp)
-      print "%s = %s\n", exp, debug_silent_eval(exp).to_s
+      print pr("display.result", n: @state.display.size, exp: exp, result: debug_silent_eval(exp))
     end
     
-    def active_display_expressions?
-      @state.display.select{|d| d[0]}.size > 0
-    end
-
     def print_display_expressions
-      n = 1
-      for d in @state.display
-        if d[0]
-          print "%d: ", n
-          display_expression(d[1])
-        end
-        n += 1
+      result = prc("display.result", @state.display) do |item, index|
+        is_active, expression = item
+        {n: index + 1, exp: expression, result: debug_silent_eval(expression)} if is_active
       end
+      print result
     end
   end
 
@@ -28,7 +21,6 @@ module Debugger
     def execute
       exp = @match[1]
       @state.display.push [true, exp]
-      print "%d: ", @state.display.size
       display_expression(exp)
     end
 
@@ -84,7 +76,7 @@ module Debugger
 
     def execute
       unless pos = @match[1]
-        if confirm("Clear all expressions? (y/n) ")
+        if confirm(pr("display.confirmations.clear_all"))
           for d in @state.display
             d[0] = false
           end
@@ -95,7 +87,7 @@ module Debugger
         if @state.display[pos-1]
           @state.display[pos-1][0] = nil
         else
-          errmsg "Display expression %d is not defined.\n", pos
+          errmsg pr("display.errors.undefined", expr: pos)
         end
       end
     end

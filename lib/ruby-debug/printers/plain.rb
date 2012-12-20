@@ -7,6 +7,12 @@ module Printers
       message << "\n"
     end
 
+    def print_collection(path, collection, &block)
+      array_of_args(collection, &block).map do |args|
+        print(path, args)
+      end.join("")
+    end
+
     private
 
       def contents_files
