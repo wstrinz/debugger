@@ -27,6 +27,12 @@ display:
   errors:
     undefined: "Display expression {expr} is not defined"
 
+edit:
+  errors:
+    state: "We are not in a state that has an associated file"
+    file_line: "Invalid file/line number specification: {file_line}"
+    not_readable: "File '{file}' is not readable"
+
 restart:
   errors:
     undefined: "Don't know name of debugged program"

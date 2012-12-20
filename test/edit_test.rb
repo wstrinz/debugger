@@ -30,7 +30,7 @@ describe "Edit Command" do
   it "must show an error if there is no such line" do
     enter "edit #{fullpath('edit3')}:6"
     debug_file 'edit'
-    check_output_includes "File \"#{fullpath('edit3')}\" is not readable.", interface.error_queue
+    check_output_includes "File '#{fullpath('edit3')}' is not readable", interface.error_queue
   end
 
   it "must show an error if there is incorrect syntax" do
