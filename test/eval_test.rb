@@ -3,10 +3,20 @@ require_relative 'test_helper'
 describe "Eval Command" do
   include TestDsl
 
-  it "must evaluate an expression" do
-    enter 'eval 3 + 2'
-    debug_file 'eval'
-    check_output_includes "5"
+  describe "evaluate an expression" do
+    it "in plain text" do
+      enter 'eval 3 + 2'
+      debug_file 'eval'
+      check_output_includes "5"
+    end
+
+    it "in xml" do
+      temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+        enter 'eval 3 + 2'
+        debug_file 'eval'
+        check_output_includes '<eval expression="3 + 2" value="5"/>'
+      end
+    end
   end
 
   it "must work with shortcut" do

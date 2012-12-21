@@ -37,6 +37,13 @@ display:
       key: "{exp}"
       value: "{result}"
 
+eval:
+  result:
+    tag: eval
+    attributes:
+      expression: "{expr}"
+      value: "{result}"
+
 toggle:
   breakpoint_enabled:
     tag: breakpointEnabled

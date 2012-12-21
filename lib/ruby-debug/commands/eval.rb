@@ -44,7 +44,7 @@ module Debugger
     def execute
       expr = @match ? @match.post_match : @input
       run_with_binding do |b|
-        print "%s\n", debug_eval(expr, b).inspect
+        print pr("eval.result", expr: expr, result: debug_eval(expr, b).inspect)
       end
     end
 

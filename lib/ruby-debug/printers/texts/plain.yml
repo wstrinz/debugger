@@ -11,6 +11,9 @@ conditions:
 display:
   result: "{n}: {exp} = {result}"
 
+eval:
+  result: "{result}"
+
 toggle:
   breakpoint_enabled: "Breakpoint {id} is enabled"
   breakpoint_disabled: "Breakpoint {id} is disabled"
