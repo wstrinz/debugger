@@ -14,24 +14,23 @@ module Debugger
       end
 
       if abs_frame_pos >= context.stack_size then
-        errmsg "Adjusting would put us beyond the oldest (initial) frame.\n"
+        errmsg pr("frame.errors.too_low")
         return
       elsif abs_frame_pos < 0 then
-        errmsg "Adjusting would put us beyond the newest (innermost) frame.\n"
+        errmsg pr("frame.errors.too_high")
         return
       end
       if @state.frame_pos != abs_frame_pos then
         @state.previous_line = nil
         @state.frame_pos = abs_frame_pos
       end
-      
       @state.file = context.frame_file(@state.frame_pos)
       @state.line = context.frame_line(@state.frame_pos)
-      
-      print_frame(@state.frame_pos, true)
+
+      print_frame(nil, @state.frame_pos, true)
     end
-    
-    def get_frame_call(prefix, pos, context)
+
+    def get_frame_call(prefix_size, pos, context)
       id = context.frame_method(pos)
       klass = context.frame_class(pos)
       call_str = ""
@@ -42,19 +41,19 @@ module Debugger
           if Command.settings[:callstyle] == :tracked
             arg_info = context.frame_args_info(pos)
           end
-          call_str << "#{klass}." 
+          call_str << "#{klass}."
         end
         call_str << id.id2name
         if args.any?
           call_str << "("
           args.each_with_index do |name, i|
-            case Command.settings[:callstyle] 
+            case Command.settings[:callstyle]
             when :short
               call_str += "%s, " % [name]
             when :last
               klass = locals[name].class
               if klass.inspect.size > 20+3
-                klass = klass.inspect[0..20]+"..." 
+                klass = klass.inspect[0..20]+"..."
               end
               call_str += "%s#%s, " % [name, klass]
             when :tracked
@@ -64,91 +63,76 @@ module Debugger
                 call_str += "%s, " % name
               end
             end
-            if call_str.size > self.class.settings[:width] - prefix.size
+            if call_str.size > self.class.settings[:width] - prefix_size
               # Strip off trailing ', ' if any but add stuff for later trunc
               call_str[-2..-1] = ",...XX"
               break
             end
           end
-          call_str[-2..-1] = ")" # Strip off trailing ', ' if any 
+          call_str[-2..-1] = ")" # Strip off trailing ', ' if any
         end
       end
       return call_str
     end
 
-    def print_frame(pos, adjust = false, context=@state.context)
-      file = context.frame_file(pos)
-      line = context.frame_line(pos)
-      klass = context.frame_class(pos)
-
-      unless Command.settings[:full_path]
-        path_components = file.split(/[\\\/]/)
-        if path_components.size > 3
-          path_components[0...-3] = '...'
-          file = path_components.join(File::ALT_SEPARATOR || File::SEPARATOR)
+    def print_frame(mark, pos, adjust = false, context = @state.context)
+      if print_frame?(context, pos)
+        print pr("frame.line", get_pr_arguments(mark, pos, context))
+        if ENV['EMACS'] && adjust
+          fmt = (Debugger.annotate.to_i > 1 ?
+                 "\032\032source %s:%d\n" : "\032\032%s:%d\n")
+          print fmt % [file, line]
         end
-      end
-
-      frame_num = "#%d " % pos
-      call_str = get_frame_call(frame_num, pos, context)
-      file_line = "at line %s:%d\n" % [CommandProcessor.canonic_file(file), line]
-      print frame_num
-      unless call_str.empty?
-        print call_str
-        print ' '
-        if call_str.size + frame_num.size + file_line.size > self.class.settings[:width]
-          print "\n       "
-        end
-      end
-      print file_line
-      if ENV['EMACS'] && adjust
-        fmt = (Debugger.annotate.to_i > 1 ?
-               "\032\032source %s:%d\n" : "\032\032%s:%d\n")
-        print fmt % [CommandProcessor.canonic_file(file), line]
       end
     end
 
-    # Check if call stack is truncated.  This can happen if
-    # Debugger.start is not called low enough in the call stack. An
-    # array of additional callstack lines from caller is returned if
-    # definitely truncated, false if not, and nil if we don't know.
-    #
-    # We determine truncation based on a passed in sentinal set via
-    # caller which can be nil.  
-    #
-    # First we see if we can find our position in caller. If so, then
-    # we compare context position to that in caller using sentinal
-    # as a place to start ignoring additional caller entries. sentinal
-    # is set by rdebug, but if it's not set, i.e. nil then additional
-    # entries are presumably ones that we haven't recorded in context
-    def truncated_callstack?(context, sentinal=nil, cs=caller)
-      recorded_size = context.stack_size
-      to_find_fl = "#{context.frame_file(0)}:#{context.frame_line(0)}"
-      top_discard = false
-      cs.each_with_index do |fl, i|
-        fl.gsub!(/in `.*'$/, '')
-        fl.gsub!(/:$/, '')
-        if fl == to_find_fl
-          top_discard = i
-          break 
+    private
+
+      def get_pr_arguments(mark, pos, context)
+        if print_frame?(context, pos)
+          mark = if Debugger.printer.type == "xml"
+            (!!mark).to_s
+          else
+            if mark == true
+              "--> "
+            elsif mark == false
+              "    "
+            else
+              mark
+            end
+          end
+
+          line = context.frame_line(pos)
+
+          file = context.frame_file(pos)
+          unless Command.settings[:full_path]
+            path_components = file.split(/[\\\/]/)
+            if path_components.size > 3
+              path_components[0...-3] = '...'
+              file = path_components.join(File::ALT_SEPARATOR || File::SEPARATOR)
+            end
+          end
+          file = CommandProcessor.canonic_file(file)
+
+          call_str = get_frame_call("##{pos}".size, pos, context)
+          call_str = unless call_str.empty?
+            padding = 10
+            approx_line_width = call_str.size + pos.to_s.size + file.to_s.size + line.to_s.size + padding
+            if approx_line_width > self.class.settings[:width]
+              call_str + "\n" + (" " * (mark.to_s.size + pos.to_s.size + 2))
+            else
+              call_str + " "
+            end
+          else
+            " "
+          end
+          {mark: mark, pos: pos, call_str: call_str, file: file, line: line}
         end
       end
-      if top_discard
-        cs = cs[top_discard..-1]
-        return false unless cs
-        return cs unless sentinal
-        if cs.size > recorded_size+2 && cs[recorded_size+2] != sentinal 
-          # caller seems to truncate recursive calls and we don't.
-          # See if we can find sentinal in the first 0..recorded_size+1 entries
-          return false if cs[0..recorded_size+1].any?{ |f| f==sentinal }
-          return cs
-        end
-        return false
+
+      def print_frame?(context, pos)
+        context.frame_line(pos) && context.frame_file(pos)
       end
-      return nil
-    end
-
-
   end
 
   # Implements debugger "where" or "backtrace" command.
@@ -158,18 +142,9 @@ module Debugger
     end
 
     def execute
-      (0...@state.context.stack_size).each do |idx|
-        if idx == @state.frame_pos
-          print "--> "
-        else
-          print "    "
-        end
-        print_frame(idx)
-
-      end
-      if truncated_callstack?(@state.context, Debugger.start_sentinal)
-#        print "Warning: saved frames may be incomplete; compare with caller(0).\n" 
-      end
+      print(prc("frame.line", (0...@state.context.stack_size)) do |item, _|
+        get_pr_arguments(item == @state.frame_pos, item, @state.context)
+      end)
     end
 
     class << self
@@ -181,18 +156,18 @@ module Debugger
         s = if cmd == 'where'
           %{
             w[here]\tdisplay stack frames
-            }
-            else
+          }
+        else
           %{
             bt|backtrace\t\talias for where - display stack frames
-         }
-            end
+          }
+        end
         s += %{
 Print the entire stack frame. Each frame is numbered, the most recent
 frame is 0. frame number can be referred to in the "frame" command;
 "up" and "down" add or subtract respectively to frame numbers shown.
-The position of the current frame is marked with -->.  } 
-      end 
+The position of the current frame is marked with -->.  }
+      end
     end
   end
 
@@ -243,11 +218,11 @@ The position of the current frame is marked with -->.  }
       end
     end
   end
-  
+
   class FrameCommand < Command # :nodoc:
     def regexp
-      / ^\s* 
-        f(?:rame)? 
+      / ^\s*
+        f(?:rame)?
         (?: \s+ (\S+))? \s*
         (?: thread \s+ (.*))? \s*
         $/x
@@ -290,10 +265,10 @@ The position of the current frame is marked with -->.  }
           Without an argument, the command prints the current stack
           frame. Since the current position is redisplayed, it may trigger a
           resyncronization if there is a front end also watching over
-          things. 
+          things.
 
           If a thread number is given then we set the context for evaluating
-          expressions to that frame of that thread. 
+          expressions to that frame of that thread.
         }
       end
     end

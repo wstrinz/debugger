@@ -5,6 +5,10 @@ module Printers
 
     SEPARATOR = "."
 
+    def type
+      self.class.name.split("::").last.downcase
+    end
+
     private
 
       def locate(path)

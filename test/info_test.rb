@@ -224,10 +224,10 @@ describe "Info Command" do
     it "must show stack info" do
       enter 'break 20', 'cont', 'info stack'
       debug_file 'info'
-      check_output_includes(
-        "-->", "#0", "A.a", "at line #{fullpath('info')}:20",
-               "#1",        "at line #{fullpath('info')}:30"
-      )
+      check_output_includes(Regexp.new(
+        "--> #0 A.a at line #{fullpath('info')}:20\\n" +
+        "    #1 A.b at line #{fullpath('info')}:30\\n",
+      Regexp::MULTILINE))
     end
   end
 
@@ -262,7 +262,7 @@ describe "Info Command" do
     it "must show verbose thread info" do
       enter 'break 20', 'cont', ->{"info thread #{context.thnum} verbose"}
       debug_file 'info'
-      check_output_includes /#<Thread:\S+ run>/, "#0", "A.a", "at line #{fullpath('info')}:20"
+      check_output_includes /#<Thread:\S+ run>/, "#0 A.a at line #{fullpath('info')}:20"
     end
 
     it "must show error when unknown parameter is used" do

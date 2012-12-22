@@ -44,6 +44,15 @@ eval:
       expression: "{expr}"
       value: "{result}"
 
+frame:
+  line:
+    tag: frame
+    attributes:
+      "no": "{pos}"
+      file: "{file}"
+      line: "{line}"
+      current: "{mark}"
+
 toggle:
   breakpoint_enabled:
     tag: breakpointEnabled

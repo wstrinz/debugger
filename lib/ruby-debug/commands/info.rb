@@ -254,7 +254,7 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
         return 
       end
       obj = debug_eval('self')
-      var_list(obj.instance_variables)
+      var_list(obj.instance_variables.map(&:to_s))
     end
     
     def info_line(*args)
@@ -319,14 +319,10 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
         errmsg "info stack not available here.\n"
         return
       end
-      (0...@state.context.stack_size).each do |idx|
-        if idx == @state.frame_pos
-          print "--> "
-        else
-          print "    "
-        end
-        print_frame(idx)
-      end
+      print(prc("frame.line", (0...@state.context.stack_size)) do |item, _|
+        mark = item == @state.frame_pos ? "--> " : "    "
+        get_pr_arguments(mark, item, @state.context)
+      end)
     end
 
     def info_thread_preamble(arg)
@@ -355,8 +351,7 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
         display_context(c, !verbose)
         if verbose and not c.ignored?
           (0...c.stack_size).each do |idx|
-            print "\t"
-            print_frame(idx, false, c)
+            print_frame("\t", idx, false, c)
           end
         end
       end
@@ -374,8 +369,7 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
       display_context(c, !verbose)
       if verbose and not c.ignored?
         (0...c.stack_size).each do |idx|
-          print "\t"
-          print_frame(idx, false, c) 
+          print_frame("\t", idx, false, c)
         end
       end
     end

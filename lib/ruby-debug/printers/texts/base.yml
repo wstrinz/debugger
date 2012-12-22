@@ -36,6 +36,11 @@ edit:
     file_line: "Invalid file/line number specification: {file_line}"
     not_readable: "File '{file}' is not readable"
 
+frame:
+  errors:
+    too_low: "Adjusting would put us beyond the oldest (initial) frame"
+    too_high: "Adjusting would put us beyond the newest (innermost) frame"
+
 restart:
   errors:
     undefined: "Don't know name of debugged program"

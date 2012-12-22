@@ -1764,12 +1764,17 @@ context_frame_id(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, debug_context_t, debug_context);
 
     cfp = GET_FRAME->info.runtime.cfp;
+    rb_iseq_t *iseq = cfp->iseq;
+    if (iseq) {
 #if defined HAVE_RB_CONTROL_FRAME_T_METHOD_ID
-    frame_id = RUBYVM_CFUNC_FRAME_P(cfp) ? cfp->method_id : cfp->iseq->defined_method_id;
+        frame_id = RUBYVM_CFUNC_FRAME_P(cfp) ? cfp->method_id : cfp->iseq->defined_method_id;
 #elif defined HAVE_RB_METHOD_ENTRY_T_CALLED_ID
-    frame_id = RUBYVM_CFUNC_FRAME_P(cfp) ? cfp->me->called_id : cfp->iseq->defined_method_id;
+        frame_id = RUBYVM_CFUNC_FRAME_P(cfp) ? cfp->me->called_id : cfp->iseq->defined_method_id;
 #endif
-    return frame_id ? ID2SYM(frame_id) : Qnil;
+      return frame_id ? ID2SYM(frame_id) : Qnil;
+    } else {
+        return Qnil;
+    }
 }
 
 /*
@@ -1796,7 +1801,7 @@ context_frame_line(int argc, VALUE *argv, VALUE self)
     cfp = GET_FRAME->info.runtime.cfp;
     while (cfp >= th->cfp)
     {
-        if ((cfp->iseq != NULL) && (pc >= cfp->iseq->iseq_encoded) && (pc < cfp->iseq->iseq_encoded + cfp->iseq->iseq_size))
+        if ((cfp->iseq) && (pc >= cfp->iseq->iseq_encoded) && (pc < cfp->iseq->iseq_encoded + cfp->iseq->iseq_size))
             return(INT2FIX(rb_vm_get_sourceline(cfp)));
         cfp = RUBY_VM_NEXT_CONTROL_FRAME(cfp);
     }
@@ -1820,7 +1825,12 @@ context_frame_file(int argc, VALUE *argv, VALUE self)
     frame = optional_frame_position(argc, argv);
     Data_Get_Struct(self, debug_context_t, debug_context);
 
-    return(GET_FRAME->info.runtime.cfp->iseq->filename);
+    rb_iseq_t *iseq = GET_FRAME->info.runtime.cfp->iseq;
+    if (iseq) {
+        return iseq->filename;
+    } else {
+        return Qnil;
+    }
 }
 
 static int
