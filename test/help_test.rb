@@ -38,6 +38,13 @@ describe "Help Command" do
     check_output_includes Debugger::AddBreakpoint.help(nil).split("\n").map { |l| l.gsub(/^ +/, '') }.join("\n")
   end
 
+  it "must be unsupported for XML printer" do
+    temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+      enter 'help'
+      debug_file 'help'
+      check_output_includes "<error>Unsupported command 'help'</error>", interface.error_queue
+    end
+  end
 
   describe "Post Mortem" do
     it "must work in post-mortem mode" do

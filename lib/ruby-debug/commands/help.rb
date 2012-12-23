@@ -9,6 +9,7 @@ module Debugger
     end
 
     def execute
+      errmsg(pr("general.errors.unsupported", cmd: 'help')) && return if Debugger.printer.type == "xml"
       if @match[1]
         args = @match[1].split
         cmds = @state.commands.select do |cmd| 
