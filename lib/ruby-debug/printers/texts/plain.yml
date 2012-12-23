@@ -17,6 +17,9 @@ eval:
 frame:
   line: "{mark}#{pos} {call_str}at line {file}:{line}"
 
+stop:
+  suspend: "{file}:{line_number}\n{line}"
+
 toggle:
   breakpoint_enabled: "Breakpoint {id} is enabled"
   breakpoint_disabled: "Breakpoint {id} is disabled"

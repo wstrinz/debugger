@@ -57,6 +57,15 @@ frame:
       line: "{line}"
       current: "{mark}"
 
+stop:
+  suspend:
+    tag: suspended
+    attributes:
+      file: "{file}"
+      line: "{line_number}"
+      threadId: "{thnum}"
+      frames: "{frames}"
+
 toggle:
   breakpoint_enabled:
     tag: breakpointEnabled

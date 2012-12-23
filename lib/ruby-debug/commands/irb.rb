@@ -91,7 +91,7 @@ module Debugger
       else
         file = @state.context.frame_file(0)
         line = @state.context.frame_line(0)
-        CommandProcessor.print_location_and_text(file, line)
+        CommandProcessor.print_location_and_text(file, line, @state.context)
         @state.previous_line = nil
       end
 

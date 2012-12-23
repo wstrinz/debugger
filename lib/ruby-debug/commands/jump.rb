@@ -19,17 +19,17 @@ module Debugger
 
     def execute
       if !@match[1]
-        errmsg "\"jump\" must be followed by a line number\n"
+        errmsg pr("jump.errors.no_line_number")
         return
       end
       if !numeric?(@match[1])
-        errmsg "Bad line number: " + @match[1]
+        errmsg pr("jump.errors.bad_line_number", line: @match[1])
         return
       end
       line = @match[1].to_i
       line = @state.context.frame_line(0) + line if @match[1][0] == '+' or @match[1][0] == '-'
       if line == @state.context.frame_line(0)
-        CommandProcessor.print_location_and_text(@state.context.frame_file(0), line)
+        CommandProcessor.print_location_and_text(@state.context.frame_file(0), line, @state.context)
         return
       end
       file = @match[2]
@@ -39,11 +39,11 @@ module Debugger
       when 0
         @state.proceed
       when 1
-        errmsg "Not possible to jump from here\n"
+        errmsg pr("jump.errors.not_possible")
       when 2
-        errmsg "Couldn't find debugged frame\n"
+        errmsg pr("jump.errors.no_frame")
       when 3
-        errmsg "Couldn't find active code at " + file + ":" + line.to_s + "\n"
+        errmsg pr("jump.errors.no_active_code", file: file, line: line)
       end
     end
 

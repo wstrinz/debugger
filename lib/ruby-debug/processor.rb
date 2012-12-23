@@ -96,16 +96,22 @@ module Debugger
       end
     end
 
-    def self.print_location_and_text(file, line)
-      file_line = "%s:%s\n%s" % [canonic_file(file), line,
-                                 Debugger.line_at(file, line)]
-      # FIXME: use annotations routines
-      if Debugger.annotate.to_i > 2
-        file_line = "\032\032source #{file_line}"
-      elsif ENV['EMACS']
-        file_line = "\032\032#{file_line}"
+    def self.print_location_and_text(file, line, context)
+      result = Debugger.printer.print("stop.suspend",
+        file: canonic_file(file), line_number: line, line: Debugger.line_at(file, line),
+        thnum: context && context.thnum, frames: context && context.stack_size
+      )
+      unless Debugger.printer.type == "xml"
+        # FIXME: use annotations routines
+        result = if Debugger.annotate.to_i > 2
+          "\032\032source #{result}"
+        elsif ENV['EMACS']
+          "\032\032#{result}"
+        else
+          result
+        end
       end
-      print file_line
+      print result
     end
 
     def self.protect(mname)
@@ -246,7 +252,7 @@ module Debugger
       end
 
       preloop(commands, context)
-      CommandProcessor.print_location_and_text(file, line)
+      CommandProcessor.print_location_and_text(file, line, context)
       while !state.proceed?
         input = if @interface.command_queue.empty?
                   @interface.read_command(prompt(context))

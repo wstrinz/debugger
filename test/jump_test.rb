@@ -9,6 +9,32 @@ describe "Jump Command" do
       debug_file('jump') { state.line.must_equal 8 }
     end
 
+    describe "jumping to the same line" do
+      it "must jump to the same line" do
+        enter 'break 6', 'cont', "jump 6 #{fullpath('jump')}"
+        debug_file('jump') { state.line.must_equal 6 }
+      end
+
+      describe "show the same position" do
+        it "must show in plain text" do
+          enter 'break 6', 'cont', "jump 6 #{fullpath('jump')}"
+          debug_file('jump')
+          check_output_includes "#{fullpath('jump')}:6\nb = 3", "#{fullpath('jump')}:6\nb = 3", interface.print_queue
+        end
+
+        it "must show in xml" do
+          temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+            enter 'break 6', 'cont', "jump 6 #{fullpath('jump')}"
+            debug_file('jump')
+            check_output_includes(
+              /<suspended file="#{fullpath('jump')}" line="6" threadId="\d+" frames="\d+"\/>/,
+              /<suspended file="#{fullpath('jump')}" line="6" threadId="\d+" frames="\d+"\/>/,
+            interface.print_queue)
+          end
+        end
+      end
+    end
+
     it "must not initialize skipped variables during jump" do
       enter 'break 6', 'cont', "jump 8 #{fullpath('jump')}", 'next'
       enter 'var local'
@@ -25,6 +51,24 @@ describe "Jump Command" do
       enter 'break 8', 'cont', "jump +2 #{fullpath('jump')}"
       debug_file('jump') { state.line.must_equal 10 }
     end
+
+    describe "show message after jump" do
+      it "must show message in plain text" do
+        enter 'break 6', 'cont', "jump 8 #{fullpath('jump')}"
+        debug_file('jump')
+        check_output_includes "#{fullpath('jump')}:8\nd = 5", interface.print_queue
+      end
+
+      it "must show message in xml" do
+        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+          enter 'break 6', 'cont', "jump 8 #{fullpath('jump')}"
+          debug_file('jump')
+          check_output_includes(
+            /<suspended file="#{fullpath('jump')}" line="8" threadId="\d+" frames="\d+"\/>/,
+          interface.print_queue)
+        end
+      end
+    end
   end
 
   describe "errors" do
@@ -37,7 +81,7 @@ describe "Jump Command" do
     it "must show an error if line number is not specified" do
       enter 'jump'
       debug_file('jump')
-      check_output_includes '"jump" must be followed by a line number', interface.error_queue
+      check_output_includes "'jump' must be followed by a line number", interface.error_queue
     end
 
     describe "when there is no active code in specified line" do

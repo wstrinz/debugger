@@ -41,6 +41,14 @@ frame:
     too_low: "Adjusting would put us beyond the oldest (initial) frame"
     too_high: "Adjusting would put us beyond the newest (innermost) frame"
 
+jump:
+  errors:
+    no_line_number: "'jump' must be followed by a line number"
+    bad_line_number: "Bad line number: {line}"
+    not_possible: "Not possible to jump from here"
+    no_frame: "Couldn't find debugged frame"
+    no_active_code: "Couldn't find active code at {file}:{line}"
+
 restart:
   errors:
     undefined: "Don't know name of debugged program"
