@@ -39,6 +39,14 @@ describe "Edit Command" do
     check_output_includes "Invalid file/line number specification: blabla", interface.error_queue
   end
 
+  it "must be unsupported for XML printer" do
+    temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+      enter 'edit'
+      debug_file 'edit'
+      check_output_includes "<error>Unsupported command 'edit'</error>", interface.error_queue
+    end
+  end
+
 
   describe "Post Mortem" do
     # TODO: This test fails with "Segmentation fault". Probably need to fix it somehow, or forbid this

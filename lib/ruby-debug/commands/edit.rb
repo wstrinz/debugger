@@ -4,12 +4,13 @@ module Debugger
     def regexp
       /^\s* ed(?:it)? (?:\s+(.*))?$/ix
     end
-    
+
     def execute
+      errmsg(pr("general.errors.unsupported", cmd: 'edit')) && return if Debugger.printer.type == "xml"
       if not @match[1] or @match[1].strip.empty?
         unless @state.context
           errmsg pr("edit.errors.state")
-          return 
+          return
         end
         file = @state.file
         line_number = @state.line
@@ -26,7 +27,7 @@ module Debugger
         errmsg pr("edit.errors.not_readable", file: file)
       end
     end
-    
+
     class << self
       def help_command
         'edit'

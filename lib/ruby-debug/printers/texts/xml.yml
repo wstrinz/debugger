@@ -1,3 +1,7 @@
+general:
+  errors:
+    unsupported: "Unsupported command '{cmd}'"
+
 breakpoints:
   set_breakpoint_to_line:
     tag: breakpointAdded
