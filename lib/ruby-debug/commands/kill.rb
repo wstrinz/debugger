@@ -13,7 +13,7 @@ module Debugger
     end
 
     def execute
-      puts @match[1]
+      errmsg(pr("general.errors.unsupported", cmd: 'kill')) && return if Debugger.printer.type == "xml"
       if @match[1] 
         signame = @match[1]
         unless Signal.list.member?(signame)
