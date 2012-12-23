@@ -91,6 +91,7 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
     end
     
     def execute
+      errmsg(pr("general.errors.unsupported", cmd: 'info')) && return if Debugger.printer.type == "xml"
       if !@match[1]
         errmsg "\"info\" must be followed by the name of an info command:\n"
         print "List of info subcommands:\n\n"
