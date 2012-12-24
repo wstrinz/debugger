@@ -64,7 +64,7 @@ module Debugger
       save_catchpoints(file)
       # save_displays(file)
       save_settings(file)
-      print "Saved to '#{file.path}'\n"
+      print pr("save.messages.done", path: file.path)
       if @state and @state.interface
         @state.interface.restart_file = file.path
       end
