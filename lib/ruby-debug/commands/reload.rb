@@ -16,7 +16,7 @@ module Debugger
     
     def execute
       Debugger.source_reload
-      print "Source code is reloaded. Automatic reloading is #{source_reloading}.\n"
+      print pr("reload.messages.done", source_reloading: source_reloading)
     end
     
     private

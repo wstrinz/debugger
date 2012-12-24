@@ -57,6 +57,10 @@ quit:
   confirmations:
     really: "Really quit?"
 
+reload:
+  messages:
+    done: "Source code is reloaded. Automatic reloading is {source_reloading}"
+
 restart:
   errors:
     undefined: "Don't know name of debugged program"

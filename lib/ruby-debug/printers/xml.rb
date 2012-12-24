@@ -13,8 +13,10 @@ module Printers
         print_confirmation(path, args)
       when "debug"
         print_debug(path, args)
-      else
+      when "messages"
         print_message(path, args)
+      else
+        print_general(path, args)
       end
     end
 
@@ -37,7 +39,7 @@ module Printers
 
     private
 
-      def print_message(path, args)
+      def print_general(path, args)
         settings = locate(path)
         xml = ::Builder::XmlMarkup.new
         tag = translate(settings["tag"], args)
@@ -51,12 +53,21 @@ module Printers
 
       def print_error(path, args)
         xml = ::Builder::XmlMarkup.new
-        xml.error { xml.text!(translate(locate(path), args)) }
+        xml.error { print_content(xml, path, args) }
       end
 
       def print_confirmation(path, args)
         xml = ::Builder::XmlMarkup.new
-        xml.confirmation { xml.text!(translate(locate(path), args)) }
+        xml.confirmation { print_content(xml, path, args) }
+      end
+
+      def print_message(path, args)
+        xml = ::Builder::XmlMarkup.new
+        xml.message { print_content(xml, path, args) }
+      end
+
+      def print_content(xml, path, args)
+        xml.text!(translate(locate(path), args))
       end
 
       def translated_attributes(attributes, args)

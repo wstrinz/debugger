@@ -4,16 +4,26 @@ describe "Reload Command" do
   include TestDsl
   temporary_change_hash_value(Debugger::Command.settings, :reload_source_on_change, false)
 
-  it "must notify that automatic reloading is off" do
-    enter 'reload'
-    debug_file 'reload'
-    check_output_includes "Source code is reloaded. Automatic reloading is off."
+  describe "notify that automatic reloading is off" do
+    it "must notify in plain text" do
+      enter 'reload'
+      debug_file 'reload'
+      check_output_includes "Source code is reloaded. Automatic reloading is off"
+    end
+
+    it "must notify in xml" do
+      temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+        enter 'reload'
+        debug_file 'reload'
+        check_output_includes "<message>Source code is reloaded. Automatic reloading is off</message>"
+      end
+    end
   end
 
   it "must notify that automatic reloading is on" do
     enter 'set autoreload', 'reload'
     debug_file 'reload'
-    check_output_includes "Source code is reloaded. Automatic reloading is on."
+    check_output_includes "Source code is reloaded. Automatic reloading is on"
   end
 
   describe "reloading" do
