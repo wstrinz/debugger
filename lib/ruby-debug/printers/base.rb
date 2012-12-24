@@ -24,7 +24,7 @@ module Printers
       end
 
       def translate(string, args = {})
-        string.gsub(/{([^}]*)}/) do
+        string.gsub(/\|\w+$/, '').gsub(/{([^}]*)}/) do
           key = $1.to_s.to_sym
           raise MissedArgument, "Missed argument #{$1} for '#{string}'" unless args.has_key?(key)
           args[key]

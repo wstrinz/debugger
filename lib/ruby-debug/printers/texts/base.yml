@@ -49,6 +49,10 @@ jump:
     no_frame: "Couldn't find debugged frame"
     no_active_code: "Couldn't find active code at {file}:{line}"
 
+method:
+  errors:
+    not_class_module: "Should be Class/Module: {object}"
+
 restart:
   errors:
     undefined: "Don't know name of debugged program"

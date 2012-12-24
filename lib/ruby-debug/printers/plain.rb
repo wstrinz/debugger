@@ -1,5 +1,6 @@
 module Printers
   class Plain < Base
+    include Columnize
 
     def print(path, args = {})
       message = translate(locate(path), args)
@@ -8,12 +9,28 @@ module Printers
     end
 
     def print_collection(path, collection, &block)
-      array_of_args(collection, &block).map do |args|
-        print(path, args)
-      end.join("")
+      modifier = get_modifier(path)
+      lines = array_of_args(collection, &block).map { |args| print(path, args) }
+      if modifier == 'c'
+        columnize(lines.map { |l| l.gsub(/\n$/, '') }, Debugger.settings[:width])
+      else
+        lines.join("")
+      end
+    end
+
+    def print_variables(path, variables, _kind)
+      print_collection(path, variables) do |(key, value), _|
+        {key: key, value: value.inspect}
+      end
     end
 
     private
+
+      def get_modifier(path)
+        modifier_regexp = /\|(\w+)$/
+        modifier_match = locate(path).match(modifier_regexp)
+        modifier_match && modifier_match[1]
+      end
 
       def contents_files
         ["plain"] + super

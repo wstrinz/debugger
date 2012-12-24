@@ -46,24 +46,21 @@ module Debugger
     end
 
     def execute
-      if @match[1] == "iv"
+      result = if @match[1] == "iv"
         obj = debug_eval(@match.post_match)
-        obj.instance_variables.sort.each do |v|
-          print "%s = %s\n", v, obj.instance_variable_get(v).inspect
-        end
+        variables = obj.instance_variables.sort.map { |var_name| [var_name, obj.instance_variable_get(var_name)] }
+        prv("variable.instance_variables", variables, 'instance')
       elsif @match[1]
-        obj = debug_eval(@match.post_match)
-        print "%s\n", columnize(obj.methods.sort(), 
-                                self.class.settings[:width])
+        prc("method.methods", debug_eval(@match.post_match).methods.sort) { |item, _| {name: item} }
       else
         obj = debug_eval(@match.post_match)
-        unless obj.kind_of? Module
-          print "Should be Class/Module: %s\n", @match.post_match
+        if obj.kind_of?(Module)
+          prc("method.methods", obj.instance_methods(false).sort) { |item, _| {name: item} }
         else
-          print "%s\n", columnize(obj.instance_methods(false).sort(), 
-                                  self.class.settings[:width])
+          errmsg(pr("method.errors.not_class_module", object: @match.post_match)) && return
         end
       end
+      print result
     end
 
     class << self

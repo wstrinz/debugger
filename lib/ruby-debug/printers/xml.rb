@@ -1,5 +1,6 @@
 require_relative 'base'
 require 'builder'
+require 'syck'
 
 module Printers
   class Xml < Base
@@ -25,6 +26,12 @@ module Printers
         array_of_args(collection, &block).each do |args|
           xml.tag!(tag, translated_attributes(settings["attributes"], args))
         end
+      end
+    end
+
+    def print_variables(path, variables, kind)
+      print_collection(path, variables) do |(key, value), index|
+        Variable.new(key, value, kind).to_hash
       end
     end
 
@@ -62,6 +69,62 @@ module Printers
       def contents_files
         ["xml"] + super
       end
+
+    class Variable
+      attr_reader :name, :kind
+      def initialize(name, value, kind = nil)
+        @name = name.to_s
+        @value = value
+        @kind = kind
+      end
+
+      def has_children?
+        if @value.is_a?(Array) || @value.is_a?(Hash)
+          !@value.empty?
+        else
+          !@value.instance_variables.empty? || !@value.class.class_variables.empty?
+        end
+      rescue
+        false
+      end
+
+      def value
+        if @value.is_a?(Array) || @value.is_a?(Hash)
+          if has_children?
+            "#{@value.class} (#{@value.size} element(s))"
+          else
+            "Empty #{@value.class}"
+          end
+        else
+          value_str = @value.nil? ? 'nil' : @value.to_s
+          if !value_str.is_a?(String)
+            "ERROR: #{@value.class}.to_s method returns #{value_str.class}. Should return String."
+          elsif value_str.is_binary_data?
+            "[Binary Data]"
+          else
+            value_str.gsub(/^(")(.*)(")$/, '\2')
+          end
+        end
+      rescue => e
+        "<raised exception: #{e}>"
+      end
+
+      def id
+        @value.respond_to?(:object_id) ? "%#+x" % @value.object_id : nil
+      rescue
+        nil
+      end
+
+      def type
+        @value.class
+      rescue
+        "Undefined"
+      end
+
+      def to_hash
+        {name: @name, kind: @kind, value: value, type: type, has_children: has_children?, id: id}
+      end
+    end
 
   end
 end

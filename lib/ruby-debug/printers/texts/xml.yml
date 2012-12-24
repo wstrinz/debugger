@@ -57,6 +57,12 @@ frame:
       line: "{line}"
       current: "{mark}"
 
+method:
+  methods:
+    tag: method
+    attributes:
+      name: "{name}"
+
 stop:
   suspend:
     tag: suspended
@@ -81,3 +87,14 @@ restart:
     tag: restart
     attributes:
       command: "{cmd}"
+
+variable:
+  instance_variables:
+    tag: variable
+    attributes:
+      name: "{name}"
+      kind: "{kind}"
+      value: "{value}"
+      type: "{type}"
+      hasChildren: "{has_children}"
+      objectId: "{id}"

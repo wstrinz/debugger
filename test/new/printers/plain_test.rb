@@ -2,6 +2,7 @@ require_relative '../test_helper'
 
 describe "Printers::Plain" do
   include PrinterHelpers
+  include TestDsl
 
   let(:klass) { Printers::Plain }
   let(:printer) { klass.new }
@@ -9,10 +10,12 @@ describe "Printers::Plain" do
     {
       "foo" => {
         "bar" => "plain {zee}, {uga} gaa",
+        "with_c" => "{arg} bla|c",
         "confirmations" => {
           "okay" => "Okay?"
         }
-      }
+      },
+      "vars" => "{key}: {value}"
     }
   end
 
@@ -51,6 +54,30 @@ describe "Printers::Plain" do
 
     it "must show an error if there is no specified argument" do
       ->{ printer.print("foo.bar", zee: 'zuu') }.must_raise klass::MissedArgument
+    end
+  end
+
+  describe "#print_collection" do
+    it "must print collection" do
+      printer.print_collection("foo.bar", [{uga: 'a'}, {uga: 'b'}]) do |item, index|
+        item.merge(zee: index)
+      end.must_equal "plain 0, a gaa\nplain 1, b gaa\n"
+    end
+
+    it "must columnize collection with modifier 'c'" do
+      temporary_change_hash_value(Debugger.settings, :width, 30) do
+        printer.print_collection("foo.with_c", (1..10)) { |i, _| {arg: i} }.must_equal(
+          "1 bla  4 bla  7 bla  10 bla\n" +
+          "2 bla  5 bla  8 bla\n" +
+          "3 bla  6 bla  9 bla\n"
+        )
+      end
+    end
+  end
+
+  describe "#print_variables" do
+    it "must print variables" do
+      printer.print_variables("vars", [['a', 'b'], ['c', 'd']], '').must_equal %{a: "b"\nc: "d"\n}
     end
   end
 

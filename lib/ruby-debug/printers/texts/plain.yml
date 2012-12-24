@@ -17,6 +17,9 @@ eval:
 frame:
   line: "{mark}#{pos} {call_str}at line {file}:{line}"
 
+method:
+  methods: "{name}|c"
+
 stop:
   suspend: "{file}:{line_number}\n{line}"
 
@@ -26,3 +29,6 @@ toggle:
 
 restart:
   success: "Re exec'ing:\n\t{cmd}"
+
+variable:
+  instance_variables: "{key} = {value}"

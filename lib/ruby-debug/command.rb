@@ -14,6 +14,7 @@ module Debugger
     extend Forwardable
     def_delegator :"Debugger.printer", :print, :pr
     def_delegator :"Debugger.printer", :print_collection, :prc
+    def_delegator :"Debugger.printer", :print_variables, :prv
 
     # Find param in subcmds. param id downcased and can be abbreviated
     # to the minimum length listed in the subcommands
