@@ -111,6 +111,10 @@ skip:
   messages:
     ok: "ok"
 
+source:
+  errors:
+    not_found: "Command file '{file}' is not found"
+
 toggle:
   errors:
     no_breakpoints: "No breakpoints have been set"
