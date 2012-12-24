@@ -5,7 +5,7 @@ module Debugger
       case setting_name
       when /^annotate$/
         Debugger.annotate ||= 0
-        return ("Annotation level is #{Debugger.annotate}")
+        return pr("show.messages.annotation", level: Debugger.annotate)
       when /^args$/
         if Command.settings[:argv] and Command.settings[:argv].size > 0
           if defined?(Debugger::RDEBUG_SCRIPT)
@@ -18,25 +18,25 @@ module Debugger
         else
           args = ''
         end
-        return "Argument list to give program being debugged when it is started is \"#{args}\"."
+        return pr("show.messages.args", args: args)
       when /^autolist$/
         on_off = Command.settings[:autolist] > 0
-        return "autolist is #{show_onoff(on_off)}."
+        return pr("show.messages.general", setting: "autolist", status: show_onoff(on_off))
       when /^autoeval$/
         on_off = Command.settings[:autoeval]
-        return "autoeval is #{show_onoff(on_off)}."
+        return pr("show.messages.general", setting: "autoeval", status: show_onoff(on_off))
       when /^autoreload$/
         on_off = Command.settings[:reload_source_on_change]
-        return "autoreload is #{show_onoff(on_off)}."
+        return pr("show.messages.general", setting: "autoreload", status: show_onoff(on_off))
       when /^autoirb$/
         on_off = Command.settings[:autoirb] > 0
-        return "autoirb is #{show_onoff(on_off)}."
+        return pr("show.messages.general", setting: "autoirb", status: show_onoff(on_off))
       when /^basename$/
         on_off = Command.settings[:basename]
-        return "basename is #{show_onoff(on_off)}."
+        return pr("show.messages.general", setting: "basename", status: show_onoff(on_off))
       when /^callstyle$/
         style = Command.settings[:callstyle]
-        return "Frame call-display style is #{style}."
+        return pr("show.messages.call_style", style: style)
       when /^commands(:?\s+(\d+))?$/
         if @state.interface.readline_support?
           s = '';
@@ -68,18 +68,18 @@ module Debugger
             i += 1
           end
         else
-          s='No readline support'
+          s = pr("show.errors.no_readline")
         end
         return s
       when /^debuggertesting$/
         on_off = Command.settings[:debuggertesting]
-        return "Currently testing the debugger is #{show_onoff(on_off)}."
+        return pr("show.messages.debuggertesting", status: show_onoff(on_off))
       when /^forcestep$/
         on_off = self.class.settings[:force_stepping]
-        return "force-stepping is #{show_onoff(on_off)}."
+        return pr("show.messages.general", setting: "force-stepping", status: show_onoff(on_off))
       when /^fullpath$/
         on_off = Command.settings[:full_path]
-        return "Displaying frame's full file names is #{show_onoff(on_off)}."
+        return pr("show.messages.fullpath", status: show_onoff(on_off))
       when /^history(:?\s+(filename|save|size))?$/
         args = @match[1].split
         interface = @state.interface
@@ -99,46 +99,35 @@ module Debugger
         end
         s = []
         if show_filename
-          msg = (prefix ? "filename: " : "") + 
-            "The filename in which to record the command history is " +
-                      "#{interface.histfile.inspect}"
-          s << msg
+          s << pr("show.messages.history.filename", prefix: ("filename: " if prefix), filename: interface.histfile)
         end
         if show_save
-          msg = (prefix ? "save: " : "") + 
-            "Saving of history save is #{show_onoff(interface.history_save)}."
-          s << msg
+          s << pr("show.messages.history.save", prefix: ("save: " if prefix), status: show_onoff(interface.history_save))
         end
         if show_size
-          msg = (prefix ? "size: " : "") + 
-            "Debugger history size is #{interface.history_length}"
-          s << msg
+          s << pr("show.messages.history.size", prefix: ("size: " if prefix), size: interface.history_length)
         end
-        return s.join("\n")
+        return s.join("")
       when /^linetrace$/
         on_off = Debugger.tracing
-        return "line tracing is #{show_onoff(on_off)}."
+        return pr("show.messages.general", setting: "line tracing", status: show_onoff(on_off))
       when /^linetrace\+$/
         on_off = Command.settings[:tracing_plus]
-        if on_off
-          return "line tracing style is different consecutive lines."
-        else
-          return "line tracing style is every line."
-        end
+        return pr("show.messages.tracing_plus.#{on_off ? "on" : "off"}")
       when /^listsize$/
         listlines = Command.settings[:listsize]
-        return "Number of source lines to list by default is #{listlines}."
+        return pr("show.messages.listsize", size: listlines)
       when /^port$/
-        return "server port is #{Debugger::PORT}."
+        return pr("show.messages.port", port: Debugger::PORT)
       when /^trace$/
         on_off = Command.settings[:stack_trace_on_error]
-        return "Displaying stack trace is #{show_onoff(on_off)}."
+        return pr("show.messages.general", setting: "Displaying stack trace", status: show_onoff(on_off))
       when /^version$/
-        return "ruby-debug #{Debugger::VERSION}"
+        return pr("show.messages.version", version: Debugger::VERSION)
       when /^width$/
-        return "width is #{self.class.settings[:width]}."
+        return pr("show.messages.general", setting: "width", status: self.class.settings[:width])
       else
-        return "Unknown show subcommand #{setting_name}."
+        return pr("show.errors.unknown", name: setting_name)
       end
     end
   end

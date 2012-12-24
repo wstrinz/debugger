@@ -27,14 +27,14 @@ describe "Show Command" do
       Debugger.send(:remove_const, "RDEBUG_SCRIPT") if Debugger.const_defined?("RDEBUG_SCRIPT")
       enter 'show args'
       debug_file 'show'
-      check_output_includes 'Argument list to give program being debugged when it is started is "foo bar".'
+      check_output_includes "Argument list to give program being debugged when it is started is 'foo bar'"
     end
 
     it "must not show the first arg if RDEBUG_SCRIPT is defined" do
       temporary_set_const(Debugger, "RDEBUG_SCRIPT", "bla") do
         enter 'show args'
         debug_file 'show'
-        check_output_includes 'Argument list to give program being debugged when it is started is "bar".'
+        check_output_includes "Argument list to give program being debugged when it is started is 'bar'"
       end
     end
   end
@@ -44,7 +44,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :autolist, 1) do
       enter 'show autolist'
       debug_file 'show'
-      check_output_includes 'autolist is on.'
+      check_output_includes 'autolist is on'
     end
   end
 
@@ -52,7 +52,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :autoeval, true) do
       enter 'show autoeval'
       debug_file 'show'
-      check_output_includes 'autoeval is on.'
+      check_output_includes 'autoeval is on'
     end
   end
 
@@ -60,7 +60,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :reload_source_on_change, true) do
       enter 'show autoreload'
       debug_file 'show'
-      check_output_includes 'autoreload is on.'
+      check_output_includes 'autoreload is on'
     end
   end
 
@@ -69,7 +69,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :autoirb, 1) do
       enter 'show autoirb'
       debug_file 'show'
-      check_output_includes 'autoirb is on.'
+      check_output_includes 'autoirb is on'
     end
   end
 
@@ -77,7 +77,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :basename, true) do
       enter 'show basename'
       debug_file 'show'
-      check_output_includes 'basename is on.'
+      check_output_includes 'basename is on'
     end
   end
 
@@ -85,7 +85,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :callstyle, :short) do
       enter 'show callstyle'
       debug_file 'show'
-      check_output_includes 'Frame call-display style is short.'
+      check_output_includes 'Frame call-display style is short'
     end
   end
 
@@ -93,7 +93,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :force_stepping, true) do
       enter 'show forcestep'
       debug_file 'show'
-      check_output_includes 'force-stepping is on.'
+      check_output_includes 'force-stepping is on'
     end
   end
 
@@ -101,7 +101,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :full_path, true) do
       enter 'show fullpath'
       debug_file 'show'
-      check_output_includes "Displaying frame's full file names is on."
+      check_output_includes "Displaying frame's full file names is on"
     end
   end
 
@@ -109,7 +109,7 @@ describe "Show Command" do
     temporary_change_method_value(Debugger, :tracing, true) do
       enter 'show linetrace'
       debug_file 'show'
-      check_output_includes "line tracing is on."
+      check_output_includes "line tracing is on"
     end
   end
 
@@ -119,7 +119,7 @@ describe "Show Command" do
       temporary_change_hash_value(Debugger::Command.settings, :tracing_plus, true) do
         enter 'show linetrace+'
         debug_file 'show'
-        check_output_includes "line tracing style is different consecutive lines."
+        check_output_includes "line tracing style is different consecutive lines"
       end
     end
 
@@ -127,7 +127,7 @@ describe "Show Command" do
       temporary_change_hash_value(Debugger::Command.settings, :tracing_plus, false) do
         enter 'show linetrace+'
         debug_file 'show'
-        check_output_includes "line tracing style is every line."
+        check_output_includes "line tracing style is every line"
       end
     end
   end
@@ -137,7 +137,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :listsize, 10) do
       enter 'show listsize'
       debug_file 'show'
-      check_output_includes 'Number of source lines to list by default is 10.'
+      check_output_includes 'Number of source lines to list by default is 10'
     end
   end
 
@@ -145,7 +145,7 @@ describe "Show Command" do
     temporary_set_const(Debugger, "PORT", 12345) do
       enter 'show port'
       debug_file 'show'
-      check_output_includes 'server port is 12345.'
+      check_output_includes 'server port is 12345'
     end
   end
 
@@ -153,7 +153,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :stack_trace_on_error, true) do
       enter 'show trace'
       debug_file 'show'
-      check_output_includes "Displaying stack trace is on."
+      check_output_includes "Displaying stack trace is on"
     end
   end
 
@@ -167,7 +167,7 @@ describe "Show Command" do
     temporary_change_hash_value(Debugger::Command.settings, :width, 35) do
       enter 'show width'
       debug_file 'show'
-      check_output_includes 'width is 35.'
+      check_output_includes 'width is 35'
     end
   end
 
@@ -189,11 +189,11 @@ describe "Show Command" do
       end
 
       it "must show history file" do
-        check_output_includes /filename: The filename in which to record the command history is "hist_file\.txt"/
+        check_output_includes /filename: The filename in which to record the command history is 'hist_file\.txt'/
       end
 
       it "must show history save setting" do
-        check_output_includes /save: Saving of history save is on\./
+        check_output_includes /save: Saving of history save is on/
       end
 
       it "must show history length" do
@@ -206,14 +206,14 @@ describe "Show Command" do
         interface.histfile = "hist_file.txt"
         enter 'show history filename'
         debug_file 'show'
-        check_output_includes 'The filename in which to record the command history is "hist_file.txt"'
+        check_output_includes "The filename in which to record the command history is 'hist_file.txt'"
       end
 
       it "must show history save setting" do
         interface.history_save = true
         enter 'show history save'
         debug_file 'show'
-        check_output_includes 'Saving of history save is on.'
+        check_output_includes 'Saving of history save is on'
       end
 
       it "must show history length" do
@@ -285,7 +285,7 @@ describe "Show Command" do
     it "must work in post-mortem mode" do
       enter 'cont', "show autolist"
       debug_file 'post_mortem'
-      check_output_includes "autolist is off."
+      check_output_includes "autolist is off"
     end
   end
 

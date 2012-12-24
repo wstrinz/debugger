@@ -58,11 +58,7 @@ set history size -- Set the size of the command history"],
 
     def execute
       if not @match[1]
-        print "\"set\" must be followed by the name of an set command:\n"
-        print "List of set subcommands:\n\n"
-        for subcmd in Subcommands do
-          print "set #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
+        print pr("set.errors.no_subcommand", subcommands: subcmd.map { |s| "set #{s.name} -- #{s.short_help}" }.join("\n"))
       else
         args = @match[1].split(/[ \t]+/)
         subcmd = args.shift
@@ -115,8 +111,7 @@ set history size -- Set the size of the command history"],
                     return
                   end
                 end
-                print "Invalid call style #{arg}. Should be one of: " +
-                  "'short' or 'last'.\n"
+                print pr("set.errors.invalid_call_style", style: arg)
               when /^trace$/
                 Command.settings[:stack_trace_on_error] = set_on
               when /^fullpath$/
@@ -139,15 +134,14 @@ set history size -- Set the size of the command history"],
                   when /^save$/
                     interface.history_save = get_onoff(args[1])
                   when /^size$/
-                    interface.history_length = get_int(args[1],
-                                                       "Set history size")
+                    interface.history_length = get_int(args[1], "Set history size")
                   when /^filename$/
-                    interface.histfile = File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", args[1])
+                    interface.histfile = File.join(ENV["HOME"] || ENV["HOMEPATH"] || ".", args[1])
                   else
-                    print "Invalid history parameter #{args[0]}. Should be 'filename', 'save' or 'size'.\n" 
+                    print pr("set.errors.wrong_history_arg", arg: args[0])
                   end
                 else
-                  print "Need two parameters for 'set history'; got #{args.size}.\n" 
+                  print pr("set.errors.wrong_history_args_number", size: args.size)
                   return
                 end
               when /^linetrace\+$/
@@ -170,17 +164,17 @@ set history size -- Set the size of the command history"],
                   return
                 end
               else
-                print "Unknown setting #{@match[1]}.\n"
+                print pr("set.errors.unknown_setting", setting: @match[1])
                 return
               end
-              print "%s\n" % show_setting(try_subcmd.name)
+              print show_setting(try_subcmd.name)
               return
             rescue RuntimeError
               return
             end
           end
         end
-        print "Unknown set command #{subcmd}\n"
+        print pr("set.errors.unknown_subcommand", subcmd: subcmd)
       end
     end
 

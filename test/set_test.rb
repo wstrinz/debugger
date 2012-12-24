@@ -56,10 +56,20 @@ describe "Set Command" do
   describe "messages" do
     temporary_change_hash_value(Debugger::Command.settings, :autolist, 0)
 
-    it "must show a message after setting" do
-      enter 'set autolist on'
-      debug_file 'set'
-      check_output_includes "autolist is on."
+    describe "show a message after setting" do
+      it "must show in plain text" do
+        enter 'set autolist on'
+        debug_file 'set'
+        check_output_includes "autolist is on"
+      end
+
+      it "must show in xml" do
+        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+          enter 'set autolist on'
+          debug_file 'set'
+          check_output_includes "<message>autolist is on</message>"
+        end
+      end
     end
   end
 
@@ -77,7 +87,7 @@ describe "Set Command" do
       temporary_change_hash_value(Debugger::Command.settings, :basename, false) do
         enter 'set debuggertesting', 'show basename'
         debug_file('set')
-        check_output_includes "basename is on."
+        check_output_includes "basename is on"
       end
     end
 
@@ -98,7 +108,7 @@ describe "Set Command" do
       it "must show a message" do
         enter 'set history save on'
         debug_file 'set'
-        check_output_includes "Saving of history save is on."
+        check_output_includes "Saving of history save is on"
       end
 
       it "must set history save to off" do
@@ -139,13 +149,13 @@ describe "Set Command" do
     it "must show an error message if used wrong subcommand" do
       enter 'set history bla 2'
       debug_file 'set'
-      check_output_includes "Invalid history parameter bla. Should be 'filename', 'save' or 'size'."
+      check_output_includes "Invalid history parameter bla. Should be 'filename', 'save' or 'size'"
     end
 
     it "must show an error message if provided only one argument" do
       enter 'set history save'
       debug_file 'set'
-      check_output_includes "Need two parameters for 'set history'; got 1."
+      check_output_includes "Need two parameters for 'set history'; got 1"
     end
   end
 
@@ -170,7 +180,7 @@ describe "Set Command" do
     it "must work in post-mortem mode" do
       enter 'cont', "set autolist on"
       debug_file 'post_mortem'
-      check_output_includes "autolist is on."
+      check_output_includes "autolist is on"
     end
   end
 

@@ -88,6 +88,10 @@ restart:
     attributes:
       command: "{cmd}"
 
+set:
+  errors:
+    no_subcommand: "'set' must be followed by the name of a subcommand"
+
 variable:
   instance_variables:
     tag: variable

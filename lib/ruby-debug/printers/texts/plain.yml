@@ -30,5 +30,9 @@ toggle:
 restart:
   success: "Re exec'ing:\n\t{cmd}"
 
+set:
+  errors:
+    no_subcommand: "\"set\" must be followed by the name of an set command:\nList of set subcommands:\n\n{subcommands}"
+
 variable:
   instance_variables: "{key} = {value}"

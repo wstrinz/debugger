@@ -76,6 +76,36 @@ save:
   messages:
     done: "Saved to '{path}'"
 
+set:
+  errors:
+    invalid_call_style: "Invalid call style {style}. Should be one of: 'short' or 'last'"
+    wrong_history_arg: "Invalid history parameter {arg}. Should be 'filename', 'save' or 'size'"
+    wrong_history_args_number: "Need two parameters for 'set history'; got {size}"
+    unknown_setting: "Unknown setting {setting}"
+    unknown_subcommand: "Unknown set command {subcmd}"
+
+show:
+  messages:
+    annotation: "Annotation level is {level}"
+    args: "Argument list to give program being debugged when it is started is '{args}'"
+    general: "{setting} is {status}"
+    call_style: "Frame call-display style is {style}"
+    debuggertesting: "Currently testing the debugger is {status}"
+    fullpath: "Displaying frame's full file names is {status}"
+    history:
+      filename: "{prefix}The filename in which to record the command history is '{filename}'"
+      save: "{prefix}Saving of history save is {status}"
+      size: "{prefix}Debugger history size is {size}"
+    tracing_plus:
+      'on': "line tracing style is different consecutive lines"
+      'off': "line tracing style is every line"
+    listsize: "Number of source lines to list by default is {size}"
+    port: "server port is {port}"
+    version: "ruby-debug {version}"
+  errors:
+    no_readline: "No readline support"
+    unknown: "Unknown show subcommand {name}"
+
 toggle:
   errors:
     no_breakpoints: "No breakpoints have been set"

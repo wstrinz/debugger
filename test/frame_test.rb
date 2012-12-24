@@ -147,7 +147,7 @@ describe "Frame Command" do
     it "must not set 'tracked' callstyle" do
       enter 'set callstyle tracked'
       debug_file('frame')
-      check_output_includes "Invalid call style tracked. Should be one of: 'short' or 'last'."
+      check_output_includes "Invalid call style tracked. Should be one of: 'short' or 'last'"
       Debugger::Command.settings[:callstyle].must_equal :last
     end
   end
