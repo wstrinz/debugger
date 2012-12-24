@@ -127,7 +127,7 @@ module Debugger
       when /^width$/
         return pr("show.messages.general", setting: "width", status: self.class.settings[:width])
       else
-        return pr("show.errors.unknown", name: setting_name)
+        return pr("show.errors.unknown_subcommand", name: setting_name)
       end
     end
   end
@@ -182,19 +182,16 @@ show history size -- Show the size of the command history"],
 
     def execute
       if not @match[1]
-        print "\"show\" must be followed by the name of an show command:\n"
-        print "List of show subcommands:\n\n"
-        for subcmd in Subcommands do
-          print "show #{subcmd.name} -- #{subcmd.short_help}\n"
-        end
+        subcommands = subcmd.map { |s| "show #{s.name} -- #{s.short_help}" }.join("\n")
+        print pr("show.errors.no_subcommand", subcommands: subcommands)
       else
         args = @match[1].split(/[ \t]+/)
         param = args.shift
         subcmd = find(Subcommands, param)
         if subcmd
-          print "%s\n" % show_setting(subcmd.name)
+          print show_setting(subcmd.name)
         else
-          print "Unknown show command #{param}\n"
+          print pr("show.errors.unknown", name: param)
         end
       end
     end

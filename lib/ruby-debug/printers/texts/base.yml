@@ -104,7 +104,8 @@ show:
     version: "ruby-debug {version}"
   errors:
     no_readline: "No readline support"
-    unknown: "Unknown show subcommand {name}"
+    unknown_subcommand: "Unknown show subcommand {name}"
+    unknown: "Unknown show command {name}"
 
 toggle:
   errors:

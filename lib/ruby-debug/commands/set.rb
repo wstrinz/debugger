@@ -58,7 +58,8 @@ set history size -- Set the size of the command history"],
 
     def execute
       if not @match[1]
-        print pr("set.errors.no_subcommand", subcommands: subcmd.map { |s| "set #{s.name} -- #{s.short_help}" }.join("\n"))
+        subcommands = subcmd.map { |s| "set #{s.name} -- #{s.short_help}" }.join("\n")
+        print pr("set.errors.no_subcommand", subcommands: subcommands)
       else
         args = @match[1].split(/[ \t]+/)
         subcmd = args.shift

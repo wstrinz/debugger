@@ -34,5 +34,9 @@ set:
   errors:
     no_subcommand: "\"set\" must be followed by the name of an set command:\nList of set subcommands:\n\n{subcommands}"
 
+show:
+  errors:
+    no_subcommand: "\"show\" must be followed by the name of an show command:\nList of show subcommands:\n\n{subcommands}"
+
 variable:
   instance_variables: "{key} = {value}"
