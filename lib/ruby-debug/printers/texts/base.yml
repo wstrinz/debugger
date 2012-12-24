@@ -107,6 +107,10 @@ show:
     unknown_subcommand: "Unknown show subcommand {name}"
     unknown: "Unknown show command {name}"
 
+skip:
+  messages:
+    ok: "ok"
+
 toggle:
   errors:
     no_breakpoints: "No breakpoints have been set"

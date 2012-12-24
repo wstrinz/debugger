@@ -13,7 +13,7 @@ module Debugger
 
     def execute
       Debugger::skip_next_exception
-      print "ok\n"
+      print pr("skip.messages.ok")
     end
 
     class << self
