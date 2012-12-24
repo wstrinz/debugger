@@ -53,6 +53,10 @@ method:
   errors:
     not_class_module: "Should be Class/Module: {object}"
 
+quit:
+  confirmations:
+    really: "Really quit?"
+
 restart:
   errors:
     undefined: "Don't know name of debugged program"
