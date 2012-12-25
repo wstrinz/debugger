@@ -5,25 +5,46 @@ describe "Thread Command" do
   let(:release) { 'eval Thread.main[:should_break] = true' }
 
   describe "list" do
-    it "must show current thread by 'plus' sign" do
-      thnum = nil
-      enter 'break 8', 'cont', 'thread list', release
-      debug_file('thread') { thnum = Debugger.contexts.first.thnum }
-      check_output_includes '+', thnum.to_s, /#<Thread:\S+ run>/, "#{fullpath('thread')}:8"
+    describe "show current thread by 'plus' sign" do
+      it "must show in plain text" do
+        thnum = nil
+        enter 'break 8', 'cont', 'thread list', release
+        debug_file('thread') { thnum = Debugger.contexts.first.thnum }
+        check_output_includes /\+ #{thnum} #<Thread:\S+ run>\t#{fullpath('thread')}:8/
+      end
+
+      it "must show in xml" do
+        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+          thnum = nil
+          enter 'break 8', 'cont', 'thread list', release
+          debug_file('thread') { thnum = Debugger.contexts.first.thnum }
+          check_output_includes %{<threads><thread id="#{thnum}" status="run" current="yes"/></threads>}
+        end
+      end
     end
 
     it "must work with shortcut" do
       thnum = nil
       enter 'break 8', 'cont', 'th list', release
       debug_file('thread') { thnum = Debugger.contexts.first.thnum }
-      check_output_includes '+', thnum.to_s, /#<Thread:\S+ run>/, "#{fullpath('thread')}:8"
+      check_output_includes /\+ #{thnum} #<Thread:\S+ run>\t#{fullpath('thread')}:8/
     end
 
 
-    it "must show 3 available threads" do
-      enter 'break 21', 'cont', 'thread list', release
-      debug_file 'thread'
-      check_output_includes /#<Thread:\S+ (sleep|run)>/, /#<Thread:\S+ (sleep|run)>/, /#<Thread:\S+ (sleep|run)>/
+    describe "show 3 available threads" do
+      it "must show in plain text" do
+        enter 'break 21', 'cont', 'thread list', release
+        debug_file 'thread'
+        check_output_includes /#<Thread:\S+ (sleep|run)>.*#<Thread:\S+ (sleep|run)>.*#<Thread:\S+ (sleep|run)>/m
+      end
+
+      it "must show in xml" do
+        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+          enter 'break 21', 'cont', 'thread list', release
+          debug_file 'thread'
+          check_output_includes /<threads>.*<thread .*<thread .*><thread .*><\/threads>/
+        end
+      end
     end
   end
 
@@ -33,7 +54,7 @@ describe "Thread Command" do
       thnum = nil
       enter 'break 21', 'cont', ->{"thread stop #{Debugger.contexts.last.thnum}"}, release
       debug_file('thread') { thnum = Debugger.contexts.last.thnum }
-      check_output_includes "$", thnum.to_s, /#<Thread:/
+      check_output_includes /\$ #{thnum} #<Thread:/
     end
 
     it "must show error message if thread number is not specified" do
@@ -45,7 +66,7 @@ describe "Thread Command" do
     it "must show error message when trying to stop current thread" do
       enter 'break 8', 'cont', ->{"thread stop #{Debugger.contexts.first.thnum}"}, release
       debug_file 'thread'
-      check_output_includes "It's the current thread.", interface.error_queue
+      check_output_includes "It's the current thread", interface.error_queue
     end
   end
 
@@ -79,14 +100,13 @@ describe "Thread Command" do
     it "must show error message when trying to resume current thread" do
       enter 'break 8', 'cont', ->{"thread resume #{Debugger.contexts.first.thnum}"}, release
       debug_file 'thread'
-      check_output_includes "It's the current thread.", interface.error_queue
+      check_output_includes "It's the current thread", interface.error_queue
     end
 
     it "must show error message if it is not stopped" do
-      thnum = nil
       enter 'break 21', 'cont', ->{"thread resume #{Debugger.contexts.last.thnum}"}, release
-      debug_file('thread') { thnum = Debugger.contexts.last.thnum }
-      check_output_includes "Already running."
+      debug_file('thread')
+      check_output_includes "Already running", interface.error_queue
     end
   end
 
@@ -106,7 +126,7 @@ describe "Thread Command" do
     it "must show error message when trying to switch current thread" do
       enter 'break 8', 'cont', ->{"thread switch #{Debugger.contexts.first.thnum}"}, release
       debug_file 'thread'
-      check_output_includes "It's the current thread.", interface.error_queue
+      check_output_includes "It's the current thread", interface.error_queue
     end
   end
 
@@ -115,7 +135,7 @@ describe "Thread Command" do
     it "must work in post-mortem mode" do
       enter 'cont', 'thread list'
       debug_file('post_mortem')
-      check_output_includes "+", /\d+/, /#<Thread:(\S+) run/
+      check_output_includes /\+ \d+ #<Thread:(\S+) run/
     end
   end
 

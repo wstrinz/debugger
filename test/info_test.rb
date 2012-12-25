@@ -256,7 +256,7 @@ describe "Info Command" do
       thread_number = nil
       enter ->{thread_number = context.thnum; "info thread #{context.thnum}"}
       debug_file 'info'
-      check_output_includes "+", thread_number.to_s, /#<Thread:\S+ run>/
+      check_output_includes /\+ #{thread_number} #<Thread:\S+ run>/
     end
 
     it "must show verbose thread info" do

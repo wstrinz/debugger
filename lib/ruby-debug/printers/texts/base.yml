@@ -115,6 +115,14 @@ source:
   errors:
     not_found: "Command file '{file}' is not found"
 
+thread:
+  errors:
+    no_number: "'{subcmd}' needs a thread number"
+    no_thread: "No such thread"
+    current_thread: "It's the current thread"
+    wrong_action: "Can't {subcmd} to the debugger thread {arg}"
+    already_running: "Already running"
+
 toggle:
   errors:
     no_breakpoints: "No breakpoints have been set"

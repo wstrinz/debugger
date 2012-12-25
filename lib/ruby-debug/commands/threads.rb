@@ -1,21 +1,34 @@
 module Debugger
   module ThreadFunctions # :nodoc:
-    def display_context(c, show_top_frame=true)
-      c_flag = c.thread == Thread.current ? '+' : ' '
-      c_flag = '$' if c.suspended?
-      d_flag = c.ignored? ? '!' : ' '
-      print "%s%s", c_flag, d_flag
-      print "%d ", c.thnum
-      print "%s\t", c.thread.inspect
-      if c.stack_size > 0 and show_top_frame
-        print "%s:%d", c.frame_file(0), c.frame_line(0)
+    def display_context(context, should_show_top_frame = true)
+      print pr("thread.context", thread_arguments(context, should_show_top_frame))
+    end
+
+    def thread_arguments(context, should_show_top_frame = true)
+      is_current = context.thread == Thread.current
+      status_flag = if context.suspended?
+        "$"
+      else
+        is_current ? '+' : ' '
       end
-      print "\n"
+      debug_flag = context.ignored? ? '!' : ' '
+      file_line = if context.stack_size > 0 && should_show_top_frame
+        "#{context.frame_file(0)}:#{context.frame_line(0)}"
+      end
+      {
+        status_flag: status_flag,
+        debug_flag: debug_flag,
+        id: context.thnum,
+        thread: context.thread.inspect,
+        file_line: file_line,
+        status: context.thread.status,
+        current: is_current ? "yes" : "no"
+      }
     end
     
     def parse_thread_num(subcmd, arg)
       if '' == arg
-        errmsg "'%s' needs a thread number\n" % subcmd
+        errmsg pr("thread.errors.no_number", subcmd: subcmd)
         nil
       else
         thread_num = get_int(arg, "thread #{subcmd}", 1)
@@ -29,11 +42,11 @@ module Debugger
       return nil unless c
       case 
       when nil == c
-        errmsg "No such thread.\n"
+        errmsg pr("thread.errors.no_thread")
       when @state.context == c
-        errmsg "It's the current thread.\n"
+        errmsg pr("thread.errors.current_thread")
       when c.ignored?
-        errmsg "Can't #{subcmd} to the debugger thread #{arg}.\n"
+        errmsg pr("thread.errors.wrong_action", subcmd: subcmd, arg: arg)
       else # Everything is okay
         return c
       end
@@ -49,9 +62,7 @@ module Debugger
     end
 
     def execute
-      threads = Debugger.contexts.sort_by{|c| c.thnum}.each do |c|
-        display_context(c)
-      end
+      print prc("thread.context", Debugger.contexts.sort_by(&:thnum)) { |context, _| thread_arguments(context) }
     end
 
     class << self
@@ -109,7 +120,7 @@ module Debugger
       c = parse_thread_num_for_cmd("thread resume", @match[1])
       return unless c 
       if !c.thread.stop?
-        print "Already running."
+        errmsg pr("thread.errors.already_running")
         return
       end
       c.resume

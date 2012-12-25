@@ -38,5 +38,8 @@ show:
   errors:
     no_subcommand: "\"show\" must be followed by the name of an show command:\nList of show subcommands:\n\n{subcommands}"
 
+thread:
+  context: "{status_flag}{debug_flag}{id} {thread}\t{file_line}"
+
 variable:
   instance_variables: "{key} = {value}"
