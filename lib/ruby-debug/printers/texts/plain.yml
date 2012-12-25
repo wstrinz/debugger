@@ -41,5 +41,9 @@ show:
 thread:
   context: "{status_flag}{debug_flag}{id} {thread}\t{file_line}"
 
+tmate:
+  errors:
+    wrong_frame: "Wrong frame number"
+
 variable:
   instance_variables: "{key} = {value}"

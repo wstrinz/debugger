@@ -6,10 +6,11 @@ module Debugger
       end
 
       def execute
+        errmsg(pr("general.errors.unsupported", cmd: 'tmate')) && return if Debugger.printer.type == "xml"
         if @match[1]
           frm_n = @match[1].to_i
           if frm_n > @state.context.stack_size || frm_n == 0
-            print "Wrong frame number\n"
+            print pr("tmate.errors.wrong_frame")
             return
           end
           file, line = @state.context.frame_file(frm_n-1), @state.context.frame_line(frm_n-1)
