@@ -45,5 +45,15 @@ tmate:
   errors:
     wrong_frame: "Wrong frame number"
 
+trace:
+  messages:
+    all_threads: "Tracing {status} all threads"
+    current_thread: "Tracing {status} on current thread"
+  errors:
+    wrong_var_subcommand: "expecting 'stop' or 'nostop'; got {subcmd}"
+    var_is_not_global: "{name} is not a global variable"
+    wrong_subcommand: "expecting 'on', 'off', 'var' or 'variable'; got: {subcmd}"
+  trace: "traced variable {name} has value {value}"
+
 variable:
   instance_variables: "{key} = {value}"

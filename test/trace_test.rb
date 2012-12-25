@@ -25,13 +25,13 @@ describe "Trace Command" do
       it "must show a message it is on" do
         enter 'trace on'
         debug_file 'trace'
-        check_output_includes "Tracing on on current thread."
+        check_output_includes "Tracing on on current thread"
       end
 
       it "must be able to use a shortcut" do
         enter 'tr on'
         debug_file 'trace'
-        check_output_includes "Tracing on on current thread."
+        check_output_includes "Tracing on on current thread"
       end
     end
 
@@ -53,7 +53,7 @@ describe "Trace Command" do
       it "must show a message it is off" do
         enter 'trace off'
         debug_file 'trace'
-        check_output_includes "Tracing off on current thread."
+        check_output_includes "Tracing off on current thread"
       end
     end
   end
@@ -77,7 +77,7 @@ describe "Trace Command" do
       it "must show a message it is on" do
         enter 'trace on all'
         debug_file 'trace'
-        check_output_includes "Tracing on all threads."
+        check_output_includes "Tracing on all threads"
       end
     end
 
@@ -96,7 +96,7 @@ describe "Trace Command" do
       it "must show a message it is off" do
         enter 'trace off'
         debug_file 'trace'
-        check_output_includes "Tracing off on current thread."
+        check_output_includes "Tracing off on current thread"
       end
     end
   end
@@ -132,7 +132,7 @@ describe "Trace Command" do
       it "must show an error message if there is no such global variable" do
         enter 'trace variable $foo'
         debug_file 'trace'
-        check_output_includes "$foo is not a global variable.", interface.error_queue
+        check_output_includes "$foo is not a global variable", interface.error_queue
       end
 
       it "must show an error message if subcommand is invalid" do
@@ -143,11 +143,19 @@ describe "Trace Command" do
     end
   end
 
+  it "must be unsupported for XML printer" do
+    temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+      enter 'trace on'
+      debug_file 'trace'
+      check_output_includes "<error>Unsupported command 'trace'</error>", interface.error_queue
+    end
+  end
+
   describe "Post Mortem" do
     it "must work in post-mortem mode" do
       enter 'cont', 'trace on'
       debug_file 'post_mortem'
-      check_output_includes "Tracing on on current thread."
+      check_output_includes "Tracing on on current thread"
     end
   end
 

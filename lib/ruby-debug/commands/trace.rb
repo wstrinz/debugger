@@ -8,35 +8,35 @@ module Debugger
     end
 
     def execute
+      errmsg(pr("general.errors.unsupported", cmd: 'trace')) && return if Debugger.printer.type == "xml"
       if @match[1] =~ /on|off/
         onoff = 'on' == @match[1] 
         if @match[2]
           Debugger.tracing = onoff
-          print "Tracing %s all threads.\n" % (onoff ? 'on' : 'off')
+          print pr("trace.messages.all_threads", status: onoff ? 'on' : 'off')
         else
           Debugger.current_context.tracing = onoff
-          print "Tracing %s on current thread.\n"  % (onoff ? 'on' : 'off')
+          print pr("trace.messages.current_thread", status: onoff ? 'on' : 'off')
         end
       elsif @match[1] =~ /var(?:iable)?/
         varname=@match[2]
         if debug_eval("defined?(#{varname})")
           if @match[3] && @match[3] !~ /(:?no)?stop/
-            errmsg("expecting 'stop' or 'nostop'; got %s\n" % @match[3])
+            errmsg pr("trace.errors.wrong_var_subcommand", subcmd: @match[3])
           else
             dbg_cmd = if @match[3] && (@match[3] !~ /nostop/) 
                         'debugger' else '' end
           end
           eval("
            trace_var(:#{varname}) do |val|
-              print \"traced variable #{varname} has value \#{val}\n\"
+              print pr('trace.trace', name: '#{varname}', value: val)
               #{dbg_cmd}
            end")
         else
-          errmsg "#{varname} is not a global variable.\n"
+          errmsg pr("trace.errors.var_is_not_global", name: varname)
         end
       else 
-        errmsg("expecting 'on', 'off', 'var' or 'variable'; got: %s\n" %
-               @match[1])
+        errmsg pr("trace.errors.wrong_subcommand", subcmd: @match[1])
       end
     end
 
