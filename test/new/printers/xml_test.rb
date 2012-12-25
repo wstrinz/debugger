@@ -25,15 +25,17 @@ describe "Printers::Xml" do
           }
         }
       },
-      "vars" => {
-        "tag" => "variable",
-        "attributes" => {
-          "name" => "{name}",
-          "kind" => "{kind}",
-          "value" => "{value}",
-          "type" => "{type}",
-          "hasChildren" => "{has_children}",
-          "objectId" => "{id}"
+      "variable" => {
+        "variable" => {
+          "tag" => "variable",
+          "attributes" => {
+            "name" => "{name}",
+            "kind" => "{kind}",
+            "value" => "{value}",
+            "type" => "{type}",
+            "hasChildren" => "{has_children}",
+            "objectId" => "{id}"
+          }
         }
       }
     }
@@ -83,7 +85,7 @@ describe "Printers::Xml" do
           x.variable(name: key, kind: "instance", value: value, type: "String", hasChildren: "false", objectId: "%#+x" % value.object_id)
         end.join("")
       end
-      result = printer.print_variables("vars", vars, 'instance')
+      result = printer.print_variables(vars, 'instance')
       result.must_equal expected
     end
   end

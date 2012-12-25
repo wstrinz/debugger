@@ -105,7 +105,7 @@ thread:
       current: "{current}"
 
 variable:
-  instance_variables:
+  variable:
     tag: variable
     attributes:
       name: "{name}"

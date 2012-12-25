@@ -177,6 +177,7 @@ module Debugger
       @state.confirm(msg) == 'y'
     end
 
+    # TODO: Add optional timeout
     def debug_eval(str, b = get_binding)
       begin
         val = eval(str, b)

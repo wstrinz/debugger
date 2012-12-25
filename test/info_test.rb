@@ -162,7 +162,7 @@ describe "Info Command" do
     it "must show instance variables" do
       enter 'break 21', 'cont', 'info instance_variables'
       debug_file 'info'
-      check_output_includes '@bla = "blabla"', '@foo = "bar"'
+      check_output_includes %{@bla = "blabla"\n@foo = "bar"}
     end
   end
 
@@ -276,7 +276,7 @@ describe "Info Command" do
     it "must show global variables" do
       enter 'info global_variables'
       debug_file 'info'
-      check_output_includes "$$ = #{Process.pid}"
+      check_output_includes /\$\$ = #{Process.pid}/
     end
   end
 
@@ -289,8 +289,7 @@ describe "Info Command" do
           'a = "1111111111111111111111...',
           "b = 2",
           /self = #<A:\S+.../,
-          '@bla = "blabla"',
-          '@foo = "bar"'
+          /@bla = "blabla"\n@foo = "bar"/
         )
       end
     end
@@ -301,8 +300,7 @@ describe "Info Command" do
       check_output_includes(
         'a = *Error in evaluation*',
         /self = #<A:\S+.../,
-        '@bla = "blabla"',
-        '@foo = "bar"'
+        /@bla = "blabla"\n@foo = "bar"/
       )
     end
 

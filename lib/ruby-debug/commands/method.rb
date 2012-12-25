@@ -49,7 +49,7 @@ module Debugger
       result = if @match[1] == "iv"
         obj = debug_eval(@match.post_match)
         variables = obj.instance_variables.sort.map { |var_name| [var_name, obj.instance_variable_get(var_name)] }
-        prv("variable.instance_variables", variables, 'instance')
+        prv(variables, 'instance')
       elsif @match[1]
         prc("method.methods", debug_eval(@match.post_match).methods.sort) { |item, _| {name: item} }
       else
@@ -57,7 +57,7 @@ module Debugger
         if obj.kind_of?(Module)
           prc("method.methods", obj.instance_methods(false).sort) { |item, _| {name: item} }
         else
-          errmsg(pr("method.errors.not_class_module", object: @match.post_match)) && return
+          errmsg(pr("variable.errors.not_class_module", object: @match.post_match)) && return
         end
       end
       print result

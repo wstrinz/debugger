@@ -1,8 +1,7 @@
 module Debugger
   module VarFunctions # :nodoc:
     def var_list(ary, b = get_binding)
-      ary.sort!
-      for v in ary
+      vars = ary.sort.map do |v|
         begin
           s = debug_eval(v.to_s, b).inspect
         rescue
@@ -15,8 +14,9 @@ module Debugger
         if s.size > self.class.settings[:width]
           s[self.class.settings[:width]-3 .. -1] = "..."
         end
-        print "%s = %s\n", v, s
+        [v, s]
       end
+      print prv(vars, 'instance')
     end
     def var_class_self
       obj = debug_eval('self')
@@ -59,15 +59,13 @@ module Debugger
     def execute
       obj = debug_eval(@match.post_match)
       if obj.kind_of? Module
-        constants = debug_eval("#{@match.post_match}.constants")
-        constants.sort!
-        for c in constants
-          next if c =~ /SCRIPT/
-          value = obj.const_get(c) rescue "ERROR: #{$!}"
-          print " %s => %p\n", c, value
+        constants = debug_eval("#{@match.post_match}.constants").sort.reject { |c| c =~ /SCRIPT/ }.map do |constant|
+          value = obj.const_get(constant) rescue "ERROR: #{$!}"
+          [constant, value]
         end
+        print prv(constants, "constant")
       else
-        print "Should be Class/Module: %s\n", @match.post_match
+        errmsg pr("variable.errors.not_class_module", object: @match.post_match)
       end
     end
 
@@ -108,12 +106,27 @@ module Debugger
 
   class VarInstanceCommand < Command # :nodoc:
     def regexp
-      /^\s*v(?:ar)?\s+ins(?:tance)?\s*/
+      # id will be read as first match, name as post match
+      /^\s*v(?:ar)?\s+ins(?:tance)?\s*((?:[\\+-]0x)[\dabcdef]+)?/
     end
 
     def execute
-      obj = debug_eval(@match.post_match.empty? ? 'self' : @match.post_match)
-      var_list(obj.instance_variables, obj.instance_eval{binding()})
+      obj = if @match[1]
+        begin
+          ObjectSpace._id2ref(@match[1].hex)
+        rescue RangeError
+          errmsg "Unknown object id : %s" % @match[1]
+          nil
+        end
+      else
+        debug_eval(@match.post_match.empty? ? 'self' : @match.post_match)
+      end
+
+      if Debugger.printer.type == "xml"
+        print Debugger.printer.print_instance_variables(obj)
+      else
+        var_list(obj.instance_variables, obj.instance_eval{binding()})
+      end
     end
 
     class << self
@@ -123,7 +136,7 @@ module Debugger
 
       def help(cmd)
         %{
-          v[ar] i[nstance] <object>\tshow instance variables of object
+          v[ar] i[nstance] <object>\tshow instance variables of object. You may pass object id's hex as well.
         }
       end
     end
@@ -136,11 +149,8 @@ module Debugger
     end
 
     def execute
-      locals = @state.context.frame_locals(@state.frame_pos)
-      _self = @state.context.frame_self(@state.frame_pos) 
-      locals.keys.sort.each do |name|
-        print "  %s => %p\n", name, locals[name]
-      end
+      locals = @state.context.frame_locals(@state.frame_pos).sort.map { |key, value| [key, value.inspect] }
+      print prv(locals, 'instance')
     end
 
     class << self

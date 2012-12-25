@@ -15,7 +15,7 @@ describe "Printers::Plain" do
           "okay" => "Okay?"
         }
       },
-      "vars" => "{key}: {value}"
+      "variable" => {"variable" => "{key}: {value}"}
     }
   end
 
@@ -77,7 +77,7 @@ describe "Printers::Plain" do
 
   describe "#print_variables" do
     it "must print variables" do
-      printer.print_variables("vars", [['a', 'b'], ['c', 'd']], '').must_equal %{a: "b"\nc: "d"\n}
+      printer.print_variables([['a', 'b'], ['c', 'd']], '').must_equal %{a: b\nc: d\n}
     end
   end
 

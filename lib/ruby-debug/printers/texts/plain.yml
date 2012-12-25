@@ -56,4 +56,4 @@ trace:
   trace: "traced variable {name} has value {value}"
 
 variable:
-  instance_variables: "{key} = {value}"
+  variable: "{key} = {value}"

@@ -69,7 +69,7 @@ describe "Method Command" do
       it "must show in plain text" do
         enter 'break 15', 'cont', 'method iv a'
         debug_file 'method'
-        check_output_includes %{@a = "b"\n@c = "d"}
+        check_output_includes %{@a = b\n@c = d}
       end
 
       it "must show in xml" do
@@ -89,7 +89,7 @@ describe "Method Command" do
     it "must show using shortcut" do
       enter 'break 15', 'cont', 'm iv a'
       debug_file 'method'
-      check_output_includes %{@a = "b"\n@c = "d"}
+      check_output_includes %{@a = b\n@c = d}
     end
   end
 

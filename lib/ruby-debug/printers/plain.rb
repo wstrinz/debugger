@@ -18,9 +18,9 @@ module Printers
       end
     end
 
-    def print_variables(path, variables, _kind)
-      print_collection(path, variables) do |(key, value), _|
-        {key: key, value: value.inspect}
+    def print_variables(variables, _kind)
+      print_collection("variable.variable", variables) do |(key, value), _|
+        {key: key, value: value.to_s}
       end
     end
 

@@ -49,10 +49,6 @@ jump:
     no_frame: "Couldn't find debugged frame"
     no_active_code: "Couldn't find active code at {file}:{line}"
 
-method:
-  errors:
-    not_class_module: "Should be Class/Module: {object}"
-
 quit:
   confirmations:
     really: "Really quit?"
@@ -138,3 +134,7 @@ parse:
       not_number: "{cmd} argument '{str}' needs to be a number"
     onoff:
       syntax: "Expecting 'on', 1, 'off', or 0. Got {arg}"
+
+variable:
+  errors:
+    not_class_module: "Should be Class/Module: {object}"

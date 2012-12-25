@@ -39,7 +39,7 @@ describe "Jump Command" do
       enter 'break 6', 'cont', "jump 8 #{fullpath('jump')}", 'next'
       enter 'var local'
       debug_file('jump')
-      check_output_includes "a => 2", "b => nil", "c => nil", "d => 5"
+      check_output_includes "a = 2\nb = nil\nc = nil\nd = 5\ne = nil\nf = nil"
     end
 
     it "must jump with relative line number (-)" do
