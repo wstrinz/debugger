@@ -1,3 +1,6 @@
+## 1.2.3
+* Bump ruby_core_source dependency
+
 ## 1.2.2
 * Bump ruby_core_source dependency
 
