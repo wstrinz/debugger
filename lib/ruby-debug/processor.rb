@@ -9,6 +9,25 @@ module Debugger
     extend Forwardable
     def_delegator :"Debugger.printer", :print, :pr
 
+    def self.protect(mname)
+      alias_method "__#{mname}", mname
+      module_eval %{
+        def #{mname}(*args)
+          @mutex.synchronize do
+            return unless @interface
+            __#{mname}(*args)
+          end
+        rescue IOError, Errno::EPIPE
+          self.interface = nil
+        rescue SignalException
+          raise
+        rescue Exception
+          print "INTERNAL ERROR!!! #\{$!\}\n" rescue nil
+          print $!.backtrace.map{|l| "\t#\{l\}"}.join("\n") rescue nil
+        end
+      }
+    end
+
     # Format msg with gdb-style annotation header
     def afmt(msg, newline="\n")
       "\032\032#{msg}#{newline}"
@@ -33,6 +52,11 @@ module Debugger
       @interface.print(*args)
     end
 
+    # Split commands like this:
+    # split_commands("abc;def\\;ghi;jkl") => ["abc", "def;ghi", "jkl"]
+    def split_commands(input)
+      input.split(/(?<!\\);/).map { |e| e.gsub("\\;", ";") }
+    end
   end
 
   class CommandProcessor < Processor # :nodoc:
@@ -111,26 +135,7 @@ module Debugger
           result
         end
       end
-      print result
-    end
-
-    def self.protect(mname)
-      alias_method "__#{mname}", mname
-      module_eval %{
-        def #{mname}(*args)
-          @mutex.synchronize do
-            return unless @interface
-            __#{mname}(*args)
-          end
-        rescue IOError, Errno::EPIPE
-          self.interface = nil
-        rescue SignalException
-          raise
-        rescue Exception
-          print "INTERNAL ERROR!!! #\{$!\}\n" rescue nil
-          print $!.backtrace.map{|l| "\t#\{l\}"}.join("\n") rescue nil
-        end
-      }
+      Debugger.handler.interface.print result
     end
 
     def at_breakpoint(context, breakpoint)
@@ -240,29 +245,14 @@ module Debugger
     def process_commands(context, file, line)
       state, commands = always_run(context, file, line, 1)
       $rdebug_state = state if Command.settings[:debuggertesting]
-      splitter = lambda do |str|
-        str.split(/;/).inject([]) do |m, v|
-          if m.empty?
-            m << v
-          else
-            if m.last[-1] == ?\\
-              m.last[-1,1] = ''
-              m.last << ';' << v
-            else
-              m << v
-            end
-          end
-          m
-        end
-      end
 
       preloop(commands, context)
       while !state.proceed?
         input = if @interface.command_queue.empty?
-                  @interface.read_command(prompt(context))
-                else
-                  @interface.command_queue.shift
-                end
+          @interface.read_command(prompt(context))
+        else
+          @interface.command_queue.shift
+        end
         break unless input
         catch(:debug_error) do
           if input == ""
@@ -271,7 +261,7 @@ module Debugger
           else
             @last_cmd = input
           end
-          splitter[input].each do |cmd|
+          split_commands(input).each do |cmd|
             one_cmd(commands, context, cmd)
             postcmd(commands, context, cmd)
           end
