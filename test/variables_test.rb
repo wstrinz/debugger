@@ -174,7 +174,7 @@ describe "Variables Command" do
       it "must show in plain text" do
         enter 'break 17', 'cont', 'var local'
         debug_file 'variables'
-        check_output_includes "a = 4\nb = nil\ni = 1"
+        check_output_includes /a = 4\nb = nil\ni = 1/
       end
 
       it "must show in xml" do
@@ -183,6 +183,7 @@ describe "Variables Command" do
           debug_file 'variables'
           check_output_includes(Regexp.new(
             "<variables>" +
+              %{<variable name="self" kind="instance" value="#&lt;VariablesExample:[^"]+&gt;" type="VariablesExample" hasChildren="true" objectId="[^"]+"/>} +
               %{<variable name="a" kind="instance" value="4" type="String" hasChildren="false" objectId="[^"]+"/>} +
               %{<variable name="b" kind="instance" value="nil" type="String" hasChildren="false" objectId="[^"]+"/>} +
               %{<variable name="i" kind="instance" value="1" type="String" hasChildren="false" objectId="[^"]+"/>} +
@@ -190,6 +191,18 @@ describe "Variables Command" do
           ))
         end
       end
+    end
+
+    it "must not show self in variables if the self is 'main'" do
+      enter 'break 24', 'cont', 'var local'
+      debug_file 'variables'
+      check_output_doesnt_include /self =/
+    end
+
+    it "must show self in variables if the self is not 'main'" do
+      enter 'break 17', 'cont', 'var local'
+      debug_file 'variables'
+      check_output_includes /self = #<VariablesExample:[^>]+>/
     end
   end
 
@@ -200,7 +213,7 @@ describe "Variables Command" do
     it "must work in post-mortem mode" do
       enter 'cont', 'var local'
       debug_file 'post_mortem'
-      check_output_includes "x = nil\nz = 4"
+      check_output_includes "self = blabla\nx = nil\nz = 4"
     end
   end
 
