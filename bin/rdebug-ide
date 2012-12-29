@@ -6,7 +6,7 @@ require 'ostruct'
 require 'debugger'
 require 'ruby-debug/ide_processor'
 
-$stdout.sync=true
+$stdout.sync = true
 
 class RdebugIde
 
@@ -14,23 +14,21 @@ class RdebugIde
     check_argv!
     Debugger.const_set("ARGV", ARGV.clone)
     Debugger.const_set("RDEBUG_SCRIPT", rdebug_path)
-    Debugger.const_set("PROG_SCRIPT", ARGV.pop)
     install_interruption_hander
     Debugger.tracing = options.tracing
     Debugger.wait_for_start = options.wait_for_start
     Debugger.wait_connection = true
     Debugger.printer = Printers::Xml.new
+    Debugger.const_set("PROG_SCRIPT", ARGV.shift)
   end
 
   def run
     Debugger.start_remote_ide(options.host, options.port)
-    puts "loading a file #{Debugger::PROG_SCRIPT}"
     bt = Debugger.debug_load(Debugger::PROG_SCRIPT, false, false)
     if bt
       print bt.backtrace.map{|l| "\t#{l}"}.join("\n"), "\n"
       print "Uncaught exception: #{bt}\n"
     end
-    puts 'file is loaded'
   end
 
   private
