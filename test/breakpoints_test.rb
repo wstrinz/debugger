@@ -131,6 +131,12 @@ describe "Breakpoints" do
           debug_file("breakpoint1")
           check_output_includes "<breakpoint file=\"breakpoint1.rb\" line=\"14\" threadId=\"1\"/>"
         end
+
+        it "must not show <suspended>" do
+          enter 'break 14', 'cont'
+          debug_file("breakpoint1")
+          check_output_doesnt_include /<suspended[^>]+line="14"/
+        end
       end
     end
   end

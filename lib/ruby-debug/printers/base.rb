@@ -1,3 +1,4 @@
+require 'yaml'
 module Printers
   class Base
     class MissedPath < StandardError; end

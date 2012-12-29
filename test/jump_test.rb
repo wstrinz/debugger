@@ -19,17 +19,14 @@ describe "Jump Command" do
         it "must show in plain text" do
           enter 'break 6', 'cont', "jump 6 #{fullpath('jump')}"
           debug_file('jump')
-          check_output_includes "#{fullpath('jump')}:6\nb = 3", "#{fullpath('jump')}:6\nb = 3", interface.print_queue
+          check_output_includes "#{fullpath('jump')}:6\nb = 3"
         end
 
         it "must show in xml" do
           temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
             enter 'break 6', 'cont', "jump 6 #{fullpath('jump')}"
             debug_file('jump')
-            check_output_includes(
-              /<suspended file="#{fullpath('jump')}" line="6" threadId="\d+" frames="\d+"\/>/,
-              /<suspended file="#{fullpath('jump')}" line="6" threadId="\d+" frames="\d+"\/>/,
-            interface.print_queue)
+            check_output_includes /<suspended file="#{fullpath('jump')}" line="6" threadId="\d+" frames="\d+"\/>/
           end
         end
       end
@@ -56,16 +53,14 @@ describe "Jump Command" do
       it "must show message in plain text" do
         enter 'break 6', 'cont', "jump 8 #{fullpath('jump')}"
         debug_file('jump')
-        check_output_includes "#{fullpath('jump')}:8\nd = 5", interface.print_queue
+        check_output_includes "#{fullpath('jump')}:8\nd = 5"
       end
 
       it "must show message in xml" do
         temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
           enter 'break 6', 'cont', "jump 8 #{fullpath('jump')}"
           debug_file('jump')
-          check_output_includes(
-            /<suspended file="#{fullpath('jump')}" line="8" threadId="\d+" frames="\d+"\/>/,
-          interface.print_queue)
+          check_output_includes /<suspended file="#{fullpath('jump')}" line="8" threadId="\d+" frames="\d+"\/>/
         end
       end
     end

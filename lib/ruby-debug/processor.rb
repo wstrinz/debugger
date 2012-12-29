@@ -144,6 +144,7 @@ module Debugger
       print pr(
         "breakpoints.stop_at_breakpoint", id: n, file: file, line: line, thread_id: Debugger.current_context.thnum
       )
+      @last_breakpoint = breakpoint
     end
     protect :at_breakpoint
 
@@ -180,12 +181,16 @@ module Debugger
     protect :at_tracing
 
     def at_line(context, file, line)
+      CommandProcessor.print_location_and_text(file, line, context) unless @last_breakpoint
       process_commands(context, file, line)
+    ensure
+      @last_breakpoint = nil
     end
     protect :at_line
 
     def at_return(context, file, line)
       context.stop_frame = -1
+      CommandProcessor.print_location_and_text(file, line, context)
       process_commands(context, file, line)
     end
 

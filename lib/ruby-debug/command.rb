@@ -1,4 +1,5 @@
 require 'columnize'
+require 'forwardable'
 require 'ruby-debug/helper'
 
 module Debugger

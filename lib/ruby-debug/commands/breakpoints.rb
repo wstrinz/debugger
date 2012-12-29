@@ -81,7 +81,7 @@ module Debugger
           return unless confirm(pr("confirmations.set_breakpoint"))
         end
 
-        unless @state.context
+        if file.nil? && !@state.context
           errmsg pr("errors.state")
           return
         end
