@@ -122,10 +122,6 @@ module Debugger
     end
 
     def execute
-      unless @state.context
-        errmsg pr("breakpoints.errors.state_delete")
-        return
-      end
       brkpts = @match[1]
       unless brkpts
         if confirm(pr("breakpoints.confirmations.delete_all"))
