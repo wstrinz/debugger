@@ -70,7 +70,7 @@ module TestDsl
       end
     end
     Debugger.start do
-      load fullpath(filename)
+      Debugger.debug_load(fullpath(filename))
       debug_completed = true
     end
     flunk "Debug block was not completed" unless debug_completed
@@ -112,6 +112,10 @@ module TestDsl
 
   def context
     state.context
+  end
+
+  def binding
+    context.frame_binding(state.frame_pos)
   end
 
   def breakpoint

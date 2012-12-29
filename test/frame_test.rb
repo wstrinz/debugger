@@ -56,7 +56,7 @@ describe "Frame Command" do
 
   it "must set frame to the last one" do
     enter 'break 25', 'cont', 'frame -1'
-    debug_file('frame') { state.line.must_equal 73 }
+    debug_file('frame') { state.line.must_equal 29 }
   end
 
   it "must not set frame if the frame number is too low" do

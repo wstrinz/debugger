@@ -257,7 +257,6 @@ module Debugger
       end
 
       preloop(commands, context)
-      CommandProcessor.print_location_and_text(file, line, context)
       while !state.proceed?
         input = if @interface.command_queue.empty?
                   @interface.read_command(prompt(context))
