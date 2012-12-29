@@ -22,6 +22,9 @@ module Debugger
       obj = debug_eval('self')
       var_list(obj.class.class_variables, get_binding)
     end
+    def var_global
+      var_list(global_variables.reject { |v| [:$=, :$KCODE, :$-K].include?(v) })
+    end
   end
 
   # Implements the debugger 'var class' command.
@@ -88,7 +91,7 @@ module Debugger
     end
 
     def execute
-      var_list(global_variables)
+      var_global
     end
 
     class << self
