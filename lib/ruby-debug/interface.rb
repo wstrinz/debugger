@@ -211,6 +211,10 @@ module Debugger
       STDOUT.puts(msg)
     end
 
+    def errmsg(*args)
+      print(*args)
+    end
+
     def confirm(prompt)
       true
     end
