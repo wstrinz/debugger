@@ -51,6 +51,12 @@ describe Debugger::IdeProcessor do
         check_output_includes "#{file}:30"
       end
 
+      it "must clear instance variables after resuming thread" do
+        subject.instance_variable_set("@line", 10)
+        subject.at_line(context, file, 30)
+        subject.instance_variable_get("@line").must_be_nil
+      end
+
       describe "print breakpoint after at_breakpoint" do
         before do
           Debugger.stubs(:breakpoints).returns([breakpoint])
@@ -85,7 +91,7 @@ describe Debugger::IdeProcessor do
     end
 
     it "returns true if #at_line was called already" do
-      subject.at_line(context, file, 30)
+      subject.instance_variable_set("@line", 10)
       subject.at_line?.must_equal true
     end
   end

@@ -13,7 +13,9 @@ describe Debugger::IdeControlCommandProcessor do
 
   before do
     Thread.stubs(:stop)
-    Debugger.handler.at_line(context, file, 30)
+    Debugger.handler.instance_variable_set("@context", context)
+    Debugger.handler.instance_variable_set("@file", file)
+    Debugger.handler.instance_variable_set("@line", 30)
   end
 
   it "must process a control command" do

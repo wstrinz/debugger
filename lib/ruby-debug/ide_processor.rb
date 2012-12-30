@@ -75,6 +75,9 @@ module Debugger
         # from `control thread'
         Thread.stop
       ensure
+        @line = nil
+        @file = nil
+        @context = nil
         @last_breakpoint = nil
       end
   end
