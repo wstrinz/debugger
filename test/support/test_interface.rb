@@ -44,6 +44,10 @@ class TestInterface < Debugger::Interface
   def close
   end
 
+  def empty?
+    [input_queue, output_queue, error_queue, confirm_queue, print_queue].all?(&:empty?)
+  end
+
   def inspect
     [
       "input_queue: #{input_queue.inspect}",

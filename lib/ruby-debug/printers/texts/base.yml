@@ -1,3 +1,9 @@
+base:
+  errors:
+    no_suspended_thread: "There is no thread suspended at the time and therefore no context to execute '{input}'"
+    command_unavailable: "Command is unavailable"
+    unknown_command: "Unknown command: {input}"
+
 breakpoints:
   errors:
     if: "Expecting 'if' in breakpoint condition; got: {expr}"
@@ -118,6 +124,7 @@ thread:
     current_thread: "It's the current thread"
     wrong_action: "Can't {subcmd} to the debugger thread {arg}"
     already_running: "Already running"
+    debug_trace: "DebuggerThread are not supposed to be traced ({thread})"
 
 toggle:
   errors:

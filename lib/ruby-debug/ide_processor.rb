@@ -3,10 +3,11 @@ require 'ruby-debug/processor'
 module Debugger
 
   class IdeProcessor < Processor
-    attr_reader :context, :file, :line
+    attr_reader :context, :file, :line, :display
     def initialize(interface)
       @mutex = Mutex.new
       @interface = interface
+      @display = []
     end
 
     def at_breakpoint(context, breakpoint)
@@ -16,15 +17,13 @@ module Debugger
     end
     protect :at_breakpoint
 
+    # TODO: Catching exceptions doesn't work so far, need to fix
     def at_catchpoint(context, excpt)
-      #@printer.print_catchpoint(excpt)
     end
-    protect :at_catchpoint
 
-    def at_tracing(context, file, line)
-      #@printer.print_trace(context, file, line)
+    # We don't have tracing for IDE
+    def at_tracing(*args)
     end
-    protect :at_tracing
 
     def at_line(context, file, line)
       if context.nil? || context.stop_reason == :step
@@ -69,21 +68,19 @@ module Debugger
             id: n, file: @file, line: @line, thread_id: Debugger.current_context.thnum
           )
         end
-        if @context.thread.is_a?(Debugger::DebugThread)
-          raise "DebuggerThread are not supposed to be traced (#{@context.thread})"
+        if @context && @context.thread.is_a?(Debugger::DebugThread)
+          raise pr("thread.errors.debug_trace", thread: @context.thread)
         end
         # will be resumed by commands like `step', `next', `continue', `finish'
         # from `control thread'
         Thread.stop
       ensure
         @last_breakpoint = nil
-        @line = nil
-        @file = nil
-        @context = nil
       end
   end
 
   class IdeControlCommandProcessor < Processor
+
     def initialize(interface)
       @interface = interface
     end
@@ -116,7 +113,7 @@ module Debugger
 
       def process_context_commands(input)
         unless Debugger.handler.at_line?
-          errmsg "There is no thread suspended at the time and therefore no context to execute 'input'"
+          errmsg pr("base.errors.no_suspended_thread", input: input)
           return
         end
         event_command_classes = Command.commands.select(&:event)
@@ -132,12 +129,12 @@ module Debugger
         catch(:debug_error) do
           if cmd = event_commands.find { |c| c.match(input) }
             if state.context.dead? && cmd.class.need_context
-              print "Command is unavailable\n"
+              print pr("base.errors.command_unavailable")
             else
               cmd.execute
             end
           else
-            print "Unknown command: #{input}"
+            print pr("base.errors.unknown_command", input: input)
           end
         end
         state.context.thread.run if state.proceed?
