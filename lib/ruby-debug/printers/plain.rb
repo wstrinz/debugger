@@ -20,7 +20,7 @@ module Printers
 
     def print_variables(variables, _kind)
       print_collection("variable.variable", variables) do |(key, value), _|
-        {key: key, value: value.to_s}
+        {key: key, value: value.nil? ? "nil" : value.to_s}
       end
     end
 

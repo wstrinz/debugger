@@ -155,7 +155,7 @@ module Debugger
       locals = []
       _self = @state.context.frame_self(@state.frame_pos)
       locals << ['self', _self] unless _self.to_s == "main"
-      locals += @state.context.frame_locals(@state.frame_pos).sort.map { |key, value| [key, value.inspect] }
+      locals += @state.context.frame_locals(@state.frame_pos).sort.map { |key, value| [key, value] }
       print prv(locals, 'instance')
     end
 

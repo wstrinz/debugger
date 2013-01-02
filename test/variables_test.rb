@@ -184,9 +184,9 @@ describe "Variables Command" do
           check_output_includes(Regexp.new(
             "<variables>" +
               %{<variable name="self" kind="instance" value="#&lt;VariablesExample:[^"]+&gt;" type="VariablesExample" hasChildren="true" objectId="[^"]+"/>} +
-              %{<variable name="a" kind="instance" value="4" type="String" hasChildren="false" objectId="[^"]+"/>} +
-              %{<variable name="b" kind="instance" value="nil" type="String" hasChildren="false" objectId="[^"]+"/>} +
-              %{<variable name="i" kind="instance" value="1" type="String" hasChildren="false" objectId="[^"]+"/>} +
+              %{<variable name="a" kind="instance" value="4" type="Fixnum" hasChildren="false" objectId="[^"]+"/>} +
+              %{<variable name="b" kind="instance" value="nil" type="NilClass" hasChildren="false" objectId="[^"]+"/>} +
+              %{<variable name="i" kind="instance" value="1" type="Fixnum" hasChildren="false" objectId="[^"]+"/>} +
             "</variables>"
           ))
         end
