@@ -23,8 +23,6 @@ module Debugger
   end
   
   class EvalCommand < Command # :nodoc:
-    self.allow_in_control = true
-    
     register_setting_get(:autoeval) do
       EvalCommand.unknown
     end
