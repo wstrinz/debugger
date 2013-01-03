@@ -42,6 +42,11 @@ display:
       value: "{result}"
 
 eval:
+  exception:
+    tag: processingException
+    attributes:
+      type: "{class}"
+      message: "{value}"
   result:
     tag: eval
     attributes:

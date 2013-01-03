@@ -41,24 +41,35 @@ describe "Eval Command" do
     end
   end
 
-  describe "stack trace on error" do
-    temporary_change_hash_value(Debugger::Command.settings, :stack_trace_on_error, false)
+  describe "evaluate with error" do
+    describe "in plain text" do
+      temporary_change_hash_value(Debugger::Command.settings, :stack_trace_on_error, false)
 
-    it "must show a stack trace if showing trace on error is enabled" do
-      enter 'set notrace', 'eval 2 / 0'
-      debug_file 'eval'
-      check_output_includes "ZeroDivisionError Exception: divided by 0"
-      check_output_doesnt_include /\S+:\d+:in `eval':divided by 0/
+      it "must show a stack trace if showing trace on error is enabled" do
+        enter 'set notrace', 'eval 2 / 0'
+        debug_file 'eval'
+        check_output_includes "ZeroDivisionError Exception: divided by 0", interface.error_queue
+        check_output_doesnt_include /\S+:\d+:in `eval':divided by 0/, interface.error_queue
+      end
+
+      it "must show a stack trace if showing trace on error is enabled" do
+        enter 'set trace', 'eval 2 / 0'
+        debug_file 'eval'
+        check_output_includes /\S+:\d+:in `eval':divided by 0/, interface.error_queue
+        check_output_doesnt_include "ZeroDivisionError Exception: divided by 0", interface.error_queue
+      end
     end
 
-    it "must show a stack trace if showing trace on error is enabled" do
-      enter 'set trace', 'eval 2 / 0'
-      debug_file 'eval'
-      check_output_includes /\S+:\d+:in `eval':divided by 0/
-      check_output_doesnt_include "ZeroDivisionError Exception: divided by 0"
+    it "in xml" do
+      temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
+        enter 'eval blabla'
+        debug_file 'eval'
+        check_output_includes(
+          %{<processingException type="NameError" message="undefined local variable or method `blabla' for main:Object"/>},
+        interface.error_queue)
+      end
     end
   end
-
 
   it "must pretty print the expression result" do
     enter 'pp {a: "3" * 40, b: "4" * 30}'

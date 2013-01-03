@@ -12,6 +12,7 @@ display:
   result: "{n}: {exp} = {result}"
 
 eval:
+  exception: "{text_message}"
   result: "{result}"
 
 frame:
