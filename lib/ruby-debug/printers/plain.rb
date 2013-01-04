@@ -1,3 +1,4 @@
+require_relative 'base'
 module Printers
   class Plain < Base
     include Columnize
