@@ -223,19 +223,27 @@ module Debugger
       close
     end
 
-    def read_command(*args)
-      @socket.gets.tap do |result|
-        raise IOError unless result
-        result.chomp!
+    # Workaround for JRuby issue http://jira.codehaus.org/browse/JRUBY-2063
+    def non_blocking_gets
+      loop do
+        result, _, _ = IO.select([@socket], nil, nil, 0.2)
+        next unless result
+        return result[0].gets
       end
+    end
+
+    def read_command(*args)
+      result = non_blocking_gets
+      raise IOError unless result
+      result.chomp
     end
 
     def readline_support?
       false
     end
 
-    def print(msg)
-      @socket.puts(msg)
+    def print(*args)
+      @socket.printf(*args)
     end
 
   end
