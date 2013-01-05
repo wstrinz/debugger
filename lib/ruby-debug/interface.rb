@@ -243,6 +243,7 @@ module Debugger
     end
 
     def print(*args)
+      args.first.gsub!("%", "%%") if args.first.is_a?(String)
       @socket.printf(*args)
     end
 
