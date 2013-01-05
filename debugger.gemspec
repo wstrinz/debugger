@@ -22,10 +22,10 @@ handling, bindings for stack frames among other things.
   s.add_dependency "columnize", ">= 0.3.1"
   s.add_dependency "debugger-ruby_core_source", '~> 1.2.0'
   s.add_dependency "debugger-linecache", '~> 1.1.1'
+  s.add_dependency 'builder', '>= 2.0.0'
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'rake-compiler', '~> 0.8.0'
   s.add_development_dependency 'minitest', '~> 2.12.1'
   s.add_development_dependency 'mocha', '~> 0.13.0'
-  s.add_development_dependency 'builder', '~> 3.1.4'
   s.license = "BSD"
 end
