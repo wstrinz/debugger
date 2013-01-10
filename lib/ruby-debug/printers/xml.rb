@@ -1,6 +1,5 @@
 require_relative 'base'
 require 'builder'
-require 'syck'
 
 module Printers
   class Xml < Base
