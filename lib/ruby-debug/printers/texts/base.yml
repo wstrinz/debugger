@@ -11,7 +11,6 @@ breakpoints:
     state: "We are not in a state that has an associated file"
     class: "Unknown class {file}"
     far_line: "There are only {lines} lines in file '{file}'"
-    not_stopping_line: "Line {line} is not a stopping point in file '{file}'"
     source: "No source file named {file}"
     state_add: "We are not in a state we can add breakpoints"
     state_delete: "We are not in a state we can delete breakpoints"

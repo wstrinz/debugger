@@ -66,29 +66,6 @@ describe "Breakpoints" do
   end
 
 
-  describe "setting breakpoint to incorrect line" do
-    before { enter 'break 8' }
-
-    it "must not create a breakpoint" do
-      debug_file("breakpoint1") { Debugger.breakpoints.must_be_empty }
-    end
-
-    describe "show an error" do
-      it "in plain text" do
-        debug_file("breakpoint1")
-        check_output_includes "Line 8 is not a stopping point in file 'breakpoint1.rb'", interface.error_queue
-      end
-
-      it "in xml" do
-        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-          debug_file("breakpoint1")
-          check_output_includes "<error>Line 8 is not a stopping point in file 'breakpoint1.rb'</error>", interface.error_queue
-        end
-      end
-    end
-  end
-
-
   describe "stopping at breakpoint" do
     it "must stop at the correct line" do
       enter 'break 14', 'cont'

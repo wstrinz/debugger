@@ -72,10 +72,6 @@ module Debugger
             errmsg pr("errors.far_line", lines: last_line, file: file)
             return
           end
-          unless LineCache.trace_line_numbers(brkpt_filename).member?(line)
-            errmsg pr("errors.not_stopping_line", line: line, file: file)
-            return
-          end
         else
           errmsg pr("errors.source", file: file)
           return unless confirm(pr("confirmations.set_breakpoint"))
