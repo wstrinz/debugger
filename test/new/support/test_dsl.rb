@@ -55,6 +55,7 @@ module TestDsl
     is_test_block_called = false
     debug_completed = false
     exception = nil
+    Debugger.stubs(:run_init_script)
     if block
       interface.test_block = lambda do
         is_test_block_called = true
