@@ -7,70 +7,10 @@ Rake::ExtensionTask.new('ruby_debug')
 
 SO_NAME = "ruby_debug.so"
 
-COMMON_FILES = FileList[
-  'AUTHORS',
-  'CHANGES',
-  'LICENSE',
-  'README',
-  'Rakefile',
-]
-
-CLI_TEST_FILE_LIST = FileList['test/lib/commands/unit/*.rb',
-                              'test/lib/commands/*_test.rb',
-                              'test/lib/**/*_test.rb',
-                              'test/test-remote.rb']
-                              # disabled until requires fixed and tests pass
-                              # 'test/test-*.rb']
-CLI_FILES = COMMON_FILES + FileList[
-  "lib/**/*",
-  'ChangeLog',
-  'bin/*',
-  'doc/rdebug.1',
-  'test/**/data/*.cmd',
-  'test/**/data/*.right',
-  'test/**/*.rb',
-  'rdbg.rb',
-   CLI_TEST_FILE_LIST
-]
-
-BASE_TEST_FILE_LIST = %w(
-  test/base/base.rb
-  test/base/binding.rb
-  test/base/catchpoint.rb)
-BASE_FILES = COMMON_FILES + FileList[
-  'ext/ruby_debug/breakpoint.c',
-  'ext/ruby_debug/extconf.rb',
-  'ext/ruby_debug/ruby_debug.c',
-  'ext/ruby_debug/ruby_debug.h',
-  'ext/win32/*',
-  'lib/**/*',
-  BASE_TEST_FILE_LIST,
-]
-
 desc "Run new MiniTest tests."
 task :test do
   Rake::TestTask.new(:test) do |t|
     t.test_files = FileList["test/new/*_test.rb"]
-    t.verbose = true
-  end
-end
-
-desc "Test everything."
-task :test_old => :test_base do
-  Rake::TestTask.new(:test_old) do |t|
-    t.libs << './ext'
-    t.libs << './lib'
-    t.test_files = CLI_TEST_FILE_LIST
-    t.verbose = true
-  end
-end
-
-desc "Test ruby-debug-base."
-task :test_base => :lib do
-  Rake::TestTask.new(:test_base) do |t|
-    t.libs << './ext'
-    t.libs << './lib'
-    t.test_files = FileList[BASE_TEST_FILE_LIST]
     t.verbose = true
   end
 end
