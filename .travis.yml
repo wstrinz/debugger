@@ -1,4 +1,3 @@
-before_install: bundle init --gemspec=debugger.gemspec
 before_script: rake compile
 rvm:
 - 1.9.2
