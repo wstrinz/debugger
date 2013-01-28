@@ -1,3 +1,4 @@
+if RUBY_PLATFORM =~ /darwin/
 require_relative 'test_helper'
 
 describe "Tmate Command" do
@@ -38,4 +39,5 @@ describe "Tmate Command" do
       debug_file 'post_mortem'
     end
   end
+end
 end
