@@ -3,7 +3,7 @@ require_relative 'test_helper'
 describe "Restart Command" do
   include TestDsl
 
-  let(:initial_dir) { Pathname.new(__FILE__ + "/../../..").realpath.to_s }
+  let(:initial_dir) { Pathname.new(__FILE__ + "/../..").realpath.to_s }
   let(:prog_script) do
     Pathname.new(fullpath('restart')).relative_path_from(Pathname.new(Debugger::INITIAL_DIR)).cleanpath.to_s
   end
@@ -23,7 +23,7 @@ describe "Restart Command" do
   end
 
   it "must be restarted with arguments" do
-    Debugger::RestartCommand.any_instance.expects(:exec).with("#{rdebug_script} test/new/examples/restart.rb 1 2 3")
+    Debugger::RestartCommand.any_instance.expects(:exec).with("#{rdebug_script} test/examples/restart.rb 1 2 3")
     enter 'restart 1 2 3'
     debug_file('restart')
   end
