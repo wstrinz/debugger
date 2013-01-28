@@ -91,6 +91,7 @@ tutorial](http://bashdb.sourceforge.net/ruby-debug/rdebug-emacs.html)
   * No downloading ruby source during install - was behavior of old ruby_core_source dependency
   * Fix LocalJumpError caused by using proc in extconf.rb
   * Fix where command failing at top level
+  * A new and improved test suite
   * Passing tests are up on travis-ci
 * Minor
   * The gem name matches the module namespace, Debugger, and main required file, debugger.
@@ -126,6 +127,7 @@ Let's keep this working for the ruby community!
 ## Credits
 
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
+* Thanks to astashov for bringing in a new and improved test suite and various bug fixes.
 * Contributors: ericpromislow, jnimety, adammck, hipe, FooBarWidget
 * Fork started on awesome @relevance fridays!
 
