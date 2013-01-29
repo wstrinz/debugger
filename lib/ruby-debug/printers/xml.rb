@@ -120,7 +120,7 @@ module Printers
           value_str = @value.nil? ? 'nil' : @value.to_s
           if !value_str.is_a?(String)
             "ERROR: #{@value.class}.to_s method returns #{value_str.class}. Should return String."
-          elsif value_str.is_binary_data?
+          elsif binary_data?(value_str)
             "[Binary Data]"
           else
             value_str.gsub(/^(")(.*)(")$/, '\2')
@@ -145,6 +145,12 @@ module Printers
       def to_hash
         {name: @name, kind: @kind, value: value, type: type, has_children: has_children?, id: id}
       end
+
+      private
+
+        def binary_data?(string)
+          string.count("\x00-\x7F", "^ -~\t\r\n").fdiv(string.size) > 0.3 || string.index("\x00") unless string.empty?
+        end
     end
 
     class AllVariables
