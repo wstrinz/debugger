@@ -119,32 +119,6 @@ describe "Breakpoints" do
   end
 
 
-  describe "reloading source on change" do
-    temporary_change_hash_value(Debugger::Command.settings, :reload_source_on_change, false)
-
-    it "must not reload source if autoreload is not set" do
-      enter(
-        'set noautoreload',
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b'); 'cont'}
-      )
-      debug_file "breakpoint1"
-      check_output_includes "Breakpoint 1 at #{fullpath('breakpoint1')}:14"
-    end
-
-    it "must reload source if autoreload is set" do
-      enter(
-        'set autoreload',
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, ''); 'break 14'},
-        # Setting second breakpoint just to reload the source code after rolling the file changes back
-        ->{change_line_in_file(fullpath('breakpoint1'), 14, 'c = a + b'); 'break 15'}, 'cont'
-      )
-      debug_file "breakpoint1"
-      check_output_includes "Line 14 is not a stopping point in file 'breakpoint1.rb'", interface.error_queue
-    end
-  end
-
-
   describe "set breakpoint in a file" do
     describe "successfully" do
       before do
