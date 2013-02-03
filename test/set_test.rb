@@ -122,10 +122,24 @@ describe "Set Command" do
       end
     end
 
+    describe "filename" do
+      it "must set history filename" do
+        enter 'set history filename .debugger-hist'
+        debug_file 'set'
+        interface.histfile.must_equal File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", '.debugger-hist')
+      end
+
+      it "must show a message" do
+        enter 'set history filename .debugger-hist'
+        debug_file 'set'
+        check_output_includes "The filename in which to record the command history is \"#{File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", ".debugger-hist")}\""
+      end
+    end
+
     it "must show an error message if used wrong subcommand" do
       enter 'set history bla 2'
       debug_file 'set'
-      check_output_includes "Invalid history parameter bla. Should be 'save' or 'size'."
+      check_output_includes "Invalid history parameter bla. Should be 'filename', 'save' or 'size'."
     end
 
     it "must show an error message if provided only one argument" do
