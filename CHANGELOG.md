@@ -1,3 +1,6 @@
+## 1.3.1
+* Bump ruby_core_source dependency
+
 ## 1.3.0 - thanks to @astashov 
 * New and improved test suite
 * Fix line tracing
