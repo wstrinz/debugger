@@ -32,6 +32,14 @@ module Debugger
       print(msg)
     end
 
+    private
+
+      def escape_input(args)
+        new_args = args.dup
+        new_args.first.gsub!("%", "%%") if args.first.is_a?(String)
+        new_args
+      end
+
   end
 
   class LocalInterface < Interface # :nodoc:
@@ -71,7 +79,7 @@ module Debugger
     end
     
     def print(*args)
-      STDOUT.printf(*args)
+      STDOUT.printf(*escape_input(args))
     end
     
     def close
@@ -173,7 +181,7 @@ module Debugger
     end
 
     def print(*args)
-      @socket.printf(*args)
+      @socket.printf(*escape_input(args))
     end
     
     private
@@ -243,8 +251,7 @@ module Debugger
     end
 
     def print(*args)
-      args.first.gsub!("%", "%%") if args.first.is_a?(String)
-      @socket.printf(*args)
+      @socket.printf(*escape_input(args))
     end
 
   end
@@ -290,7 +297,7 @@ module Debugger
     end
     
     def print(*args)
-      @out.printf(*args)
+      @out.printf(*escape_input(args))
     end
     
     def close
