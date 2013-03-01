@@ -69,7 +69,7 @@ module Debugger
     # If we can show from B to E then we return B, otherwise we return the
     # previous line @state.previous_line.
     def display_list(b, e, file, current)
-      print "[%d, %d] in %s\n", b, e, file
+      print("[%d, %d] in %s\n" % [b, e, file])
       lines = LineCache::getlines(file, 
                                   Command.settings[:reload_source_on_change])
       if lines
@@ -78,14 +78,14 @@ module Debugger
         [b, 1].max.upto(e) do |n|
           if n > 0 && lines[n-1]
             if n == current
-              print "=> %d  %s\n", n, lines[n-1].chomp
+              print("=> %d  %s\n" % [n, lines[n-1].chomp])
             else
-              print "   %d  %s\n", n, lines[n-1].chomp
+              print("   %d  %s\n" % [n, lines[n-1].chomp])
             end
           end
         end
       else
-        errmsg "No sourcefile available for %s\n", file
+        errmsg("No sourcefile available for %s\n" % [file])
         return @state.previous_line
       end
       return e == lines.size ? @state.previous_line : b
