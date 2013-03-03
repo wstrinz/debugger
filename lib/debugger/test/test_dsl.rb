@@ -1,7 +1,7 @@
 module TestDsl
   module Shared
     def fullpath(filename)
-      (Pathname.new(__FILE__) + "../../examples/#{filename}.rb").cleanpath.to_s
+      File.join($debugger_test_dir, "examples", "#{filename}.rb")
     end
   end
   include Shared
@@ -163,6 +163,22 @@ module TestDsl
         force_set_const(klass, const, old_value)
       end
     end
+  end
+
+  def pi
+    puts
+    puts "Output Queue:"
+    puts interface.output_queue.join("")
+    puts
+    puts "Error Queue:"
+    puts interface.error_queue.join("")
+    puts
+    puts "Confirm Queue:"
+    puts interface.confirm_queue.join("")
+    puts
+    puts "Print Queue:"
+    puts interface.print_queue.join("")
+    puts
   end
 
   module ClassMethods

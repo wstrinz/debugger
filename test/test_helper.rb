@@ -3,6 +3,7 @@ require 'minitest/autorun'
 require 'mocha/setup'
 
 require 'debugger'
-Dir.glob(File.expand_path("../support/*.rb", __FILE__)).each { |f| require f }
+require 'debugger/test'
 
+$debugger_test_dir = File.expand_path("..", __FILE__)
 Debugger::Command.settings[:debuggertesting] = true
