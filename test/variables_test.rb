@@ -133,15 +133,15 @@ describe "Variables Command" do
       it "must show instance variables of the given object" do
         enter 'break 22', 'cont', 'var instance a'
         debug_file 'variables_xml'
-        check_output_includes(Regexp.new(
-          "<variables>" +
-            %{<variable name="@inst_a" kind="instance" value="Array \\(3 element\\(s\\)\\)" type="Array" hasChildren="true" objectId=".*"/>} +
-            %{<variable name="@inst_b" kind="instance" value="2" type="Fixnum" hasChildren="false" objectId="\\+0x5"/>} +
-            %{<variable name="@inst_c" kind="instance" value="123" type="String" hasChildren="false" objectId=".*"/>} +
-            %{<variable name="@inst_d" kind="instance" value="&lt;raised exception.*" type="Undefined" hasChildren="false" objectId=""/>} +
-            %{<variable name="@@class_c" kind="class" value="3" type="Fixnum" hasChildren="false" objectId="\\+0x7"/>} +
-          "</variables>"
-        ))
+        [
+          %{<variable name="@inst_a" kind="instance" value="Array \\(3 element\\(s\\)\\)" type="Array" hasChildren="true" objectId=".*"/>},
+          %{<variable name="@inst_b" kind="instance" value="2" type="Fixnum" hasChildren="false" objectId="\\+0x5"/>},
+          %{<variable name="@inst_c" kind="instance" value="123" type="String" hasChildren="false" objectId=".*"/>},
+          %{<variable name="@inst_d" kind="instance" value="&lt;raised exception.*" type="Undefined" hasChildren="false" objectId=""/>},
+          %{<variable name="@@class_c" kind="class" value="3" type="Fixnum" hasChildren="false" objectId="\\+0x7"/>}
+        ].each do |regexp_string|
+          check_output_includes(Regexp.new(regexp_string))
+        end
       end
 
       it "must show array" do
