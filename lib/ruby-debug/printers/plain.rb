@@ -34,7 +34,7 @@ module Printers
       end
 
       def contents_files
-        ["plain"] + super
+        [File.expand_path(File.join("..", "texts", "plain.yml"), __FILE__)] + super
       end
 
   end

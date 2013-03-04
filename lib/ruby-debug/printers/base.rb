@@ -38,7 +38,7 @@ module Printers
 
       def contents
         @contents ||= contents_files.inject({}) do |hash, filename|
-          hash[filename] = YAML.load_file(File.expand_path(File.join("..", "texts", "#{filename}.yml"), __FILE__)) || {}
+          hash[filename] = YAML.load_file(filename) || {}
           hash
         end
       end
@@ -52,7 +52,7 @@ module Printers
       end
 
       def contents_files
-        ["base"]
+        [File.expand_path(File.join("..", "texts", "base.yml"), __FILE__)]
       end
   end
 end
