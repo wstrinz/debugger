@@ -35,14 +35,6 @@ describe "Stepping Commands" do
         end
       end
 
-      it "must show the suspended line in xml" do
-        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-          enter 'next+'
-          debug_file('stepping')
-          check_output_includes /<suspended file=".*stepping.rb" line="11" threadId="\d+" frames="\d+"\/>/
-        end
-      end
-
       it "must go to the next line if forced to do that by 'plus' sign" do
         enter 'next+'
         debug_file('stepping') { state.line.must_equal 11 }

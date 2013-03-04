@@ -3,20 +3,10 @@ require_relative 'test_helper'
 describe "Eval Command" do
   include TestDsl
 
-  describe "evaluate an expression" do
-    it "in plain text" do
-      enter 'eval 3 + 2'
-      debug_file 'eval'
-      check_output_includes "5"
-    end
-
-    it "in xml" do
-      temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-        enter 'eval 3 + 2'
-        debug_file 'eval'
-        check_output_includes '<eval expression="3 + 2" value="5"/>'
-      end
-    end
+  it "must evaluate an expression" do
+    enter 'eval 3 + 2'
+    debug_file 'eval'
+    check_output_includes "5"
   end
 
   it "must work with shortcut" do
@@ -42,32 +32,20 @@ describe "Eval Command" do
   end
 
   describe "evaluate with error" do
-    describe "in plain text" do
-      temporary_change_hash_value(Debugger::Command.settings, :stack_trace_on_error, false)
+    temporary_change_hash_value(Debugger::Command.settings, :stack_trace_on_error, false)
 
-      it "must show a stack trace if showing trace on error is enabled" do
-        enter 'set notrace', 'eval 2 / 0'
-        debug_file 'eval'
-        check_output_includes "ZeroDivisionError Exception: divided by 0", interface.error_queue
-        check_output_doesnt_include /\S+:\d+:in `eval':divided by 0/, interface.error_queue
-      end
-
-      it "must show a stack trace if showing trace on error is enabled" do
-        enter 'set trace', 'eval 2 / 0'
-        debug_file 'eval'
-        check_output_includes /\S+:\d+:in `eval':divided by 0/, interface.error_queue
-        check_output_doesnt_include "ZeroDivisionError Exception: divided by 0", interface.error_queue
-      end
+    it "must show a stack trace if showing trace on error is enabled" do
+      enter 'set notrace', 'eval 2 / 0'
+      debug_file 'eval'
+      check_output_includes "ZeroDivisionError Exception: divided by 0", interface.error_queue
+      check_output_doesnt_include /\S+:\d+:in `eval':divided by 0/, interface.error_queue
     end
 
-    it "in xml" do
-      temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-        enter 'eval blabla'
-        debug_file 'eval'
-        check_output_includes(
-          %{<processingException type="NameError" message="undefined local variable or method `blabla' for main:Object"/>},
-        interface.error_queue)
-      end
+    it "must show a stack trace if showing trace on error is enabled" do
+      enter 'set trace', 'eval 2 / 0'
+      debug_file 'eval'
+      check_output_includes /\S+:\d+:in `eval':divided by 0/, interface.error_queue
+      check_output_doesnt_include "ZeroDivisionError Exception: divided by 0", interface.error_queue
     end
   end
 

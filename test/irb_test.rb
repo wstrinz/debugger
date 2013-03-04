@@ -69,14 +69,6 @@ describe "Irb Command" do
     end
   end
 
-  it "must be unsupported for XML printer" do
-    temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-      enter 'irb'
-      debug_file 'irb'
-      check_output_includes "<error>Unsupported command 'irb'</error>", interface.error_queue
-    end
-  end
-
   describe "Post Mortem" do
     it "must work in post-mortem mode" do
       irb.stubs(:eval_input).throws(:IRB_EXIT, :cont)

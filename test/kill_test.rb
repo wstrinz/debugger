@@ -37,14 +37,6 @@ describe "Kill Command" do
     end
   end
 
-  it "must be unsupported for XML printer" do
-    temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-      enter 'kill'
-      debug_file 'kill'
-      check_output_includes "<error>Unsupported command 'kill'</error>", interface.error_queue
-    end
-  end
-
   describe "Post Mortem" do
     it "must work in post-mortem mode" do
       Process.expects(:kill).with("USR1", Process.pid)

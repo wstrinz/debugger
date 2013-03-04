@@ -63,7 +63,6 @@ module Debugger
     end
     
     def execute
-      errmsg(pr("general.errors.unsupported", cmd: 'irb')) && return if Debugger.printer.type == "xml"
       unless @state.interface.kind_of?(LocalInterface)
         print "Command is available only in local mode.\n"
         throw :debug_error

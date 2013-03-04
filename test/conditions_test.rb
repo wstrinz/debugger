@@ -16,24 +16,10 @@ describe "Conditions" do
         debug_file('conditions') { breakpoint.expr.must_equal "b == 5" }
       end
 
-      describe "messaging" do
-        describe "in plain text" do
-          it "must show a successful message" do
-            id = nil
-            debug_file('conditions') { id = breakpoint.id }
-            check_output_includes "Condition 'b == 5' is set for the breakpoint #{id}"
-          end
-        end
-
-        describe "in xml" do
-          temporary_change_method_value(Debugger, :printer, Printers::Xml.new)
-
-          it "must show a successful message" do
-            id = nil
-            debug_file('conditions') { id = breakpoint.id }
-            check_output_includes "<conditionSet bp_id=\"#{id}\"/>"
-          end
-        end
+      it "must show a successful message" do
+        id = nil
+        debug_file('conditions') { id = breakpoint.id }
+        check_output_includes "Condition 'b == 5' is set for the breakpoint #{id}"
       end
     end
 
@@ -70,24 +56,10 @@ describe "Conditions" do
       debug_file('conditions') { state.line.must_equal 3 }
     end
 
-    describe "messaging" do
-      describe "in plain text" do
-        it "must show a successful message" do
-          id = nil
-          debug_file('conditions') { id = breakpoint.id }
-          check_output_includes "Condition is cleared for the breakpoint #{id}"
-        end
-      end
-
-      describe "in xml" do
-        temporary_change_method_value(Debugger, :printer, Printers::Xml.new)
-
-        it "must show a successful message" do
-          id = nil
-          debug_file('conditions') { id = breakpoint.id }
-          check_output_includes "<conditionSet bp_id=\"#{id}\"/>"
-        end
-      end
+    it "must show a successful message" do
+      id = nil
+      debug_file('conditions') { id = breakpoint.id }
+      check_output_includes "Condition is cleared for the breakpoint #{id}"
     end
   end
 
@@ -98,22 +70,10 @@ describe "Conditions" do
       debug_file('conditions') { state.line.must_equal 3 }
     end
 
-    describe "in plain text" do
-      it "must show error if there are no breakpoints" do
-        enter 'cond 1 true'
-        debug_file('conditions')
-        check_output_includes "No breakpoints have been set"
-      end
-    end
-
-    describe "in xml" do
-      temporary_change_method_value(Debugger, :printer, Printers::Xml.new)
-
-      it "must show error if there are no breakpoints" do
-        enter 'cond 1 true'
-        debug_file('conditions')
-        check_output_includes "<error>No breakpoints have been set</error>"
-      end
+    it "must show error if there are no breakpoints" do
+      enter 'cond 1 true'
+      debug_file('conditions')
+      check_output_includes "No breakpoints have been set"
     end
   end
 

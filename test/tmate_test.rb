@@ -30,14 +30,6 @@ describe "Tmate Command" do
     end
   end
 
-  it "must be unsupported for XML printer" do
-    temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-      enter 'tmate'
-      debug_file 'tmate'
-      check_output_includes "<error>Unsupported command 'tmate'</error>", interface.error_queue
-    end
-  end
-
   describe "Post Mortem" do
     it "must work in post-mortem mode" do
       Debugger::TextMateCommand.any_instance.expects(:`).with(

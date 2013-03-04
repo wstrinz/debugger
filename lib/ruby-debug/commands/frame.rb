@@ -90,16 +90,12 @@ module Debugger
 
       def get_pr_arguments(mark, pos, context)
         if print_frame?(context, pos)
-          mark = if Debugger.printer.type == "xml"
-            (!!mark).to_s
+          mark = if mark == true
+            "--> "
+          elsif mark == false
+            "    "
           else
-            if mark == true
-              "--> "
-            elsif mark == false
-              "    "
-            else
-              mark
-            end
+            mark
           end
 
           line = context.frame_line(pos)

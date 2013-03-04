@@ -6,7 +6,6 @@ module Debugger
       end
 
       def execute
-        errmsg(pr("general.errors.unsupported", cmd: 'tmate')) && return if Debugger.printer.type == "xml"
         if @match[1]
           frm_n = @match[1].to_i
           if frm_n > @state.context.stack_size || frm_n == 0

@@ -125,17 +125,18 @@ module Debugger
         file: canonic_file(file), line_number: line, line: Debugger.line_at(file, line),
         thnum: context && context.thnum, frames: context && context.stack_size
       )
-      unless Debugger.printer.type == "xml"
-        # FIXME: use annotations routines
-        result = if Debugger.annotate.to_i > 2
-          "\032\032source #{result}"
-        elsif ENV['EMACS']
-          "\032\032#{result}"
-        else
-          result
-        end
+      Debugger.handler.interface.print(annotate_location_and_text(result))
+    end
+
+    def self.annotate_location_and_text(output)
+      # FIXME: use annotations routines
+      if Debugger.annotate.to_i > 2
+        "\032\032source #{output}"
+      elsif ENV['EMACS']
+        "\032\032#{output}"
+      else
+        output
       end
-      Debugger.handler.interface.print result
     end
 
     def at_breakpoint(context, breakpoint)

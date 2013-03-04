@@ -31,7 +31,6 @@ module Debugger
 
     # in remote mode, wait for the remote connection
     attr_accessor :wait_connection
-    attr_accessor :wait_for_start
 
     # If set, a string to look for in caller() and is used to see
     # if the call stack is truncated.
@@ -43,23 +42,6 @@ module Debugger
 
     def interface=(value) # :nodoc:
       handler.interface = value
-    end
-
-    def start_remote_ide(host, port)
-      return if @control_thread
-      @mutex = Mutex.new
-      @proceed = ConditionVariable.new
-      start
-      @control_thread = DebugThread.new do
-        server = TCPServer.new(host, port)
-        while (session = server.accept)
-          interface = IdeInterface.new(session)
-          processor = IdeControlCommandProcessor.new(interface)
-          self.handler = IdeProcessor.new(interface)
-          processor.process_commands
-        end
-      end
-      @mutex.synchronize { @proceed.wait(@mutex) } if wait_for_start
     end
 
     # Starts a remote debugger.
@@ -159,11 +141,6 @@ module Debugger
       home_script_file = File.expand_path(File.join(HOME_DIR, INITFILE))
       run_script(home_script_file, out) if File.exists?(home_script_file) and
         cwd_script_file != home_script_file
-    end
-
-    def proceed
-      return unless @mutex
-      @mutex.synchronize { @proceed.signal }
     end
 
     #

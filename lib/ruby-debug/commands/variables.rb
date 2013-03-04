@@ -114,22 +114,8 @@ module Debugger
     end
 
     def execute
-      obj = if @match[1]
-        begin
-          ObjectSpace._id2ref(@match[1].hex)
-        rescue RangeError
-          errmsg "Unknown object id : %s" % @match[1]
-          nil
-        end
-      else
-        debug_eval(@match.post_match.empty? ? 'self' : @match.post_match)
-      end
-
-      if Debugger.printer.type == "xml"
-        print Debugger.printer.print_instance_variables(obj)
-      else
-        var_list(obj.instance_variables, obj.instance_eval{binding()})
-      end
+      obj = get_obj(@match)
+      var_list(obj.instance_variables, obj.instance_eval{binding()})
     end
 
     class << self
@@ -143,6 +129,21 @@ module Debugger
         }
       end
     end
+
+    private
+
+      def get_obj(match)
+        obj = if match[1]
+          begin
+            ObjectSpace._id2ref(match[1].hex)
+          rescue RangeError
+            errmsg "Unknown object id : %s" % match[1]
+            nil
+          end
+        else
+          debug_eval(match.post_match.empty? ? 'self' : match.post_match)
+        end
+      end
   end
 
   # Implements the debugger 'var local' command.

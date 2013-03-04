@@ -311,14 +311,6 @@ describe "Info Command" do
     end
   end
 
-  it "must be unsupported for XML printer" do
-    temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-      enter 'info line'
-      debug_file 'info'
-      check_output_includes "<error>Unsupported command 'info'</error>", interface.error_queue
-    end
-  end
-
   describe "Post Mortem" do
     it "must work in post-mortem mode" do
       enter 'cont', 'info line'
@@ -326,5 +318,4 @@ describe "Info Command" do
       check_output_includes "Line 8 of \"#{fullpath('post_mortem')}\""
     end
   end
-
 end

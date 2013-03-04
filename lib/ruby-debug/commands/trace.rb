@@ -8,7 +8,6 @@ module Debugger
     end
 
     def execute
-      errmsg(pr("general.errors.unsupported", cmd: 'trace')) && return if Debugger.printer.type == "xml"
       if @match[1] =~ /on|off/
         onoff = 'on' == @match[1] 
         if @match[2]

@@ -56,20 +56,10 @@ describe "Set Command" do
   describe "messages" do
     temporary_change_hash_value(Debugger::Command.settings, :autolist, 0)
 
-    describe "show a message after setting" do
-      it "must show in plain text" do
-        enter 'set autolist on'
-        debug_file 'set'
-        check_output_includes "autolist is on"
-      end
-
-      it "must show in xml" do
-        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-          enter 'set autolist on'
-          debug_file 'set'
-          check_output_includes "<message>autolist is on</message>"
-        end
-      end
+    it "must show a message after setting" do
+      enter 'set autolist on'
+      debug_file 'set'
+      check_output_includes "autolist is on"
     end
   end
 

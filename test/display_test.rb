@@ -20,26 +20,12 @@ describe "Display Command" do
     debug_file('display') { state.display.must_equal [[true, "d + 1"]] }
   end
 
-  describe "in plain text" do
-    it "displays all expressions available" do
-      enter 'break 3', 'cont', -> do
-        Debugger.handler.display.concat([[true, "abc"], [true, "d"]]); 'display'
-      end
-      debug_file('display')
-      check_output_includes "1: abc = \n2: d = 4"
+  it "displays all expressions available" do
+    enter 'break 3', 'cont', -> do
+      Debugger.handler.display.concat([[true, "abc"], [true, "d"]]); 'display'
     end
-  end
-
-  describe "in xml" do
-    temporary_change_method_value(Debugger, :printer, Printers::Xml.new)
-
-    it "displays all expressions available" do
-      enter 'break 3', 'cont', -> do
-        Debugger.handler.display.concat([[true, "abc"], [true, "d"]]); 'display'
-      end
-      debug_file('display')
-      check_output_includes '<displays><display key="abc" value=""/><display key="d" value="4"/></displays>'
-    end
+    debug_file('display')
+    check_output_includes "1: abc = \n2: d = 4"
   end
 
   describe "undisplay" do
@@ -54,18 +40,9 @@ describe "Display Command" do
       describe "confirmation is successful" do
         let(:confirm_response) { 'y' }
 
-        describe "asking about confirmation" do
-          it "must ask in plain text" do
-            debug_file('display')
-            check_output_includes "Clear all expressions? (y/n)", interface.confirm_queue
-          end
-
-          it "must ask in xml" do
-            temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-              debug_file('display')
-              check_output_includes "<confirmation>Clear all expressions?</confirmation>", interface.confirm_queue
-            end
-          end
+        it "must ask about confirmation" do
+          debug_file('display')
+          check_output_includes "Clear all expressions? (y/n)", interface.confirm_queue
         end
 
         it "must set all expressions saved to 'false'" do

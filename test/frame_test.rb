@@ -33,20 +33,10 @@ describe "Frame Command" do
     debug_file('frame') { state.line.must_equal 25 }
   end
 
-  describe "printing current stack frame when without arguments" do
-    it "must print in plain text" do
-      enter 'break 25', 'cont', 'up', 'frame'
-      debug_file('frame')
-      check_output_includes "#0 A.d(e#String)\n   at line #{fullpath('frame')}:25"
-    end
-
-    it "must print in xml" do
-      temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-        enter 'break 25', 'cont', 'up', 'frame'
-        debug_file('frame')
-        check_output_includes %{<frame no="0" file="#{fullpath('frame')}" line="25" current="false"/>}
-      end
-    end
+  it "must print current stack frame when without arguments" do
+    enter 'break 25', 'cont', 'up', 'frame'
+    debug_file('frame')
+    check_output_includes "#0 A.d(e#String)\n   at line #{fullpath('frame')}:25"
   end
 
   it "must set frame to the first one" do
@@ -79,31 +69,14 @@ describe "Frame Command" do
       "...#{separator}" + fullpath.split(separator)[-3..-1].join(separator)
     end
 
-    describe "display current backtrace with full path = true" do
-      it "must display in plain text" do
-        enter 'set fullpath', 'break 25', 'cont', 'where'
-        debug_file('frame')
-        check_output_includes(Regexp.new(
-          "--> #0 A.d\\(e#String\\)\\n" +
-          "       at line #{fullpath('frame')}:25\\n" +
-          "    #1 A.c at line #{fullpath('frame')}:21\\n",
-        Regexp::MULTILINE))
-      end
-
-      it "must display in xml" do
-        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-          enter 'set fullpath', 'break 25', 'cont', 'where'
-          debug_file('frame')
-          check_output_includes(Regexp.new(
-            "<frames>" +
-              %{<frame no="0" file="#{fullpath('frame')}" line="25" current="true"/>} +
-              %{<frame no="1" file="#{fullpath('frame')}" line="21" current="false"/>} +
-              %{<frame no="2" file="#{fullpath('frame')}" line="17" current="false"/>} +
-              %{<frame no="3" file="#{fullpath('frame')}" line="14" current="false"/>.*} +
-            "</frames>",
-          Regexp::MULTILINE))
-        end
-      end
+    it "must display current backtrace with full path = true" do
+      enter 'set fullpath', 'break 25', 'cont', 'where'
+      debug_file('frame')
+      check_output_includes(Regexp.new(
+        "--> #0 A.d\\(e#String\\)\\n" +
+        "       at line #{fullpath('frame')}:25\\n" +
+        "    #1 A.c at line #{fullpath('frame')}:21\\n",
+      Regexp::MULTILINE))
     end
 
     it "must display current backtrace with full path = false" do

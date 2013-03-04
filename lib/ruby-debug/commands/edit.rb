@@ -6,7 +6,6 @@ module Debugger
     end
 
     def execute
-      errmsg(pr("general.errors.unsupported", cmd: 'edit')) && return if Debugger.printer.type == "xml"
       if not @match[1] or @match[1].strip.empty?
         unless @state.context
           errmsg pr("edit.errors.state")

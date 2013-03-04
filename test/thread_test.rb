@@ -5,22 +5,11 @@ describe "Thread Command" do
   let(:release) { 'eval Thread.main[:should_break] = true' }
 
   describe "list" do
-    describe "show current thread by 'plus' sign" do
-      it "must show in plain text" do
-        thnum = nil
-        enter 'break 8', 'cont', 'thread list', release
-        debug_file('thread') { thnum = Debugger.contexts.first.thnum }
-        check_output_includes /\+ #{thnum} #<Thread:\S+ run>\t#{fullpath('thread')}:8/
-      end
-
-      it "must show in xml" do
-        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-          thnum = nil
-          enter 'break 8', 'cont', 'thread list', release
-          debug_file('thread') { thnum = Debugger.contexts.first.thnum }
-          check_output_includes %{<threads><thread id="#{thnum}" status="run" current="yes"/></threads>}
-        end
-      end
+    it "must show current thread by 'plus' sign" do
+      thnum = nil
+      enter 'break 8', 'cont', 'thread list', release
+      debug_file('thread') { thnum = Debugger.contexts.first.thnum }
+      check_output_includes /\+ #{thnum} #<Thread:\S+ run>\t#{fullpath('thread')}:8/
     end
 
     it "must work with shortcut" do
@@ -30,21 +19,10 @@ describe "Thread Command" do
       check_output_includes /\+ #{thnum} #<Thread:\S+ run>\t#{fullpath('thread')}:8/
     end
 
-
-    describe "show 3 available threads" do
-      it "must show in plain text" do
-        enter 'break 21', 'cont', 'thread list', release
-        debug_file 'thread'
-        check_output_includes /#<Thread:\S+ (sleep|run)>.*#<Thread:\S+ (sleep|run)>.*#<Thread:\S+ (sleep|run)>/m
-      end
-
-      it "must show in xml" do
-        temporary_change_method_value(Debugger, :printer, Printers::Xml.new) do
-          enter 'break 21', 'cont', 'thread list', release
-          debug_file 'thread'
-          check_output_includes /<threads>.*<thread .*<thread .*><thread .*><\/threads>/
-        end
-      end
+    it "must show 3 available threads" do
+      enter 'break 21', 'cont', 'thread list', release
+      debug_file 'thread'
+      check_output_includes /#<Thread:\S+ (sleep|run)>.*#<Thread:\S+ (sleep|run)>.*#<Thread:\S+ (sleep|run)>/m
     end
   end
 
