@@ -132,7 +132,8 @@ describe "Set Command" do
       it "must show a message" do
         enter 'set history filename .debugger-hist'
         debug_file 'set'
-        check_output_includes "The filename in which to record the command history is \"#{File.join(ENV["HOME"]||ENV["HOMEPATH"]||".", ".debugger-hist")}\""
+        history_filename = File.join(ENV["HOME"] || ENV["HOMEPATH"] || ".", ".debugger-hist")
+        check_output_includes "The filename in which to record the command history is '#{history_filename}'"
       end
     end
 
