@@ -104,6 +104,7 @@ tutorial](http://bashdb.sourceforge.net/ruby-debug/rdebug-emacs.html)
 Please report them [on github](http://github.com/cldwalker/debugger/issues).
 
 ## Known Issues
+* 2.0.0 support is only partially working and the test suite dies before it can finish.
 * If you place a debugger call at the end of a block, debugging will start at the next step and
   outside of your block. A simple work-around is to place a meaningless step (i.e. puts "STAY")
   at the end of your block and before debugger.
