@@ -128,6 +128,7 @@ Let's keep this working for the ruby community!
 
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
 * Thanks to astashov for bringing in a new and improved test suite and various bug fixes.
+* Thanks to windwiny for porting to 2.0.0
 * Contributors: ericpromislow, jnimety, adammck, hipe, FooBarWidget, aghull
 * Fork started on awesome @relevance fridays!
 
