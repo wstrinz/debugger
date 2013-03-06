@@ -3,10 +3,10 @@ unless ARGV.any? {|arg| arg.include?('--with-ruby-include') }
   require 'rbconfig'
   bindir = RbConfig::CONFIG['bindir']
   if bindir =~ %r{(^.*/\.rbenv/versions)/([^/]+)/bin$}
-    ruby_include = "#{$1}/#{$2}/include/ruby-#{RUBY_VERSION}/ruby-#{$2}"
+    ruby_include = "#{$1}/#{$2}/include/ruby-#{RUBY_VERSION.start_with?("1.9") ? "1.9.1" : RUBY_VERSION}/ruby-#{$2}"
     ARGV << "--with-ruby-include=#{ruby_include}"
   elsif bindir =~ %r{(^.*/\.rvm/rubies)/([^/]+)/bin$}
-    ruby_include = "#{$1}/#{$2}/include/ruby-#{RUBY_VERSION}/#{$2}"
+    ruby_include = "#{$1}/#{$2}/include/ruby-#{RUBY_VERSION.start_with?("1.9") ? "1.9.1" : RUBY_VERSION}/#{$2}"
     ruby_include = "#{ENV['rvm_path']}/src/#{$2}" unless File.exist?(ruby_include)
     ARGV << "--with-ruby-include=#{ruby_include}"
   end
