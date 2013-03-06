@@ -72,7 +72,8 @@ SRC
     end
   }
 else
-  raise 'no match version'
+  STDERR.puts "Ruby version #{RUBY_VERSION} is not supported."
+  exit(1)
 end
 
 
