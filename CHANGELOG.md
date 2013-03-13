@@ -1,3 +1,6 @@
+## 1.4.0
+* Partial support for 2.0.0
+
 ## 1.3.3
 * Bump ruby_core_source dependency
 
