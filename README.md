@@ -89,10 +89,13 @@ tutorial](http://bashdb.sourceforge.net/ruby-debug/rdebug-emacs.html)
     * 1.9.3 points to ruby-debug-base19-0.11.26 headers
   * Install painlessly for rvm and rbenv rubies i.e. no compiler flags needed
   * No downloading ruby source during install - was behavior of old ruby_core_source dependency
-  * Fix LocalJumpError caused by using proc in extconf.rb
-  * Fix where command failing at top level
+  * Add output adapters, Printers, to support output besides plain text e.g. xml
   * A new and improved test suite
   * Passing tests are up on travis-ci
+  * Fix several bugs
+    * Fix LocalJumpError caused by using proc in extconf.rb
+    * Fix where command failing at top level
+    * See changelog for more
 * Minor
   * The gem name matches the module namespace, Debugger, and main required file, debugger.
   * ruby-debug-base19 and ruby-debug19 are released as one gem
@@ -128,7 +131,7 @@ Let's keep this working for the ruby community!
 ## Credits
 
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
-* Thanks to astashov for bringing in a new and improved test suite and various bug fixes.
+* Thanks to astashov for bringing in a new and improved test suite, adding printers support and various bug fixes.
 * Thanks to windwiny for porting to 2.0.0
 * Contributors: ericpromislow, jnimety, adammck, hipe, FooBarWidget, aghull
 * Fork started on awesome @relevance fridays!
