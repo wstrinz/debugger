@@ -102,6 +102,7 @@ tutorial](http://bashdb.sourceforge.net/ruby-debug/rdebug-emacs.html)
   * Rake tasks have been updated
   * No more $LOAD_PATH manipulation or runtime code outside of lib
   * man page available via gem-man
+  * Test helpers for third-party debugger libraries can be accessed from debugger/test. See debugger-xml for an example
 
 ## Issues
 Please report them [on github](http://github.com/cldwalker/debugger/issues).
@@ -120,6 +121,8 @@ Let's keep this working for the ruby community!
 
 * [debugger-completion](https://github.com/cldwalker/debugger-completion) - autocompletion for
   debugger commands and more
+* [debugger-xml](https://github.com/astashov/debugger-xml) - XML interface for debugger, compatible
+  with ruby-debug-ide
 * [debugger-pry](https://github.com/pry/debugger-pry) - using pry within debugger
 * [pry-debugger](https://github.com/nixme/pry-debugger) - using debugger within pry
 * [ruby-debug-passenger](https://github.com/davejamesmiller/ruby-debug-passenger) - rake task to
