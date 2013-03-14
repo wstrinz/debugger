@@ -1,3 +1,7 @@
+## 1.5.0
+* Add support for any output adapters e.g. xml
+* Bump debugger-linecache dependency
+
 ## 1.4.0
 * Partial support for 2.0.0
 
