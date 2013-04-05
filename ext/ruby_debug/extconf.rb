@@ -23,7 +23,13 @@ require "mkmf"
 begin
   require "debugger/ruby_core_source"
 rescue LoadError
-  warn '*** RUBY_CORE_SOURCE NOT INSTALLED **'
+  if RUBY_VERSION < '2.0.0'
+    puts '*** Installing debugger-ruby_core_source... ***'
+    require 'rubygems/command'
+    require 'rubygems/dependency_installer'
+    installer = Gem::DependencyInstaller.new
+    installer.install('debugger-ruby_core_source', '~> 1.2.0')
+  end
 end
 
 hdrs = if RUBY_VERSION == '1.9.2'
