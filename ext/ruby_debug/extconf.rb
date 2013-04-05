@@ -29,6 +29,7 @@ rescue LoadError
     require 'rubygems/dependency_installer'
     installer = Gem::DependencyInstaller.new
     installer.install('debugger-ruby_core_source', '~> 1.2.0')
+    require 'debugger/ruby_core_source'
   end
 end
 
