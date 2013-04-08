@@ -9,6 +9,9 @@ module Debugger
       ListCommand.always_run = value
     end
 
+    # Set autolist by default
+    Command.settings[:autolist] = 1
+
     def regexp
       /^\s* l(?:ist)? (?:\s*([-=])|\s+(.+))? $/x
     end
