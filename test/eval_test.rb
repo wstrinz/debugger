@@ -22,12 +22,16 @@ describe "Eval Command" do
   end
 
   describe "autoeval" do
-    temporary_change_hash_value(Debugger::Command.settings, :autoeval, false)
-
-    it "must eval the expression if no matching command is found" do
-      enter 'set autoeval', '[5,6,7].inject(&:+)'
+    it "must eval the expression if no matching command is found by default" do
+      enter '[5,6,7].inject(&:+)'
       debug_file 'eval'
       check_output_includes "18"
+    end
+
+    it "must not eval the expression if no matching command is found if toogled" do
+      enter 'set noautoeval', '[5,6,7].inject(&:+)'
+      debug_file 'eval'
+      check_output_doesnt_include "18"
     end
   end
 
