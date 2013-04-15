@@ -4,7 +4,7 @@ require 'socket'
 require 'thread'
 require 'ruby-debug-base'
 require 'ruby-debug/processor'
-Dir.glob(File.expand_path("../ruby-debug/printers/**/*.rb", __FILE__)).each { |f| require f }
+require 'ruby-debug/printers/plain'
 
 module Debugger
   self.handler = CommandProcessor.new

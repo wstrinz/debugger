@@ -1,4 +1,4 @@
-require_relative 'base'
+require 'ruby-debug/printers/base'
 module Printers
   class Plain < Base
     include Columnize
