@@ -177,8 +177,7 @@ module Debugger
       file = CommandProcessor.canonic_file(file)
       unless file == @last_file and @last_line == line and
           Command.settings[:tracing_plus]
-        print "Tracing(%d):%s:%s %s",
-        context.thnum, file, line, Debugger.line_at(file, line)
+        print("Tracing(%d):%s:%s %s" % [context.thnum, file, line, Debugger.line_at(file, line)])
         @last_file = file
         @last_line = line
       end

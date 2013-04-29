@@ -110,7 +110,7 @@ module Debugger
         vals = debug_eval(@match.post_match, b)
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "%s\n", columnize(vals, self.class.settings[:width])
+          print "#{columnize(vals, self.class.settings[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string
@@ -148,7 +148,7 @@ module Debugger
         vals = debug_eval(@match.post_match, b)
         if vals.is_a?(Array)
           vals = vals.map{|item| item.to_s}
-          print "%s\n", columnize(vals.sort!, self.class.settings[:width])
+          print "#{columnize(vals.sort!, self.class.settings[:width])}\n"
         else
           PP.pp(vals, out)
           print out.string

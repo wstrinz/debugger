@@ -12,8 +12,8 @@ class TestInterface < Debugger::Interface
     @readline_support = false
   end
 
-  def errmsg(*args)
-    @error_queue << format(args)
+  def errmsg(value)
+    @error_queue << value
   end
 
   def read_command(*args)
@@ -25,8 +25,8 @@ class TestInterface < Debugger::Interface
     result.is_a?(Proc) ? result.call : result
   end
 
-  def print(*args)
-    @output_queue << format(args)
+  def print(value)
+    @output_queue << value
   end
 
   def confirm(message)
@@ -58,13 +58,4 @@ class TestInterface < Debugger::Interface
     ].join("\n")
   end
 
-  private
-
-    def format(args)
-      if args.size > 1
-        args.first % args[1..-1]
-      else
-        args.first
-      end
-    end
 end
