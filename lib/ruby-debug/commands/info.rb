@@ -143,11 +143,9 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
         print "Num Enb What\n"
         brkpts.each do |b|
           if b.expr.nil?
-            print "%3d %s   at %s:%s\n", 
-            b.id, (b.enabled? ? 'y' : 'n'), b.source, b.pos
+            print("%3d %s   at %s:%s\n" % [b.id, (b.enabled? ? 'y' : 'n'), b.source, b.pos])
           else
-            print "%3d %s   at %s:%s if %s\n", 
-            b.id, (b.enabled? ? 'y' : 'n'), b.source, b.pos, b.expr
+            print("%3d %s   at %s:%s if %s\n" % [b.id, (b.enabled? ? 'y' : 'n'), b.source, b.pos, b.expr])
           end
           hits = b.hit_count
           if hits > 0
@@ -170,8 +168,7 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
         print "Num Enb Expression\n"
         n = 1
         for d in @state.display
-          print "%3d: %s  %s\n", n, (d[0] ? 'y' : 'n'), d[1] if
-            d[0] != nil
+          print("%3d: %s  %s\n" % [n, (d[0] ? 'y' : 'n'), d[1]]) if d[0] != nil
           n += 1
         end
       else
@@ -202,17 +199,17 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
         LineCache::cache(file, Command.settings[:reload_source_on_change])
       end
       
-      print "File %s", file
+      print("File #{file}")
       path = LineCache.path(file)
       if %w(all basic path).member?(subcmd.name) and path != file
-        print " - %s\n", path 
+        print(" - #{path}\n")
       else
         print "\n"
       end
 
       if %w(all basic lines).member?(subcmd.name)
         lines = LineCache.size(file)
-        print "\t %d lines\n", lines if lines
+        print("\t #{lines} lines\n") if lines
       end
 
       if %w(all breakpoints).member?(subcmd.name)
@@ -225,10 +222,10 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
 
       if %w(all mtime).member?(subcmd.name)
         stat = LineCache.stat(file)
-        print "\t%s\n", stat.mtime if stat
+        print("\t#{stat.mtime}\n") if stat
       end
       if %w(all sha1).member?(subcmd.name)
-        print "\t%s\n", LineCache.sha1(file)
+        print("\t#{LineCache.sha1(file)}\n")
       end
     end
     
@@ -238,13 +235,13 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
       files.uniq.sort.each do |file|
         stat = LineCache::stat(file)
         path = LineCache::path(file)
-        print "File %s", file
+        print("File #{file}")
         if path and path != file
-          print " - %s\n", path 
+          print " - #{path}\n"
         else
           print "\n"
         end
-        print "\t%s\n", stat.mtime if stat
+        print "\t#{stat.mtime}\n" if stat
       end
     end
     
@@ -262,7 +259,7 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
         errmsg "info line not available here.\n"
         return 
       end
-      print "Line %d of \"%s\"\n",  @state.line, @state.file
+      print "Line #{@state.line} of \"#{@state.file}\"\n"
     end
     
     def info_locals(*args)
@@ -310,7 +307,7 @@ item. If \'verbose\' is given then the entire stack frame is shown.'],
       when :catchpoint
         print("It stopped at a catchpoint.\n")
       else
-        print "unknown reason: %s\n" % @state.context.stop_reason.to_s
+        print "unknown reason: #{@state.context.stop_reason.to_s}\n"
       end
     end
     
