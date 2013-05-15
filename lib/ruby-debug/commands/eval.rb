@@ -21,7 +21,7 @@ module Debugger
       $__dbg_interface = nil
     end
   end
-  
+
   class EvalCommand < Command # :nodoc:
     register_setting_get(:autoeval) do
       EvalCommand.unknown
@@ -30,11 +30,14 @@ module Debugger
       EvalCommand.unknown = value
     end
 
+    # Set default value
+    Command.settings[:autoeval] = 1
+
     def match(input)
       @input = input
       super
     end
-    
+
     def regexp
       /^\s*(p|e(?:val)?)\s+/
     end
@@ -69,7 +72,7 @@ module Debugger
 
   class PPCommand < Command # :nodoc:
     self.allow_in_control = true
-    
+
     def regexp
       /^\s*pp\s+/
     end
@@ -80,7 +83,7 @@ module Debugger
         PP.pp(debug_eval(@match.post_match, b), out)
       end
       print out.string
-    rescue 
+    rescue
       out.puts $!.message
     end
 
@@ -99,7 +102,7 @@ module Debugger
 
   class PutLCommand < Command # :nodoc:
     self.allow_in_control = true
-    
+
     def regexp
       /^\s*putl\s+/
     end
@@ -116,7 +119,7 @@ module Debugger
           print out.string
         end
       end
-    rescue 
+    rescue
       out.puts $!.message
     end
 
@@ -132,12 +135,12 @@ module Debugger
       end
     end
   end
-  
+
   class PSCommand < Command # :nodoc:
     self.allow_in_control = true
-    
+
     include EvalFunctions
-    
+
     def regexp
       /^\s*ps\s+/
     end
@@ -154,7 +157,7 @@ module Debugger
           print out.string
         end
       end
-    rescue 
+    rescue
       out.puts $!.message
     end
 
@@ -170,5 +173,5 @@ module Debugger
       end
     end
   end
-  
+
 end
