@@ -43,12 +43,6 @@ from two locations:
 * ~/.rdebugrc (~/rdebug.ini for windows)
 * $PWD/.rdebugrc ($PWD/rdebug.ini for windows)
 
-Here's a common configuration (yeah, I should make this the default):
-
-    set autolist
-    set autoeval
-    set autoreload
-
 To see debugger's current settings, use the `set` command.
 
 ### Using Commands
@@ -98,6 +92,7 @@ tutorial](http://bashdb.sourceforge.net/ruby-debug/rdebug-emacs.html)
     * See changelog for more
 * Minor
   * The gem name matches the module namespace, Debugger, and main required file, debugger.
+  * autolist and autoeval enabled by default
   * ruby-debug-base19 and ruby-debug19 are released as one gem
   * Rake tasks have been updated
   * No more $LOAD_PATH manipulation or runtime code outside of lib
