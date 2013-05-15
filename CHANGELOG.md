@@ -1,3 +1,10 @@
+## 1.6.0
+* Make autoeval and autolist true the default
+* Bump ruby_core_source dependency
+* Fix printf bugs
+* Fix printer require issues
+* Fix some warnings
+
 ## 1.5.0
 * Add support for any output adapters e.g. xml
 * Bump debugger-linecache dependency
