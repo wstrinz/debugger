@@ -36,7 +36,7 @@ describe "Frame Command" do
   it "must print current stack frame when without arguments" do
     enter 'break 25', 'cont', 'up', 'frame'
     debug_file('frame')
-    check_output_includes "#0 A.d(e#String)\n   at line #{fullpath('frame')}:25"
+    check_output_includes "#0 A.d(e#String) at line #{fullpath('frame')}:25"
   end
 
   it "must set frame to the first one" do
@@ -73,8 +73,7 @@ describe "Frame Command" do
       enter 'set fullpath', 'break 25', 'cont', 'where'
       debug_file('frame')
       check_output_includes(Regexp.new(
-        "--> #0 A.d\\(e#String\\)\\n" +
-        "       at line #{fullpath('frame')}:25\\n" +
+        "--> #0 A.d\\(e#String\\) at line #{fullpath('frame')}:25\\n" +
         "    #1 A.c at line #{fullpath('frame')}:21\\n",
       Regexp::MULTILINE))
     end
@@ -96,8 +95,7 @@ describe "Frame Command" do
       enter 'set callstyle last', 'break 25', 'cont', 'where'
       debug_file('frame')
       check_output_includes(Regexp.new(
-        "--> #0 A.d\\(e#String\\)\\n" +
-        "       at line #{fullpath('frame')}:25\\n" +
+        "--> #0 A.d\\(e#String\\) at line #{fullpath('frame')}:25\\n" +
         "    #1 A.c at line #{fullpath('frame')}:21\\n" +
         "    #2 A.b at line #{fullpath('frame')}:17\\n" +
         "    #3 A.a at line #{fullpath('frame')}:14\\n",
