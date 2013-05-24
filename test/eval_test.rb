@@ -29,9 +29,11 @@ describe "Eval Command" do
     end
 
     it "must not eval the expression if no matching command is found if toogled" do
-      enter 'set noautoeval', '[5,6,7].inject(&:+)'
-      debug_file 'eval'
-      check_output_doesnt_include "18"
+      temporary_change_hash_value(Debugger::Command.settings, :autoeval, false) do
+        enter '[5,6,7].inject(&:+)'
+        debug_file 'eval'
+        check_output_doesnt_include "18"
+      end
     end
   end
 
