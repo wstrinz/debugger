@@ -38,6 +38,8 @@ describe "Finish Command" do
 
 
   describe "Post Mortem" do
+    temporary_change_hash_value(Debugger::Command.settings, :autoeval, false)
+
     it "must not work in post-mortem mode" do
       enter 'cont', 'finish'
       debug_file "post_mortem"

@@ -62,9 +62,11 @@ describe "List Command" do
     end
 
     it "must not show the surronding lines by default when autolist is toggled" do
-      enter 'set noautolist', 'break 5', 'cont'
-      debug_file 'list'
-      check_output_doesnt_include "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
+      temporary_change_hash_value(Debugger::Command.settings, :autolist, false) do
+        enter 'break 5', 'cont'
+        debug_file 'list'
+        check_output_doesnt_include "[4, 6] in #{fullpath('list')}", "4  4", "=> 5  5", "6  6"
+      end
     end
   end
 
