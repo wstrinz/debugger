@@ -1,3 +1,6 @@
+## 1.6.1
+* Bump ruby_core_source dependency
+
 ## 1.6.0
 * Make autoeval and autolist true the default
 * Bump ruby_core_source dependency
