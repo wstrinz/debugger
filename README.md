@@ -131,13 +131,12 @@ Let's keep this working for the ruby community!
 
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
 * Thanks to astashov for bringing in a new and improved test suite, adding printers support and various bug fixes.
-* Thanks to windwiny for porting to 2.0.0
-* Contributors: ericpromislow, jnimety, adammck, hipe, FooBarWidget, aghull
+* Thanks to windwiny for starting the port to 2.0.0
+* Contributors: ericpromislow, jnimety, adammck, hipe, FooBarWidget, aghull, deivid-rodriguez, tessi
 * Fork started on awesome @relevance fridays!
 
 ## TODO
 
-* Fix test/test-*.rb
 * Port some of bashdb's docs
 * Use ~/.debuggerrc and bin/debugger and gracefully deprecate rdebug*
 * Work with others willing to tackle jruby, rubinius or windows support
