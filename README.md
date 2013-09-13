@@ -127,6 +127,11 @@ Let's keep this working for the ruby community!
 * [rb-trepanning](https://github.com/rocky/rb-trepanning) - rewrite of ruby-debug that requires a
   patched ruby
 
+## License
+
+Licensing due to the complicated forking history of this project. Licensing is BSD throughout most
+of the repository except for portions of emacs/, doc/ and old_scripts/ which are GPL.
+
 ## Credits
 
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
