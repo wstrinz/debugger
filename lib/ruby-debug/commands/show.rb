@@ -181,8 +181,8 @@ show history size -- Show the size of the command history"],
     end
 
     def execute
-      if not @match[1]
-        subcommands = subcmd.map { |s| "show #{s.name} -- #{s.short_help}" }.join("\n")
+      if !@match[1]
+        subcommands = Subcommands.map { |s| "show #{s.name} -- #{s.short_help}" }.join("\n")
         print pr("show.errors.no_subcommand", subcommands: subcommands)
       else
         args = @match[1].split(/[ \t]+/)

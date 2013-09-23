@@ -23,6 +23,13 @@ describe "Show Command" do
   describe "args" do
     temporary_change_hash_value(Debugger::Command.settings, :argv, %w{foo bar})
 
+    it "when no args givenmust show args" do
+      Debugger.send(:remove_const, "RDEBUG_SCRIPT") if Debugger.const_defined?("RDEBUG_SCRIPT")
+      enter 'show'
+      debug_file 'show'
+      check_output_includes /\"show\" must be followed by the name of an show command/
+    end
+
     it "must show args" do
       Debugger.send(:remove_const, "RDEBUG_SCRIPT") if Debugger.const_defined?("RDEBUG_SCRIPT")
       enter 'show args'
