@@ -110,7 +110,7 @@ module Debugger
   class VarInstanceCommand < Command # :nodoc:
     def regexp
       # id will be read as first match, name as post match
-      /^\s*v(?:ar)?\s+ins(?:tance)?\s*((?:[\\+-]0x)[\dabcdef]+)?/
+      /^\s*v(?:ar)?\s+i(?:ns(?:tance)?)?\s*(?:((?:[\\+-]0x)[\dabcdef]+)|\s|$)/
     end
 
     def execute

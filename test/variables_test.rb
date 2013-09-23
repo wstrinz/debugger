@@ -83,6 +83,18 @@ describe "Variables Command" do
       check_output_includes /@inst_a = 1\n@inst_b = 2/
     end
 
+    it "must not accept 'v insv' as shortcut for 'v ins v'" do
+      enter 'break 25', 'cont', 'v insv'
+      debug_file 'variables'
+      check_output_doesnt_include /@inst_a = 1\n@inst_b = 2/
+    end
+
+    it "must be able to use i as a shortcut" do
+      enter 'break 25', 'cont', 'v i v'
+      debug_file 'variables'
+      check_output_includes /@inst_a = 1\n@inst_b = 2/
+    end
+
     it "must cut long variable values according to :width setting" do
       temporary_change_hash_value(Debugger::Command.settings, :width, 20) do
         enter 'break 25', 'cont', 'var instance v'
