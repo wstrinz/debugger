@@ -137,7 +137,8 @@ of the repository except for portions of emacs/, doc/ and old_scripts/ which are
 * Thanks to the original authors: Kent Sibilev and Mark Moseley
 * Thanks to astashov for bringing in a new and improved test suite, adding printers support and various bug fixes.
 * Thanks to windwiny for starting the port to 2.0.0
-* Contributors: ericpromislow, jnimety, adammck, hipe, FooBarWidget, aghull, deivid-rodriguez, tessi
+* Contributors: ericpromislow, jnimety, adammck, hipe, FooBarWidget, aghull, deivid-rodriguez,
+  tessi, os97673, arthurnn
 * Fork started on awesome @relevance fridays!
 
 ## TODO
