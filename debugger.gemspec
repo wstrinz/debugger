@@ -20,7 +20,7 @@ handling, bindings for stack frames among other things.
   s.extensions << "ext/ruby_debug/extconf.rb"
   s.executables = ["rdebug"]
   s.add_dependency "columnize", ">= 0.3.1"
-  s.add_dependency "debugger-ruby_core_source", '~> 1.2.3'
+  s.add_dependency "debugger-ruby_core_source", '~> 1.2.4'
   s.add_dependency "debugger-linecache", '~> 1.2.0'
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'rake-compiler', '~> 0.8.0'
