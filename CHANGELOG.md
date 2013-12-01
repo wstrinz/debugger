@@ -1,3 +1,6 @@
+## 1.6.3
+* Bump ruby_core_source dependency
+
 ## 1.6.2
 * Fix show command
 * Fix var instance command

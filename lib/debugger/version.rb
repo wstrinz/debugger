@@ -1,5 +1,5 @@
 module Debugger
   # TODO: remove version from C ext
   send :remove_const, :VERSION if const_defined? :VERSION
-  VERSION = '1.6.2'
+  VERSION = '1.6.3'
 end
