@@ -55,6 +55,18 @@ Most commands are described in rdebug's man page
 
     $ gem install gem-man
     $ man rdebug
+    
+To debug a separate process remotely (such as unicorn) try:
+
+```ruby
+  Debugger.wait_connection = true
+  Debugger.start_remote
+  debugger
+```
+
+Then you can do
+
+     $ rdebug -c
 
 ### More documentation
 
