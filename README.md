@@ -55,7 +55,9 @@ Most commands are described in rdebug's man page
 
     $ gem install gem-man
     $ man rdebug
-    
+
+### Remote Debugging
+
 To debug a separate process remotely (such as unicorn) try:
 
 ```ruby
@@ -130,7 +132,7 @@ Let's keep this working for the ruby community!
   debugger commands and more
 * [debugger-xml](https://github.com/astashov/debugger-xml) - XML interface for debugger, compatible
   with ruby-debug-ide
-* [vim-ruby-debugger] - Vim plugin that uses debugger
+* [vim-ruby-debugger](https://github.com/astashov/vim-ruby-debugger) - Vim plugin that uses debugger
 * [debugger-pry](https://github.com/pry/debugger-pry) - using pry within debugger
 * [pry-debugger](https://github.com/nixme/pry-debugger) - using debugger within pry
 * [ruby-debug-passenger](https://github.com/davejamesmiller/ruby-debug-passenger) - rake task to
@@ -138,6 +140,10 @@ Let's keep this working for the ruby community!
 * [jruby-debug](https://github.com/jruby/jruby-debug)
 * [rb-trepanning](https://github.com/rocky/rb-trepanning) - rewrite of ruby-debug that requires a
   patched ruby
+
+## Links
+
+* [Rails guide with debugger](http://guides.rubyonrails.org/debugging_rails_applications.html)
 
 ## License
 
