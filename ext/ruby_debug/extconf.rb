@@ -49,7 +49,7 @@ SRC
       $defs << '-DRB_ISEQ_COMPILE_5ARGS'
     end
   }
-elsif RUBY_VERSION == '2.0.0' || RUBY_VERSION == '2.1.0'
+elsif RUBY_VERSION >= '2.0.0'
   lambda {
     iseqs = %w[vm_core.h iseq.h]
     begin
