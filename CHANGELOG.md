@@ -1,3 +1,6 @@
+## 1.6.6
+* 2.1.1 support
+
 ## 1.6.5
 * Bump ruby_core_source dependency
 
