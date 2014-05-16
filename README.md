@@ -1,5 +1,6 @@
 ## Description
 A fork of ruby-debug(19) that works on 1.9.2 and 1.9.3 and installs easily for rvm/rbenv rubies.
+ruby >= 2.0 are *not* supported - [see below](#known-issues].
 
 [![Build Status](https://travis-ci.org/cldwalker/debugger.png?branch=master)](https://travis-ci.org/cldwalker/debugger)
 
@@ -17,7 +18,7 @@ For Windows install instructions, see OLD\_README.
 On install, debugger tries to find your ruby's headers. If it's unable to find them and your ruby is
 a patch release, it will use headers included with
 [debugger-ruby_core_source](https://github.com/cldwalker/debugger-ruby_core_source).  For the list
-of rubies supported by debugger [see
+of 1.9.X rubies supported by debugger [see
 here](https://github.com/cldwalker/debugger-ruby_core_source/tree/master/lib/debugger/ruby_core_source).
 *If your ruby is not an official patch release i.e. head, dev or an rc, you are responsible for
 having headers and setting them with --with-ruby-include.*
@@ -117,7 +118,7 @@ tutorial](http://bashdb.sourceforge.net/ruby-debug/rdebug-emacs.html)
 Please report them [on github](http://github.com/cldwalker/debugger/issues).
 
 ## Known Issues
-* 2.0.0 support is only partially working and the test suite dies before it can finish.
+* Only 1.9.2 and 1.9.3 are supported. For 2.X rubies, consider using [byebug](https://github.com/deivid-rodriguez/byebug) or [debugger2](https://github.com/ko1/debugger2).
 * If you place a debugger call at the end of a block, debugging will start at the next step and
   outside of your block. A simple work-around is to place a meaningless step (i.e. puts "STAY")
   at the end of your block and before debugger.
