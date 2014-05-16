@@ -1,6 +1,6 @@
 ## Description
 A fork of ruby-debug(19) that works on 1.9.2 and 1.9.3 and installs easily for rvm/rbenv rubies.
-ruby >= 2.0 are *not* supported - [see below](#known-issues].
+ruby >= 2.0 are *not* supported - [see below](#known-issues).
 
 [![Build Status](https://travis-ci.org/cldwalker/debugger.png?branch=master)](https://travis-ci.org/cldwalker/debugger)
 
