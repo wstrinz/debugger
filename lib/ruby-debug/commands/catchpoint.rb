@@ -24,15 +24,15 @@ module Debugger
             print "Warning #{excn} is not known to be a Class\n"
           end
           Debugger.add_catchpoint(excn)
-          print "Catch exception %s.\n", excn
+          print "Catch exception #{excn}.\n"
         end
       elsif @match[2] != 'off'
-        errmsg "Off expected. Got %s\n", @match[2]
+        errmsg "Off expected. Got #{@match[2]}\n"
       elsif Debugger.catchpoints.member?(excn)
         Debugger.catchpoints.delete(excn)
-        print "Catch for exception %s removed.\n", excn
+        print "Catch for exception #{excn} removed.\n"
       else
-        errmsg "Catch for exception %s not found.\n", excn
+        errmsg "Catch for exception #{excn} not found.\n"
       end
     end
 
