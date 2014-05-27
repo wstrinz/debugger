@@ -1,3 +1,6 @@
+## 1.6.8
+* Fix 'prints' in CatchCommand
+
 ## 1.6.7
 * Bump ruby_core_source dependency
 
