@@ -118,7 +118,7 @@ tutorial](http://bashdb.sourceforge.net/ruby-debug/rdebug-emacs.html)
 Please report them [on github](http://github.com/cldwalker/debugger/issues).
 
 ## Known Issues
-* Only 1.9.2 and 1.9.3 are supported. For 2.X rubies, consider using [byebug](https://github.com/deivid-rodriguez/byebug) or [debugger2](https://github.com/ko1/debugger2).
+* Only 1.9.2 and 1.9.3 are supported. For 2.X rubies, consider using [byebug](https://github.com/deivid-rodriguez/byebug).
 * If you place a debugger call at the end of a block, debugging will start at the next step and
   outside of your block. A simple work-around is to place a meaningless step (i.e. puts "STAY")
   at the end of your block and before debugger.
