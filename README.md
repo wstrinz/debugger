@@ -119,6 +119,9 @@ Please report them [on github](http://github.com/cldwalker/debugger/issues).
 
 ## Known Issues
 * Only 1.9.2 and 1.9.3 are supported. For 2.X rubies, consider using [byebug](https://github.com/deivid-rodriguez/byebug).
+* If you're interested in porting debugger to ruby2, see [this
+  checklist](https://github.com/cldwalker/debugger/issues/125#issuecomment-43353446). Note an old attempt at porting it lives at
+  [debugger2](https://github.com/ko1/debugger2).
 * If you place a debugger call at the end of a block, debugging will start at the next step and
   outside of your block. A simple work-around is to place a meaningless step (i.e. puts "STAY")
   at the end of your block and before debugger.
